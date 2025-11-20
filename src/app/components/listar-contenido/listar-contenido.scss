@@ -1,0 +1,16 @@
+.container{
+    width: 80vw;
+    display: flex;
+    gap: 20;
+    background-color: #eee;
+    justify-content: space-evenly;
+    margin: auto;
+    flex-wrap: wrap;
+
+}
+.container div{
+    width: 20vw;
+    background-color: aqua;
+    height: 300px;
+    margin: 10px;
+}

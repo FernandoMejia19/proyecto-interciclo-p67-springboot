@@ -1,0 +1,18 @@
+section{
+    margin: auto;
+    width: 60vw;
+    background-color: #eee;
+    
+}
+.proyects{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-evenly;
+}
+
+.proyects div{
+    width: 30%;
+    background-color: aqua;
+}
