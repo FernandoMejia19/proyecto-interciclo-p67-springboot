@@ -15,4 +15,8 @@ export class InicioSesion {
     console.log('ir a portafolios');
     this.router.navigate(['/portafolios']);
   }
+  entrar(){
+    console.log('Ingresaste');
+    this.router.navigate(['/administrador']);
+  }
 }

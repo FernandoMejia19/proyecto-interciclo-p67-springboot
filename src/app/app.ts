@@ -16,7 +16,7 @@ export class App {
   constructor (private router:Router){
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd)=>{
-        if (event.url.includes('/inicio-sesion') || event.url.includes('/register')) {
+        if (event.url.includes('/inicio-sesion') || event.url.includes('/administrador')) {
         this.mostrarNavBar = false;
       } else {
         this.mostrarNavBar = true;

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ListarContenido } from '../../components/listar-contenido/listar-contenido';
+import { ListarContenido } from '../../../../components/listar-contenido/listar-contenido';
+
 
 @Component({
   selector: 'app-proyectos',
