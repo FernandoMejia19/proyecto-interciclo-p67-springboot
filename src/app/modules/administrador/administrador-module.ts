@@ -11,7 +11,7 @@ export const routes:Routes=[
   { path:'', component: NavBarAdmin ,children:[  
     { path:'admin-desarrolladores',component:AdminDesarrolladores},
     { path:'admin-proyectos',component:AdminProyectos},
-    { path: '', redirectTo: 'admin-desarrolladores', pathMatch: 'full'}
+    { path: '', redirectTo: 'admin-proyectos', pathMatch: 'full'}
   ]
     }];
   

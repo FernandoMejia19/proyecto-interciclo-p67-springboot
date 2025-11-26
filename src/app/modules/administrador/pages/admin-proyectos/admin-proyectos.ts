@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
+
 @Component({
   selector: 'app-admin-proyectos',
   imports: [],
@@ -7,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './admin-proyectos.scss',
 })
 export class AdminProyectos {
-
+  saludar(){
+    console.log('Hola dvi')
+  }
 }
