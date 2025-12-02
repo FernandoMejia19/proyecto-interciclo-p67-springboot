@@ -1,8 +1,10 @@
-<div class="contenido-proyectos">
-    <div class="tarjeta">
+<div class="contenido-proyectos" >
+    <div class="container" *ngFor="let d of desarrolladores">
+        <div class="tarjeta" (click)="abrirPerfil()">
         <div class="img"></div>
-        <p>Nombre</p>
-        <p>Lugar de residencia</p>
-        <p>Disponibilidad</p>
+        <p>Nombre={{d.nombre}}</p>
+        <p>Lugar de residencia={{d.ciudad}} -  {{d.pais}}</p>
     </div>
+    </div>
+    
 </div>

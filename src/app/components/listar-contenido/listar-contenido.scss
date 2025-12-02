@@ -1,5 +1,6 @@
 .container{
-    width: 80vw;
+    
+    width: 100%;
     display: flex;
     gap: 20;
     background-color: #eee;
@@ -13,4 +14,7 @@
     background-color: aqua;
     height: 300px;
     margin: 10px;
+}
+img{
+    width: 200px;
 }

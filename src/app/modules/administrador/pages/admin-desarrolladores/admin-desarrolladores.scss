@@ -1,16 +1,24 @@
-
-
+.contenido-proyectos{
+    display: flex;
+    width: 80vw;
+    flex-wrap: wrap;
+}
+.container{
+    width: 100%;
+    display: flex;
+}
 .img{
     width: 100px;
     height: 100px;
     background-color: aqua;
     border-radius: 50px;
-
+    
 }
 .tarjeta{
     background-color: #333;
-    width: 20vw;
+    width: 30%;
     padding: 20px;
     border-radius: 20px;
     color: #eee;
+    margin: 10px;
 }

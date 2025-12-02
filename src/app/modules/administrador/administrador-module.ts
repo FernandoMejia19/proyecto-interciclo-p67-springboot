@@ -13,7 +13,9 @@ export const routes:Routes=[
     { path:'admin-proyectos',component:AdminProyectos},
     { path: '', redirectTo: 'admin-proyectos', pathMatch: 'full'}
   ]
-    }];
+    }
+
+  ];
   
 @NgModule({
   declarations: [

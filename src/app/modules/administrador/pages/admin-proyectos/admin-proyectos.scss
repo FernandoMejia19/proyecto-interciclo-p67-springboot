@@ -14,13 +14,22 @@
 }
 .complemento{
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-self: flex-end;
+}
+ul{
+    display: flex;
+    text-decoration: none;
+}
+li{
+    list-style-type: none;
 }
 .tec{
     margin-left: 10px;
     background-color: aqua;
-    padding: 5px;border-radius: 30%;
+    padding: 5px;
+    border-radius: 30%;
 }
 button{
     margin: 10px;

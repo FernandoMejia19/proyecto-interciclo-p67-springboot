@@ -13,6 +13,7 @@ import { filter } from 'rxjs/operators';
 export class App {
   titulo="Proyecto Interciclo";
   mostrarNavBar: boolean =true;
+  mostrarHeader:boolean=true;
   constructor (private router:Router){
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd)=>{
@@ -22,5 +23,15 @@ export class App {
         this.mostrarNavBar = true;
       }
       });
-  }
+
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd)=>{
+        if (!event.url.includes('/perfilUsuario')) {
+        this.mostrarHeader = true;
+      } else {
+        this.mostrarHeader = false;
+      }
+      });
+    }
 }
+

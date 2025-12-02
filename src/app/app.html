@@ -1,3 +1,10 @@
+<header *ngIf="mostrarHeader">
+    <div class="titulo">
+        <h1>Portafolios <span>WEB</span></h1>
+        <p>Proyecto Interciclo</p>
+    </div>
+</header>
+
 <app-navbar *ngIf="mostrarNavBar"></app-navbar>
 <hr>
 <router-outlet />

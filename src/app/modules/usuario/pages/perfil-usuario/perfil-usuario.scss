@@ -1,0 +1,37 @@
+.imagen-usuario{
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 100%;
+    border:2px solid #fff;
+    margin-top: 5%;
+    margin-left: 10%;
+}
+.portada-usuario{
+    background-color: #333;
+    display: flex;
+}
+.portada-usuario span{
+    font-size: 4rem;
+    color: #fff;
+}
+.tec{
+    background-color: aqua;
+    width: 10px;
+    margin-left: 10px;
+    color: #333;
+}
+.tecnologias-usuario{
+    display: flex;
+    color: #fff;
+}
+.encabezado-usuario{
+    align-self: flex-end;
+    margin-bottom: 10px;
+    margin-left: 20px;
+}
+.container-contenido{
+    width: 80vw;
+    display: flex;
+    margin: auto;
+}

@@ -3,11 +3,18 @@
         <p>Proyecto Interciclo</p>
         <span>Realizado por: Fernando Mejia</span>
     </div>
-    <form >
+
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
         <button class="cerrar" (click)="salir()">x</button>
         <h2>Iniciar Sesión</h2>
-        <input type="text" id="usuario" placeholder="Usuario">
-        <input type="password" id="contrasena" placeholder="Contraseña">
-        <button type="button" class="iniciar" (click)="entrar()">Iniciar</button>
+
+        <input type="email" placeholder="Correo" formControlName="email">
+        <input type="password" placeholder="Contraseña" formControlName="password">
+
+        <button class="iniciar" type="submit" [disabled]="loading">
+            {{ loading ? 'Ingresando...' : 'Iniciar' }}
+        </button>
+
+        <p *ngIf="errorMessage" style="color: red">{{ errorMessage }}</p>
     </form>
 </div>

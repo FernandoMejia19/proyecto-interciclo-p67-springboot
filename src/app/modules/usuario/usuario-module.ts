@@ -6,6 +6,7 @@ import { Proyectos } from './pages/proyectos/proyectos';
 import { Portafolios } from './pages/portafolios/portafolios';
 import { Desarrolladores } from './pages/desarrolladores/desarrolladores';
 import { InicioSesion } from './pages/inicio-sesion/inicio-sesion';
+import { PerfilUsuario } from './pages/perfil-usuario/perfil-usuario';
 
 export const routes:Routes=[
   
@@ -13,6 +14,7 @@ export const routes:Routes=[
   { path: 'portafolios', component: Portafolios },
   { path: 'desarrolladores', component: Desarrolladores },
   { path: 'inicio-sesion', component: InicioSesion },
+  { path: 'perfilUsuario', component: PerfilUsuario},
   { path: '', redirectTo: 'proyectos', pathMatch: 'full' }
     ];
   
