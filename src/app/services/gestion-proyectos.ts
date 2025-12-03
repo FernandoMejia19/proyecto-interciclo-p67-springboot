@@ -9,7 +9,6 @@ export class GestionProyectos {
   private firestore = inject(Firestore);
   private injector = inject(Injector); 
 
-  // No necesitas el constructor con NgZone para esto
 
   getAllProyectos(): Observable<any[]> {
     return runInInjectionContext(this.injector, () => {
@@ -29,7 +28,6 @@ export class GestionProyectos {
     });
   }
 
-  // ✅ CORREGIDO: Aplicamos la misma solución que en los otros métodos
   getProyectos(): Observable<any[]> {
     return runInInjectionContext(this.injector, () => {
       const ref = collection(this.firestore, 'proyectos');

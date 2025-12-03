@@ -1,0 +1,39 @@
+<div class="container-editar">
+    <h2>Editar Proyecto</h2>
+
+    <div *ngIf="loading" class="cargando">Cargando datos...</div>
+
+    <form [formGroup]="miFormulario" (ngSubmit)="guardar()" *ngIf="!loading">
+        
+        <div class="form-group">
+            <label>Título del Proyecto</label>
+            <input type="text" formControlName="titulo" placeholder="Ej: Mi Portafolio">
+        </div>
+
+        <div class="form-group">
+            <label>Descripción</label>
+            <textarea formControlName="descripcion" rows="4" placeholder="De qué trata el proyecto..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Tecnologías (separadas por coma)</label>
+            <input type="text" formControlName="tecnologias" placeholder="Ej: Angular, Firebase, CSS">
+            <small>Separa las tecnologías con comas</small>
+        </div>
+
+        <div class="form-group">
+            <label>URL de la Imagen (opcional)</label>
+            <input type="text" formControlName="imagen" placeholder="https://...">
+            
+            <img *ngIf="miFormulario.get('imagen')?.value" 
+                [src]="miFormulario.get('imagen')?.value" 
+                class="preview-img">
+        </div>
+
+        <div class="botones-accion">
+            <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+            <button type="submit" class="btn-guardar" [disabled]="miFormulario.invalid">Guardar Cambios</button>
+        </div>
+
+    </form>
+</div>

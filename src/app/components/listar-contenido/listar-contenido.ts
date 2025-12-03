@@ -14,7 +14,7 @@ import { combineLatest } from 'rxjs';
 })
 export class ListarContenido implements OnInit {
 
-  proyectos: any[] = [];  // Aquí se guardarán los proyectos
+  proyectos: any[] = []; 
   usuarios: any[]=[]
   constructor(private proyectosService: GestionProyectos,
     private usuariosService:GestionUsuarios,

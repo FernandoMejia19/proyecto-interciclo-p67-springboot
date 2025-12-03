@@ -1,0 +1,102 @@
+.container-crear {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #444;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+
+        &:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    small {
+        color: #888;
+        font-size: 0.85rem;
+        margin-top: 5px;
+        display: block;
+    }
+    
+    .error {
+        color: #dc3545;
+    }
+}
+
+.preview-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: 1px solid #eee;
+    background-color: #f9f9f9;
+}
+
+.botones-accion {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s;
+
+    &.btn-cancelar {
+        background-color: #f1f3f5;
+        color: #495057;
+        &:hover { background-color: #e9ecef; }
+    }
+
+    &.btn-guardar {
+        background-color: #007bff;
+        color: white;
+        &:hover { background-color: #0056b3; }
+        
+        &:disabled {
+            background-color: #a0cfff;
+            cursor: not-allowed;
+        }
+    }
+}

@@ -27,12 +27,24 @@ export class RoleGuard implements CanActivate {
 
         return this.userService.getUserRole(user.uid).pipe(
           map(role => {
+            switch(role){
+              case 'admin':
+                return true
+              case 'dev':
+                return true
+              default:
+                this.router.navigate(['/forbidden']);
+            return false;
+            }
+
+            /*
             if (role === 'admin') {
               return true;
             } else {
               this.router.navigate(['/forbidden']);
-              return false;
-            }
+            return false;
+          }
+          */
           })
         );
       })

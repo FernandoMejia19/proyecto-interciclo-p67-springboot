@@ -33,23 +33,35 @@ export class InicioSesion {
   }
 
   async login() {
-    if (this.loginForm.invalid) return;
+  if (this.loginForm.invalid) return;
+  this.loading = true;
+  const { email, password } = this.loginForm.value;
+  try {
+    const userCredential = await this.authService.login(email, password);
+    const uid = userCredential.user?.uid;
 
-    this.loading = true;
-
-    const { email, password } = this.loginForm.value;
-
-    try {
-      await this.authService.login(email, password);
-
-      console.log('Login exitoso');
-      this.router.navigate(['/administrador']);
+    if (uid) {
+      const role = await this.authService.getUserRole(uid); 
       
-    } catch (error: any) {
-      console.log(error);
-      this.errorMessage = 'Correo o contraseña incorrectos';
+      console.log('Login exitoso. Rol:', role);
+      switch (role) {
+        case 'admin':
+          this.router.navigate(['/administrador']);
+          break;
+        case 'dev': 
+          this.router.navigate(['/perfilUsuario']);
+          break;
+        case 'user':
+        default:
+          this.router.navigate(['/portafolios']); 
+          break;
+      }
     }
 
-    this.loading = false;
+  } catch (error: any) {
+    console.log(error);
+    this.errorMessage = 'Correo o contraseña incorrectos';
   }
+  this.loading = false;
+}
 }

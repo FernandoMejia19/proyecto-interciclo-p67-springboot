@@ -1,0 +1,43 @@
+<div class="perfil-publico-container" *ngIf="!loading; else cargando">
+
+    <div class="header-perfil" *ngIf="programador">
+        
+        <div class="info">
+            <h1>{{ programador.nombre || 'Programador' }}</h1>
+            <p class="desc">{{ programador.descripcion || 'Sin descripción' }}</p>
+            <div class="badges">
+                <span class="badge" *ngFor="let tech of programador.tecnologias">{{ tech }}</span>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="seccion-reserva">
+        <h2>📅 Disponibilidad para Asesorías</h2>
+        <p>Selecciona un horario disponible para enviar tu solicitud.</p>
+
+        <div *ngIf="horariosDisponibles.length === 0" class="sin-horarios">
+            <p>Este programador no tiene horarios disponibles por el momento.</p>
+        </div>
+
+        <div class="grid-horarios">
+            <div class="card-horario" *ngFor="let slot of horariosDisponibles">
+                <div class="fecha">
+                    <strong>{{ slot.fecha }}</strong>
+                </div>
+                <div class="hora">
+                    ⏰ {{ slot.horaInicio }} - {{ slot.horaFin }}
+                </div>
+                <button class="btn-reservar" (click)="reservarCita(slot)">
+                    Reservar Cita
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<ng-template #cargando>
+    <div class="loading">Cargando perfil...</div>
+</ng-template>

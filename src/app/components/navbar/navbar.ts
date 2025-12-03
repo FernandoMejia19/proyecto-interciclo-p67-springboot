@@ -1,22 +1,40 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive,Router } from "@angular/router";
+import { RouterLink, RouterLinkActive, Router } from "@angular/router";
+import { AuthService } from '../../core/services/auth'; 
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, RouterLinkActive],
+  standalone: true, 
+  imports: [RouterLink, RouterLinkActive, CommonModule],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
 export class Navbar {
-  constructor(private router: Router){
+
+  user$;
+  menuAbierto = false;
+  
+  constructor(
+    private router: Router,
+    public authService: AuthService 
+  ) {
+    this.user$ = this.authService.currentUser$;
 
   }
-  registrar(){
-    console.log("Te quieres registrar ");
+
+  toggleMenu() {
+    this.menuAbierto = !this.menuAbierto;
   }
+
+  logout() {
+    this.authService.logout().then(() => {
+      this.menuAbierto = false; 
+      this.router.navigate(['/login']); 
+    });
+  }
+
   ingresar(){
-    console.log("quieres iniciar ");
-    this.router.navigate(['/inicio-sesion']);
+    this.router.navigate(['/login']); 
   }
-
 }

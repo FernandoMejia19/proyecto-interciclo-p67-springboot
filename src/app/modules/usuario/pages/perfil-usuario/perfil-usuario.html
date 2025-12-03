@@ -1,25 +1,93 @@
-<div class="container_perfil-usuario">
+<div class="container_perfil-usuario" *ngIf="perfil; else cargando">
     <div class="portada-usuario">
-        <img class="imagen-usuario" src="https://lienzocreativo.com/blog/wp-content/uploads/2020/03/primer-plano.jpg" >
+        <img class="imagen-usuario" 
+            [src]="perfil.photoURL ? perfil.photoURL : 'https://lienzocreativo.com/blog/wp-content/uploads/2020/03/primer-plano.jpg'" 
+            alt="Foto de perfil">
+        
         <div class="encabezado-usuario">
-            <span>Vawlasl asdad</span>
+            <span>{{ perfil.nombre || perfil.email }}</span>
+            
             <div class="tecnologias-usuario">
-                <p>Tecnologias :</p>
-                <div class="tec">1</div>
-                <div class="tec">2</div>
-                <div class="tec">3</div>
+                <p>Tecnologías:</p>
+                <div class="tec" *ngFor="let tech of perfil.tecnologias">
+                    {{ tech }}
+                </div>
+                <span *ngIf="!perfil.tecnologias || perfil.tecnologias.length === 0" style="font-size: 1rem; margin-left: 10px;">
+                    (Sin tecnologías)
+                </span>
             </div>
         </div>
     </div>
+
     <div class="container-contenido">
         <div class="informacion-usuario">
-            nombre:ajsajsfl
-            ciudad:dasfasd
-            pais:asdfds
-            descripcion:loremadasfasdfa
+            <p><strong>Nombre:</strong> {{ perfil.nombre }}</p>
+            <p><strong>Ciudad:</strong> {{ perfil.ciudad || 'No especificada' }}</p>
+            <p><strong>País:</strong> {{ perfil.pais || 'No especificado' }}</p>
+            <p><strong>Descripción:</strong></p>
+            <p>{{ perfil.descripcion || 'Sin descripción disponible.' }}</p>
         </div>
-        <div class="proyectos">
-            <app-listar-contenido></app-listar-contenido>
+        <div class="contenido-dinamico">
+            
+            <div class="menu-tabs">
+                <button [class.activo]="seccionActiva === 'proyectos'" 
+                        (click)="cambiarSeccion('proyectos')">
+                    Mis Proyectos
+                </button>
+                <button [class.activo]="seccionActiva === 'citas'" 
+                        (click)="cambiarSeccion('citas')">
+                    Mis Asesorías
+                </button>
+                <button *ngIf="isAdmin" 
+                        [class.activo]="seccionActiva === 'usuarios'" 
+                        (click)="cambiarSeccion('usuarios')"
+                        style="color: #dc3545; font-weight: bold;">
+                    🛡️ Gestionar Usuarios
+                </button>
+            </div>
+            <div class="proyectos-container" *ngIf="seccionActiva === 'proyectos'">
+                <div class="barra-acciones">
+                    <button class="btn-crear-full" (click)="crearNuevoProyecto()">
+                        🚀 Crear Nuevo Proyecto
+                    </button>
+                </div>
+                <div *ngIf="proyectos.length === 0" class="no-proyectos">
+                    <p>Aún no has subido ningún proyecto.</p>
+                </div>
+
+                <div class="grid-proyectos">
+                    <div class="card-proyecto" *ngFor="let pro of proyectos">
+                        <img [src]="pro.imagen || 'assets/default-project.png'" class="img-proyecto">
+                        
+                        <div class="info-proyecto">
+                            <h4>{{ pro.titulo }}</h4>
+                            <p>{{ pro.descripcion }}</p>
+                        </div>
+
+                        <div class="acciones-proyecto">
+                            <button class="btn-editar" (click)="editarProyecto(pro.id)">
+                                Editar
+                            </button>
+                            <button class="btn-eliminar" (click)="eliminarProyecto(pro.id)">
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="citas-container" *ngIf="seccionActiva === 'citas'">
+                <app-mis-citas></app-mis-citas>
+            </div>
+            <div class="admin-container" *ngIf="seccionActiva === 'usuarios' && isAdmin">
+                <app-admin-usuarios></app-admin-usuarios>
+            </div>
         </div>
     </div>
 </div>
+
+<ng-template #cargando>
+    <div style="padding: 50px; text-align: center; color: white;">
+        Cargando perfil...
+    </div>
+</ng-template>

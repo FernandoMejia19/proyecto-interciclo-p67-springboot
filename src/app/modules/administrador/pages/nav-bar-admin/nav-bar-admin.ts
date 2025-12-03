@@ -3,7 +3,7 @@ import { Router, RouterOutlet, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-nav-bar-admin',
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet],
   templateUrl: './nav-bar-admin.html',
   styleUrl: './nav-bar-admin.scss',
 })

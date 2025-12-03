@@ -2,16 +2,9 @@
     <header>
         <img class="logo-navbar" src="https://img.freepik.com/vector-gratis/logotipo-abstracto-empresa_53876-120501.jpg?semt=ais_hybrid&w=740&q=80" >
         <h2>ADMINISTRACION</h2>
-        <button (click)="salir()" class="btn_salir">salir</button>
+        <button (click)="salir()" class="btn_salir">Ir al inicio</button>
     </header>
-    <div class="informacion">
-        <p>Bienvenido</p>
-    </div>
-    <nav>
-        <a routerLink="admin-desarrolladores" routerLinkActive="active">Desarrolladores</a>
-        <a routerLink="admin-proyectos" >Proyectos</a>
-    </nav>
     <section class="contenido">
-        <router-outlet />
     </section>
 </div>
+<router-outlet />

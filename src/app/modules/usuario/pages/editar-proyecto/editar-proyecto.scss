@@ -1,0 +1,83 @@
+.container-editar {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    small {
+        color: #888;
+        font-size: 0.8rem;
+    }
+}
+
+.preview-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.botones-accion {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-cancelar {
+    background-color: #ccc;
+    color: #333;
+    &:hover { background-color: #bbb; }
+}
+
+.btn-guardar {
+    background-color: #007bff; /* Azul */
+    color: white;
+    &:hover { background-color: #0056b3; }
+    
+    &:disabled {
+        background-color: #a0cfff;
+        cursor: not-allowed;
+    }
+}

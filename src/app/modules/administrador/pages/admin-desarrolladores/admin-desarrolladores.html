@@ -1,10 +1,16 @@
-<div class="contenido-proyectos" >
+<div class="contenido-proyectos">
     <div class="container" *ngFor="let d of desarrolladores">
-        <div class="tarjeta" (click)="abrirPerfil()">
-        <div class="img"></div>
-        <p>Nombre={{d.nombre}}</p>
-        <p>Lugar de residencia={{d.ciudad}} -  {{d.pais}}</p>
+
+        <div class="tarjeta" (click)="abrirPerfil(d.id)">
+            {{d.id}}
+            <div class="img">
+                <img *ngIf="d.photoURL" [src]="d.photoURL" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+            </div>
+            
+            <p><strong>Nombre:</strong> {{d.nombre}}</p>
+            <p><strong>Ubicación:</strong> {{d.ciudad}} - {{d.pais}}</p>
+            <p *ngIf="d.tecnologias"><small>{{ d.tecnologias }}</small></p>
+        </div>
+
     </div>
-    </div>
-    
 </div>

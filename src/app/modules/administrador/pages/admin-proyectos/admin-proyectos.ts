@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './admin-proyectos.scss',
 })
 export class AdminProyectos {
-  proyectos: any[] = [];  // Aquí se guardarán los proyectos
+  proyectos: any[] = [];
   usuarios: any[]=[]
   constructor(private proyectosService: GestionProyectos,
     private usuariosService:GestionUsuarios,

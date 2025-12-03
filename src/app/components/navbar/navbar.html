@@ -1,11 +1,34 @@
-
 <nav>
     <div class="enlaces">
         <a routerLink="/portafolios" routerLinkActive="active">Portafolios</a>
-        <a routerLink="/proyectos">Proyectos</a>
-        <a routerLink="/desarrolladores">Desarrolladores</a>
+        <a routerLink="/proyectos" routerLinkActive="active">Proyectos</a>
+        <a routerLink="/desarrolladores" routerLinkActive="active">Desarrolladores</a>
     </div>
+
     <div class="botones">
-        <button (click)="ingresar()">Ingresar</button>
+
+        <div *ngIf="user$ | async as user; else loginTemplate" class="usuario-container">
+
+            <div class="avatar" (click)="toggleMenu()">
+                <img [src]="user.photoURL || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'" alt="Perfil">
+                
+                <i class="arrow-icon">▼</i>
+            </div>
+             <div class="dropdown" *ngIf="menuAbierto">
+                <div class="dropdown-header">
+                    <p>Hola, <strong>{{ user.email }}</strong></p>
+                </div>
+                <hr>
+                <a routerLink="/perfilUsuario" (click)="menuAbierto=false">Editar Perfil</a>
+                <a routerLink="/mis-proyectos" (click)="menuAbierto=false">Mis Proyectos</a>
+                <hr>
+                <button (click)="logout()" class="btn-logout">Cerrar Sesión</button>
+            </div>
+
+        </div>
+        <ng-template #loginTemplate>
+            <button (click)="ingresar()">Ingresar</button>
+        </ng-template>
+
     </div>
 </nav>

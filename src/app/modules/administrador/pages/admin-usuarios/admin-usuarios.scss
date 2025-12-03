@@ -1,0 +1,115 @@
+.panel-gestion {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+h3 { margin-top: 0; color: #333; }
+.desc { color: #666; margin-bottom: 20px; font-size: 0.9rem; }
+
+.tabla-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        color: #444;
+    }
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+    .avatar-mini {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+
+    &.admin { background-color: #d4edda; color: #155724; }
+    &.dev { background-color: #cce5ff; color: #004085; }
+    &.user { background-color: #e2e3e5; color: #383d41; }
+}
+
+.select-rol {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.botones-accion {
+    display: flex;
+    gap: 5px;
+
+    button {
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: 0.2s;
+        
+        &.btn-editar { background-color: #ffc107; color: #333; }
+        &.btn-eliminar { background-color: #dc3545; color: white; }
+        &.btn-guardar { background-color: #28a745; color: white; }
+        &.btn-cancelar { background-color: #6c757d; color: white; }
+
+        &:hover { opacity: 0.8; }
+    }
+}
+.btn-crear {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+.btn-crear:hover { opacity: .85; }
+
+/* MODAL */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+.modal-content {
+    width: 380px;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+}

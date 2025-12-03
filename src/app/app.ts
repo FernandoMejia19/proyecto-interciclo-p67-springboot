@@ -26,7 +26,7 @@ export class App {
 
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd)=>{
-        if (!event.url.includes('/perfilUsuario')) {
+        if (event.url.includes('/portafolios') ||event.url.includes('/proyectos') || event.url.includes('/desarrolladores') ) {
         this.mostrarHeader = true;
       } else {
         this.mostrarHeader = false;

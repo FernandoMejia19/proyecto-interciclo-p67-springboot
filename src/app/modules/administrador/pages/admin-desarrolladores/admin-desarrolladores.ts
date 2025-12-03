@@ -10,18 +10,27 @@ import { CommonModule } from '@angular/common';
   styleUrl: './admin-desarrolladores.scss',
 })
 export class AdminDesarrolladores implements OnInit {
-  desarrolladores:any[]=[]
-  constructor(private router:Router,
-    private usuariosService:GestionUsuarios,
+  
+  desarrolladores: any[] = [];
+
+  constructor(
+    private router: Router,
+    private usuariosService: GestionUsuarios,
     private cdr: ChangeDetectorRef
-  ){}
+  ) {}
+
   ngOnInit(): void {
-    this.usuariosService.getUsuarios().subscribe(usuarios=>{
-      this.desarrolladores=usuarios
+    this.usuariosService.getUsuarios().subscribe(usuarios => {
+      this.desarrolladores = usuarios;
       this.cdr.detectChanges();
     });
   }
-  abrirPerfil(){
-    this.router.navigate(['/perfilUsuario']);
+
+  abrirPerfil(id: string) {
+    if (id) {
+        this.router.navigate(['/ver-programador', id]);
+    } else {
+        console.error("Error: El usuario no tiene ID");
+    }
   }
 }
