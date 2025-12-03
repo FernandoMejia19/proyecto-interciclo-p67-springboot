@@ -231,3 +231,31 @@ button {
         transform: scale(0.99);
     }
 }
+.redes-sociales {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    .contacto-item {
+        margin: 8px 0;
+        a { color: #007bff; text-decoration: underline; }
+    }
+}
+
+.no-contactos { color: #888; font-style: italic; margin: 15px 0; }
+
+.acciones-perfil {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.btn-editar-perfil {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 1rem;
+    cursor: pointer;
+    &:hover { background: #0056b3; }
+}

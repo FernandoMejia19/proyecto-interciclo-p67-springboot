@@ -21,9 +21,19 @@ export class AdminDesarrolladores implements OnInit {
 
   ngOnInit(): void {
     this.usuariosService.getUsuarios().subscribe(usuarios => {
-      this.desarrolladores = usuarios;
-      this.cdr.detectChanges();
-    });
+    // FORZAMOS que sea un array aunque venga cualquier cosa
+    const lista = Array.isArray(usuarios) ? usuarios : [];
+    
+    // Filtramos solo desarrolladores
+    this.desarrolladores = lista.filter(user => 
+      user.role === 'dev' || 
+      user.rol === 'dev' || 
+      user.role === 'desarrollador'
+    );
+
+    console.log('Desarrolladores finales:', this.desarrolladores); // ← abre la consola y mira qué sale aquí
+    this.cdr.detectChanges();
+  });
   }
 
   abrirPerfil(id: string) {

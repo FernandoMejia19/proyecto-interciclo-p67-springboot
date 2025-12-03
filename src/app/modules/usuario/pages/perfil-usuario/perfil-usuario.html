@@ -1,93 +1,94 @@
 <div class="container_perfil-usuario" *ngIf="perfil; else cargando">
-    <div class="portada-usuario">
-        <img class="imagen-usuario" 
-            [src]="perfil.photoURL ? perfil.photoURL : 'https://lienzocreativo.com/blog/wp-content/uploads/2020/03/primer-plano.jpg'" 
-            alt="Foto de perfil">
-        
-        <div class="encabezado-usuario">
-            <span>{{ perfil.nombre || perfil.email }}</span>
-            
-            <div class="tecnologias-usuario">
-                <p>Tecnologías:</p>
-                <div class="tec" *ngFor="let tech of perfil.tecnologias">
-                    {{ tech }}
-                </div>
-                <span *ngIf="!perfil.tecnologias || perfil.tecnologias.length === 0" style="font-size: 1rem; margin-left: 10px;">
-                    (Sin tecnologías)
-                </span>
-            </div>
+  <div class="portada-usuario">
+    <img class="imagen-usuario" 
+        [src]="perfil.photoURL || 'https://lienzocreativo.com/blog/wp-content/uploads/2020/03/primer-plano.jpg'" 
+        alt="Foto de perfil">
+    
+    <div class="encabezado-usuario">
+      <h2>{{ perfil.nombre || 'Usuario' }}</h2>
+      <p>{{ perfil.descripcion || 'Sin descripción' }}</p>
+    </div>
+  </div>
+
+  <div class="container-contenido">
+
+    <!-- INFORMACIÓN PERSONAL -->
+    <div class="informacion-usuario">
+      <p><strong>Email:</strong> {{ perfil.email }}</p>
+      <p><strong>Ciudad:</strong> {{ perfil.ciudad || 'No especificada' }}</p>
+      <p><strong>País:</strong> {{ perfil.pais || 'No especificado' }}</p>
+
+      <!-- REDES SOCIALES -->
+      <div class="redes-sociales" *ngIf="tieneContactos()">
+        <h4>Mis Contactos</h4>
+        <div *ngIf="perfil.contactos?.whatsapp">
+          WhatsApp: <a [href]="'https://wa.me/' + perfil.contactos.whatsapp" target="_blank">{{ perfil.contactos.whatsapp }}</a>
         </div>
+        <div *ngIf="perfil.contactos?.facebook">
+          Facebook: <a [href]="'https://facebook.com/' + perfil.contactos.facebook" target="_blank">{{ perfil.contactos.facebook }}</a>
+        </div>
+      </div>
+
+      <!-- BOTÓN EDITAR -->
+      <div class="acciones-perfil">
+        <button class="btn-editar-perfil" (click)="irAEditarPerfil()">
+          Editar Información Personal
+        </button>
+      </div>
     </div>
 
-    <div class="container-contenido">
-        <div class="informacion-usuario">
-            <p><strong>Nombre:</strong> {{ perfil.nombre }}</p>
-            <p><strong>Ciudad:</strong> {{ perfil.ciudad || 'No especificada' }}</p>
-            <p><strong>País:</strong> {{ perfil.pais || 'No especificado' }}</p>
-            <p><strong>Descripción:</strong></p>
-            <p>{{ perfil.descripcion || 'Sin descripción disponible.' }}</p>
+    <div class="contenido-dinamico">
+
+      <!-- SI ES USUARIO NORMAL (role: user) -->
+      <div *ngIf="perfil.role === 'user'" class="seccion-user">
+        <h3>Mis Solicitudes de Asesoría</h3>
+        <app-mis-citas [esSolicitante]="true"></app-mis-citas>
+      </div>
+
+      <!-- SI ES DEV O ADMIN -->
+      <div *ngIf="perfil.role !== 'user'">
+        <div class="menu-tabs">
+          <button [class.activo]="seccionActiva === 'proyectos'" (click)="cambiarSeccion('proyectos')">
+            Mis Proyectos
+          </button>
+          <button [class.activo]="seccionActiva === 'citas'" (click)="cambiarSeccion('citas')">
+            Asesorías Recibidas
+          </button>
+          <button *ngIf="isAdmin" [class.activo]="seccionActiva === 'usuarios'" (click)="cambiarSeccion('usuarios')">
+            Gestionar Usuarios
+          </button>
         </div>
-        <div class="contenido-dinamico">
-            
-            <div class="menu-tabs">
-                <button [class.activo]="seccionActiva === 'proyectos'" 
-                        (click)="cambiarSeccion('proyectos')">
-                    Mis Proyectos
-                </button>
-                <button [class.activo]="seccionActiva === 'citas'" 
-                        (click)="cambiarSeccion('citas')">
-                    Mis Asesorías
-                </button>
-                <button *ngIf="isAdmin" 
-                        [class.activo]="seccionActiva === 'usuarios'" 
-                        (click)="cambiarSeccion('usuarios')"
-                        style="color: #dc3545; font-weight: bold;">
-                    🛡️ Gestionar Usuarios
-                </button>
-            </div>
-            <div class="proyectos-container" *ngIf="seccionActiva === 'proyectos'">
-                <div class="barra-acciones">
-                    <button class="btn-crear-full" (click)="crearNuevoProyecto()">
-                        🚀 Crear Nuevo Proyecto
-                    </button>
-                </div>
-                <div *ngIf="proyectos.length === 0" class="no-proyectos">
-                    <p>Aún no has subido ningún proyecto.</p>
-                </div>
 
-                <div class="grid-proyectos">
-                    <div class="card-proyecto" *ngFor="let pro of proyectos">
-                        <img [src]="pro.imagen || 'assets/default-project.png'" class="img-proyecto">
-                        
-                        <div class="info-proyecto">
-                            <h4>{{ pro.titulo }}</h4>
-                            <p>{{ pro.descripcion }}</p>
-                        </div>
-
-                        <div class="acciones-proyecto">
-                            <button class="btn-editar" (click)="editarProyecto(pro.id)">
-                                Editar
-                            </button>
-                            <button class="btn-eliminar" (click)="eliminarProyecto(pro.id)">
-                                Eliminar
-                            </button>
-                        </div>
-                    </div>
-                </div>
+        <!-- PROYECTOS -->
+        <div *ngIf="seccionActiva === 'proyectos'">
+          <button class="btn-crear-full" (click)="crearNuevoProyecto()">Crear Proyecto</button>
+          <div class="grid-proyectos">
+            <div class="card-proyecto" *ngFor="let pro of proyectos">
+              <img [src]="pro.imagen || 'assets/default.png'">
+              <h4>{{ pro.titulo }}</h4>
+              <div class="acciones-proyecto">
+                <button (click)="editarProyecto(pro.id)">Editar</button>
+                <button (click)="eliminarProyecto(pro.id)">Eliminar</button>
+              </div>
             </div>
-
-            <div class="citas-container" *ngIf="seccionActiva === 'citas'">
-                <app-mis-citas></app-mis-citas>
-            </div>
-            <div class="admin-container" *ngIf="seccionActiva === 'usuarios' && isAdmin">
-                <app-admin-usuarios></app-admin-usuarios>
-            </div>
+          </div>
         </div>
+
+        <!-- ASESORÍAS RECIBIDAS (para dev) -->
+        <div *ngIf="seccionActiva === 'citas'">
+          <app-mis-citas [esSolicitante]="false"></app-mis-citas>
+        </div>
+
+        <!-- ADMIN -->
+        <div *ngIf="seccionActiva === 'usuarios' && isAdmin">
+          <app-admin-usuarios></app-admin-usuarios>
+        </div>
+      </div>
+
     </div>
+  </div>
 </div>
 
 <ng-template #cargando>
-    <div style="padding: 50px; text-align: center; color: white;">
-        Cargando perfil...
-    </div>
+  <div class="loading">Cargando perfil...</div>
 </ng-template>

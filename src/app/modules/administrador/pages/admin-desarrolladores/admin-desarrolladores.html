@@ -1,16 +1,33 @@
 <div class="contenido-proyectos">
-    <div class="container" *ngFor="let d of desarrolladores">
+  <div *ngIf="desarrolladores.length === 0" class="no-desarrolladores">
+    <p>No hay desarrolladores registrados aún.</p>
+</div>
 
-        <div class="tarjeta" (click)="abrirPerfil(d.id)">
-            {{d.id}}
-            <div class="img">
-                <img *ngIf="d.photoURL" [src]="d.photoURL" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
-            </div>
-            
-            <p><strong>Nombre:</strong> {{d.nombre}}</p>
-            <p><strong>Ubicación:</strong> {{d.ciudad}} - {{d.pais}}</p>
-            <p *ngIf="d.tecnologias"><small>{{ d.tecnologias }}</small></p>
+  <div class="container" *ngFor="let d of desarrolladores">
+
+    <div class="tarjeta" (click)="abrirPerfil(d.id)">
+
+        <div class="img">
+            <img *ngIf="d.photoURL" 
+                [src]="d.photoURL" 
+                alt="Foto de {{ d.nombre }}"
+                style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+        
+        <div *ngIf="!d.photoURL" class="placeholder-avatar">
+            <span>{{ d.nombre?.[0] || 'D' }}</span>
         </div>
+    </div>
+
+    <div class="info">
+        <p class="nombre"><strong>{{ d.nombre || 'Sin nombre' }}</strong></p>
+        <p class="ubicacion">
+            <small>{{ d.ciudad || 'Ciudad no especificada' }}, {{ d.pais || 'País no especificado' }}</small>
+        </p>
+        <div class="tecnologias" *ngIf="d.tecnologias && d.tecnologias.length > 0">
+          <span class="tech-badge" *ngFor="let tech of d.tecnologias">{{ tech }}</span>
+        </div>
+    </div>
 
     </div>
+</div>
 </div>

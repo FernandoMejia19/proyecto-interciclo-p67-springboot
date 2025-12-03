@@ -29,7 +29,7 @@ export class InicioSesion {
   }
 
   salir() {
-    this.router.navigate(['/portafolios']);
+    this.router.navigate(['/proyectos']);
   }
 
   async login() {
@@ -53,7 +53,7 @@ export class InicioSesion {
           break;
         case 'user':
         default:
-          this.router.navigate(['/portafolios']); 
+          this.router.navigate(['/proyectos']); 
           break;
       }
     }

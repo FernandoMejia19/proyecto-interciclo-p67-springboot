@@ -4,6 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Firestore, doc, getDoc, collection, query, where, getDocs, addDoc, updateDoc } from '@angular/fire/firestore';
 import { AuthService } from '../../../../core/services/auth';
 
+
+
+
 @Component({
   selector: 'app-ver-perfil-publico',
   standalone: true,
@@ -24,12 +27,11 @@ export class PerfilPublico implements OnInit {
     private router: Router,
     private firestore: Firestore,
     private authService: AuthService,
-    private cdr:ChangeDetectorRef
+    private cdr: ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
     this.idProgramador = this.route.snapshot.paramMap.get('id') || '';
-    
     this.authService.currentUser$.subscribe(user => {
       if (user) this.uidUsuarioActual = user.uid;
     });
@@ -38,6 +40,7 @@ export class PerfilPublico implements OnInit {
       await this.cargarDatosProgramador();
       await this.cargarHorariosDisponibles();
     }
+
     this.loading = false;
     this.cdr.detectChanges();
   }
@@ -59,40 +62,92 @@ export class PerfilPublico implements OnInit {
     );
     
     const snap = await getDocs(q);
-    this.horariosDisponibles = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const horariosOriginales = snap.docs.map(d => ({
+      id: d.id,
+      ...d.data()
+    }));
+
+    this.horariosDisponibles = this.desglosarHorarios(horariosOriginales);
+  }
+
+  desglosarHorarios(horarios: any[]) {
+    const resultado: any[] = [];
+
+    horarios.forEach(h => {
+      let inicio = this.convertirAHoras(h.horaInicio);
+      let fin = this.convertirAHoras(h.horaFin);
+
+      while (inicio < fin) {
+        const siguiente = inicio + 1;
+
+        resultado.push({
+          id: h.id,
+          fecha: h.fecha,
+          horaInicio: this.convertirAFormato(inicio),
+          horaFin: this.convertirAFormato(siguiente),
+          uidDev: h.uidDev
+        });
+
+        inicio = siguiente;
+      }
+    });
+
+    return resultado;
+  }
+
+  convertirAHoras(hora: string): number {
+    return parseInt(hora.split(':')[0], 10);
+  }
+
+  convertirAFormato(hora: number): string {
+    return `${hora.toString().padStart(2, '0')}:00`;
   }
 
   async reservarCita(slot: any) {
-    if (!this.uidUsuarioActual) {
-      alert("Debes iniciar sesión para reservar.");
-      return;
-    }
+  if (!this.uidUsuarioActual) {
+    alert("Debes iniciar sesión para reservar.");
+    return;
+  }
 
-    const confirmar = confirm(`¿Confirmar reserva para el ${slot.fecha} a las ${slot.horaInicio}?`);
-    if (!confirmar) return;
+  // Pedir motivo
+  const motivo = prompt("Ingresa el motivo de la asesoría:");
 
-    try {
-      await addDoc(collection(this.firestore, 'asesorias'), {
-        uidDev: this.idProgramador,
-        uidSolicitante: this.uidUsuarioActual,
-        nombreSolicitante: 'Cliente', 
-        tema: 'Asesoría General', 
-        fecha: slot.fecha,
-        horaInicio: slot.horaInicio,
-        horaFin: slot.horaFin,
-        estado: 'pendiente' 
-      });
+  if (!motivo || motivo.trim() === "") {
+    alert("Debes ingresar un motivo para poder reservar.");
+    return;
+  }
 
-      const slotRef = doc(this.firestore, 'disponibilidad', slot.id);
-      await updateDoc(slotRef, { estado: 'reservado' });
+  const confirmar = confirm(
+    `¿Confirmar reserva para el ${slot.fecha} a las ${slot.horaInicio}?`
+  );
+  if (!confirmar) return;
 
-      alert('¡Solicitud enviada! El programador debe aceptarla.');
-      
-      this.cargarHorariosDisponibles();
+  try {
+    await addDoc(collection(this.firestore, 'asesorias'), {
+      uidDev: this.idProgramador,
+      uidSolicitante: this.uidUsuarioActual,
+      nombreSolicitante: 'Cliente',
+      tema: 'Asesoría General',
+      fecha: slot.fecha,
+      horaInicio: slot.horaInicio,
+      horaFin: slot.horaFin,
+      estado: 'pendiente',
+      mensaje: motivo // 👈 se guarda el motivo
+    });
 
-    } catch (error) {
-      console.error(error);
-      alert('Error al reservar');
-    }
+    const slotRef = doc(this.firestore, 'disponibilidad', slot.id);
+    await updateDoc(slotRef, { estado: 'reservado' });
+
+    alert('¡Solicitud enviada! El programador debe aceptarla.');
+
+    this.cargarHorariosDisponibles();
+  } catch (error) {
+    console.error(error);
+    alert('Error al reservar');
+  }
+  this.cdr.detectChanges();
+}
+volverAtras() {
+    window.history.back();
   }
 }

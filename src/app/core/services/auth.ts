@@ -1,8 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User } from '@angular/fire/auth';
 import { authState } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { createStorageRef } from '@angular/fire/compat/storage';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { Storage } from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +14,10 @@ export class AuthService {
 
   currentUser$: Observable<User | null>;
 
-  constructor(private auth: Auth,private firestore:Firestore) {
+  constructor(private auth: Auth,private firestore:Firestore,
+    private storage: Storage = inject(Storage)
+    
+  ) {
     this.currentUser$ = authState(this.auth);
   }
 
@@ -50,5 +56,21 @@ async getUserProfile(uid: string) {
   } else {
     return null;
   }
+}
+async subirFotoPerfil(file: File, uid: string): Promise<string> {
+    const filePath = `users/${uid}/avatar.jpg`;
+    const storageRef = ref(this.storage, filePath);
+
+    try {
+      const snapshot = await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(snapshot.ref);
+      return url;
+    } catch (error) {
+      console.error('Error al subir foto:', error);
+      throw error;
+    }
+  }
+  async getCurrentUser() {
+  return await this.currentUser$.pipe(take(1)).toPromise();
 }
 }

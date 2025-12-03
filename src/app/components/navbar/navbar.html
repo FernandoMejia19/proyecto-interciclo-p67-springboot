@@ -1,6 +1,9 @@
 <nav>
     <div class="enlaces">
-        <a routerLink="/portafolios" routerLinkActive="active">Portafolios</a>
+        <!--
+            <a routerLink="/portafolios" routerLinkActive="active">Portafolios</a>
+        
+        -->
         <a routerLink="/proyectos" routerLinkActive="active">Proyectos</a>
         <a routerLink="/desarrolladores" routerLinkActive="active">Desarrolladores</a>
     </div>
@@ -19,8 +22,8 @@
                     <p>Hola, <strong>{{ user.email }}</strong></p>
                 </div>
                 <hr>
-                <a routerLink="/perfilUsuario" (click)="menuAbierto=false">Editar Perfil</a>
-                <a routerLink="/mis-proyectos" (click)="menuAbierto=false">Mis Proyectos</a>
+                <a routerLink="/perfilUsuario" (click)="menuAbierto=false">Mi Perfil</a>
+                <a routerLink="/perfilUsuario" (click)="menuAbierto=false">Mis Proyectos</a>
                 <hr>
                 <button (click)="logout()" class="btn-logout">Cerrar Sesión</button>
             </div>

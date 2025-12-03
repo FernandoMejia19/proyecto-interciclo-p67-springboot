@@ -1,4 +1,9 @@
 <div class="perfil-publico-container" *ngIf="!loading; else cargando">
+    <div class="volver-atras">
+        <button class="btn-volver" (click)="volverAtras()">
+            <span class="flecha">←</span> Volver
+        </button>
+    </div>
 
     <div class="header-perfil" *ngIf="programador">
         
@@ -34,6 +39,12 @@
                 </button>
             </div>
         </div>
+        <!--
+            <div class="proyects">
+                <app-proyectos></app-proyectos>
+            </div>
+        
+        -->
     </div>
 
 </div>

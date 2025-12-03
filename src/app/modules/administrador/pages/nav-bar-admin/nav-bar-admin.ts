@@ -13,6 +13,6 @@ export class NavBarAdmin {
   }
   
   salir(){
-    this.router.navigate(['/portafolios']);
+    this.router.navigate(['/proyectos']);
   }
 }

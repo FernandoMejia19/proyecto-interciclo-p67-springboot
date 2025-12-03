@@ -41,10 +41,19 @@ export const routes: Routes = [
     loadComponent: () => import('../app/modules/usuario/pages/perfil-publico/perfil-publico').then(m => m.PerfilPublico),
     canActivate: [AuthGuard]
     },
+    {
+    path: 'proyecto/:id',
+    loadComponent: () => import('./modules/usuario/pages/detalle-proyecto/detalle-proyecto').then(m => m.DetalleProyectoComponent)
+    },
     { 
         path: 'crear-proyecto', 
         loadComponent: () => import('./modules/usuario/pages/crear-proyecto/crear-proyecto').then(m => m. CrearProyectoComponent),
         canActivate: [AuthGuard] 
+    },
+    {
+    path: 'editar-perfil',
+    loadComponent: () => import('./modules/usuario/pages/editar-perfil/editar-perfil')
+    .then(m => m.EditarPerfilComponent)
     },
     { 
         path: '', 

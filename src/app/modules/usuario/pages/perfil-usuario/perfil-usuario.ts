@@ -89,4 +89,15 @@ export class PerfilUsuario implements OnInit {
   editarProyecto(idProyecto: string) {
     this.router.navigate(['/editar-proyecto', idProyecto]);
   }
+  tieneContactos(): boolean {
+  return this.perfil?.contactos && 
+        (this.perfil.contactos.facebook || 
+          this.perfil.contactos.whatsapp || 
+          this.perfil.contactos.instagram || 
+          this.perfil.contactos.linkedin);
+}
+
+irAEditarPerfil() {
+  this.router.navigate(['/editar-perfil']);
+}
 }

@@ -39,4 +39,36 @@ export class AsesoriasService {
     const docRef = doc(this.firestore, 'asesorias', idCita);
     return await updateDoc(docRef, { estado: estado });
   }
+async obtenerMisSolicitudes(uidCliente: string): Promise<any[]> {
+  try {
+    const solicitudesRef = collection(this.firestore, 'asesorias');
+    const q = query(
+      solicitudesRef,
+      where('uidSolicitante', '==', uidCliente)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    const solicitudes = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        fecha: data['fecha'] || '',
+        horaInicio: data['horaInicio'] || '',
+        horaFin: data['horaFin'] || '',
+        mensaje: data['mensaje'] || data['tema'] || 'Sin tema',
+        estado: data['estado'] || 'pendiente',
+        nombreDev: data['nombreDev'] || 'Desarrollador',
+        linkReunion: data['linkReunion'] || null
+      };
+    });
+    return solicitudes;
+
+  } catch (error) {
+    console.error('Error al obtener mis solicitudes:', error);
+    return [];
+  }
+}
+
 }

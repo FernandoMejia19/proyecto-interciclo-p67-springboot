@@ -5,13 +5,26 @@
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="login()">
-        <button class="cerrar" (click)="salir()">x</button>
+        <!-- Botón cerrar con type="button" para que no envíe el form -->
+        <button type="button" class="cerrar" (click)="salir()">x</button>
+        
         <h2>Iniciar Sesión</h2>
 
-        <input type="email" placeholder="Correo" formControlName="email">
-        <input type="password" placeholder="Contraseña" formControlName="password">
+        <input 
+            type="email" 
+            placeholder="Correo" 
+            formControlName="email">
 
-        <button class="iniciar" type="submit" [disabled]="loading">
+        <input 
+            type="password" 
+            placeholder="Contraseña" 
+            formControlName="password"
+            (keydown.enter)="login()"> <!-- Esto evita que Enter recargue la página -->
+
+        <button 
+            class="iniciar" 
+            type="submit" 
+            [disabled]="loading">
             {{ loading ? 'Ingresando...' : 'Iniciar' }}
         </button>
 

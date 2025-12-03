@@ -1,78 +1,114 @@
 <div class="panel-asesorias">
 
+  <!-- MODO CLIENTE (role: user) -->
+  <div *ngIf="esCliente" class="modo-cliente">
+    <h2>Mis Solicitudes de Asesoría</h2>
+
+    <!-- Solicitudes que el usuario ha hecho (pendientes o confirmadas) -->
+    <div *ngIf="misSolicitudes.length > 0; else sinSolicitudes">
+        <div class="grid-solicitudes">
+        <div class="card-solicitud" *ngFor="let sol of misSolicitudes">
+            <div class="info">
+            <span class="dev">Para: <strong>{{ sol.nombreDev || 'Desarrollador' }}</strong></span>
+            <span class="tema">Tema: {{ sol.mensaje }}</span>
+            <span class="fecha">Fecha: {{ sol.fecha }} | Hora: {{ sol.horaInicio }} - {{ sol.horaFin }}</span>
+            <span class="estado" [class.pendiente]="sol.estado === 'pendiente'"
+                [class.aceptada]="sol.estado === 'aceptada'"
+                [class.rechazada]="sol.estado === 'rechazada'">
+                Estado: {{ sol.estado | titlecase }}
+            </span>
+        </div>
+          <div class="acciones" *ngIf="sol.estado === 'aceptada' && sol.linkReunion">
+            <a [href]="sol.linkReunion" target="_blank" class="btn-unirse">
+            Unirse a la reunión
+            </a>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <ng-template #sinSolicitudes>
+    <p class="vacio">Aún no has solicitado ninguna asesoría.</p>
+    </ng-template>
+</div>
+
+<!-- MODO DESARROLLADOR (dev/admin) -->
+  <div *ngIf="!esCliente">
 
     <section class="seccion-solicitudes" *ngIf="solicitudes.length > 0">
-        <h3>🔔 Solicitudes Pendientes</h3>
-        
-        <div class="grid-solicitudes">
-            <div class="card-solicitud" *ngFor="let sol of solicitudes">
-                <div class="info">
-                    <span class="cliente">De: {{ sol.nombreSolicitante || 'Usuario Anónimo' }}</span>
-                    <span class="tema">Tema: {{ sol.mensaje }}</span>
-                    <span class="fecha">📅 {{ sol.fecha }} | ⏰ {{ sol.horaInicio }} - {{ sol.horaFin }}</span>
-                </div>
-                <div class="acciones">
-                    <button class="btn-aceptar" (click)="responder(sol.id, 'aceptada')">✅ Aceptar</button>
-                    <button class="btn-rechazar" (click)="responder(sol.id, 'rechazada')">❌ Rechazar</button>
-                </div>
-            </div>
-        </div> 
+    <h3>Solicitudes Pendientes</h3>
+    <div class="grid-solicitudes">
+        <div class="card-solicitud" *ngFor="let sol of solicitudes">
+            <div class="info">
+            <span class="cliente">De: {{ sol.nombreSolicitante }}</span>
+            <span class="tema">Tema: {{ sol.mensaje }}</span>
+            <span class="fecha">Fecha: {{ sol.fecha }} | Hora: {{ sol.horaInicio }} - {{ sol.horaFin }}</span>
+        </div>
+        <div class="acciones">
+            <button class="btn-aceptar" (click)="responder(sol.id, 'aceptada')">Aceptar</button>
+            <button class="btn-rechazar" (click)="responder(sol.id, 'rechazada')">Rechazar</button>
+        </div>
+        </div>
+    </div>
     </section>
 
     <hr *ngIf="solicitudes.length > 0">
+
+    <!-- Configurar horarios libres -->
     <section class="seccion-calendario">
-        <h3>📅 Configurar mis Horarios Libres</h3>
-        <p class="desc">Elige un día y crea rangos de horas donde puedas atender.</p>
+    <h3>Configurar mis Horarios Libres</h3>
+    <p class="desc">Elige un día y crea rangos de horas donde puedas atender.</p>
 
-        <div class="form-disponibilidad">
-            <div class="campo">
-                <label>Día:</label>
-                <input type="date" [(ngModel)]="fechaSeleccionada">
-            </div>
-            
-            <div class="campo-horas" *ngIf="fechaSeleccionada">
-                <div class="grupo">
-                    <label>Desde:</label>
-                    <input type="time" [(ngModel)]="horaInicio">
-                </div>
-                <div class="grupo">
-                    <label>Hasta:</label>
-                    <input type="time" [(ngModel)]="horaFin">
-                </div>
-            </div>
-
-            <button class="btn-agregar" 
-                    [disabled]="!fechaSeleccionada || !horaInicio || !horaFin || guardandoHorario"
-                    (click)="agregarDisponibilidad()">
-                {{ guardandoHorario ? 'Guardando...' : ' Agregar Horario Disponible' }}
-            </button>
+    <div class="form-disponibilidad">
+        <div class="campo">
+        <label>Día:</label>
+        <input type="date" [(ngModel)]="fechaSeleccionada">
         </div>
+        
+        <div class="campo-horas" *ngIf="fechaSeleccionada">
+        <div class="grupo">
+            <label>Desde:</label>
+            <input type="time" [(ngModel)]="horaInicio">
+        </div>
+        <div class="grupo">
+            <label>Hasta:</label>
+            <input type="time" [(ngModel)]="horaFin">
+        </div>
+        </div>
+
+        <button class="btn-agregar" 
+                [disabled]="!fechaSeleccionada || !horaInicio || !horaFin || guardandoHorario"
+                (click)="agregarDisponibilidad()">
+        {{ guardandoHorario ? 'Guardando...' : 'Agregar Horario' }}
+        </button>
+    </div>
     </section>
 
     <hr>
 
+    <!-- Agenda confirmada del dev -->
     <section class="seccion-agenda">
-        <h3>📆 Mi Agenda Confirmada</h3>
-        
-        <div *ngIf="agenda.length === 0" class="vacio">
-            No tienes citas confirmadas próximamente.
+        <h3>Mi Agenda Confirmada</h3>
+    
+      <div *ngIf="agenda.length === 0" class="vacio">
+        No tienes citas confirmadas próximamente.
         </div>
 
-        <div class="lista-agenda">
-            <div class="item-agenda" *ngFor="let cita of agenda">
-                <div class="fecha-box">
-                    <strong>{{ cita.fecha | date:'d' }}</strong> 
-                    <small>{{ cita.fecha }}</small>
-                </div>
-                <div class="detalle-agenda">
-                    <h4>Reunión con {{ cita.nombreSolicitante }}</h4>
-                    <p>{{ cita.tema }}</p>
-                    <span class="hora-badge">⏰ {{ cita.horaInicio }} - {{ cita.horaFin }}</span>
-                    
-                    <a *ngIf="cita.linkReunion" [href]="cita.linkReunion" target="_blank">Unirse a la reunión</a>
-                </div>
-            </div>
+    <div class="lista-agenda">
+        <div class="item-agenda" *ngFor="let cita of agenda">
+            <div class="fecha-box">
+            <strong>{{ cita.fecha | date:'d' }}</strong> 
+            <small>{{ cita.fecha | date:'MMM' }}</small>
         </div>
+        <div class="detalle-agenda">
+            <h4>Reunión con {{ cita.nombreSolicitante }}</h4>
+            <p>{{ cita.mensaje }}</p>
+            <span class="hora-badge">Hora: {{ cita.horaInicio }} - {{ cita.horaFin }}</span>
+            <a *ngIf="cita.linkReunion" [href]="cita.linkReunion" target="_blank">Unirse</a>
+        </div>
+        </div>
+    </div>
     </section>
 
+    </div>
 </div>
