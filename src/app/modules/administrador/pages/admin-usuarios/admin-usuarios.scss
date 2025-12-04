@@ -5,8 +5,16 @@
     border: 1px solid #eee;
 }
 
-h3 { margin-top: 0; color: #333; }
-.desc { color: #666; margin-bottom: 20px; font-size: 0.9rem; }
+h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.desc {
+    color: #666;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
 
 .tabla-container {
     overflow-x: auto;
@@ -15,31 +23,32 @@ h3 { margin-top: 0; color: #333; }
 table {
     width: 100%;
     border-collapse: collapse;
-    
-    th, td {
-        padding: 12px 15px;
-        text-align: left;
-        border-bottom: 1px solid #eee;
-    }
+}
 
-    th {
-        background-color: #f8f9fa;
-        font-weight: 600;
-        color: #444;
-    }
+table th,
+table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #444;
 }
 
 .user-info {
     display: flex;
     align-items: center;
     gap: 10px;
-    
-    .avatar-mini {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
+}
+
+.user-info .avatar-mini {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .badge {
@@ -48,10 +57,21 @@ table {
     font-size: 0.8rem;
     font-weight: bold;
     text-transform: uppercase;
+}
 
-    &.admin { background-color: #d4edda; color: #155724; }
-    &.dev { background-color: #cce5ff; color: #004085; }
-    &.user { background-color: #e2e3e5; color: #383d41; }
+.badge.admin {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.badge.dev {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.badge.user {
+    background-color: #e2e3e5;
+    color: #383d41;
 }
 
 .select-rol {
@@ -63,22 +83,25 @@ table {
 .botones-accion {
     display: flex;
     gap: 5px;
-
-    button {
-        border: none;
-        padding: 5px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: 0.2s;
-        
-        &.btn-editar { background-color: #ffc107; color: #333; }
-        &.btn-eliminar { background-color: #dc3545; color: white; }
-        &.btn-guardar { background-color: #28a745; color: white; }
-        &.btn-cancelar { background-color: #6c757d; color: white; }
-
-        &:hover { opacity: 0.8; }
-    }
 }
+
+.botones-accion button {
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-editar { background-color: #ffc107; color: #333; }
+.btn-eliminar { background-color: #dc3545; color: white; }
+.btn-guardar { background-color: #28a745; color: white; }
+.btn-cancelar { background-color: #6c757d; color: white; }
+
+.botones-accion button:hover {
+    opacity: 0.8;
+}
+
 .btn-crear {
     background: #007bff;
     color: white;
@@ -88,9 +111,11 @@ table {
     cursor: pointer;
     margin-bottom: 15px;
 }
-.btn-crear:hover { opacity: .85; }
 
-/* MODAL */
+.btn-crear:hover {
+    opacity: .85;
+}
+
 .modal {
     position: fixed;
     inset: 0;
@@ -100,6 +125,7 @@ table {
     align-items: center;
     z-index: 999;
 }
+
 .modal-content {
     width: 380px;
     background: white;
@@ -109,6 +135,7 @@ table {
     flex-direction: column;
     gap: 10px;
 }
+
 .modal-buttons {
     display: flex;
     justify-content: space-between;

@@ -1,10 +1,17 @@
 <div class="contenido-administrador">
-    <header>
-        <img class="logo-navbar" src="https://img.freepik.com/vector-gratis/logotipo-abstracto-empresa_53876-120501.jpg?semt=ais_hybrid&w=740&q=80" >
-        <h2>ADMINISTRACION</h2>
+    <header class="navbar-admin">
+        <div class="navbar-left">
+            <!--
+            
+            <img class="logo-navbar" src="https://img.freepik.com/vector-gratis/logotipo-abstracto-empresa_53876-120501.jpg?semt=ais_hybrid&w=740&q=80">
+            -->
+            <h2>ADMINISTRACIÓN</h2>
+        </div>
+
         <button (click)="salir()" class="btn_salir">Ir al inicio</button>
     </header>
-    <section class="contenido">
-    </section>
+
+    <section class="contenido"></section>
 </div>
+
 <router-outlet />

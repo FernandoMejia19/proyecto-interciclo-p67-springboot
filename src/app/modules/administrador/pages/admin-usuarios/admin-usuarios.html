@@ -1,7 +1,9 @@
 <div class="panel-gestion">
     <h3>👥 Administración de Usuarios</h3>
     <p class="desc">Gestiona los roles y accesos de los usuarios registrados.</p>
+
     <button class="btn-crear" (click)="abrirCrearUsuario()">➕ Crear Usuario</button>
+
     <div *ngIf="loading" class="loading">Cargando lista de usuarios...</div>
 
     <div class="tabla-container" *ngIf="!loading">
@@ -19,38 +21,39 @@
                 <tr *ngFor="let u of usuarios">
 
                     <td>
-    <div class="user-info">
-        <img [src]="u.photoURL || 'assets/default-user.png'" class="avatar-mini">
-        <span *ngIf="!u.editando">{{ u.nombre || 'Sin nombre' }}</span>
-        <input *ngIf="u.editando" [(ngModel)]="u.nuevoNombre" type="text" style="width: 120px;">
-    </div>
-</td>
+                        <div class="user-info">
+                            <img [src]="u.photoURL || 'assets/default-user.png'" class="avatar-mini">
+                            <span *ngIf="!u.editando">{{ u.nombre || 'Sin nombre' }}</span>
+                            <input *ngIf="u.editando" [(ngModel)]="u.nuevoNombre" type="text" style="width: 120px;">
+                        </div>
+                    </td>
 
+                    <td>{{ u.email }}</td>
 
-<td>
-    <div *ngIf="u.editando">
-        <select [(ngModel)]="u.nuevoRol" class="select-rol">
-            <option value="user">Usuario</option>
-            <option value="dev">Programador</option>
-            <option value="admin">Administrador</option>
-        </select>
-    </div>
-    <div *ngIf="!u.editando">
-        <span class="badge" [ngClass]="u.role || 'user'">{{ u.role || 'user' }}</span>
-    </div>
-</td>
+                    <td>
+                        <div *ngIf="u.editando">
+                            <select [(ngModel)]="u.nuevoRol" class="select-rol">
+                                <option value="user">Usuario</option>
+                                <option value="dev">Programador</option>
+                                <option value="admin">Administrador</option>
+                            </select>
+                        </div>
+                        <div *ngIf="!u.editando">
+                            <span class="badge" [ngClass]="u.role || 'user'">{{ u.role || 'user' }}</span>
+                        </div>
+                    </td>
 
-<td>
-    <div class="botones-accion" *ngIf="!u.editando">
-        <button class="btn-editar" (click)="activarEdicion(u)">Editar</button>
-        <button class="btn-eliminar" (click)="eliminarUsuario(u.id)">Eliminar</button>
-    </div>
+                    <td>
+                        <div class="botones-accion" *ngIf="!u.editando">
+                            <button class="btn-editar" (click)="activarEdicion(u)">Editar</button>
+                            <button class="btn-eliminar" (click)="eliminarUsuario(u.id)">Eliminar</button>
+                        </div>
 
-    <div class="botones-accion" *ngIf="u.editando">
-        <button class="btn-guardar" (click)="guardarCambios(u)">Guardar</button>
-        <button class="btn-cancelar" (click)="cancelarEdicion(u)">Cancelar</button>
-    </div>
-</td>
+                        <div class="botones-accion" *ngIf="u.editando">
+                            <button class="btn-guardar" (click)="guardarCambios(u)">Guardar</button>
+                            <button class="btn-cancelar" (click)="cancelarEdicion(u)">Cancelar</button>
+                        </div>
+                    </td>
 
                 </tr>
             </tbody>
@@ -86,7 +89,7 @@
         </select>
 
         <label>Tecnologías:</label>
-        <input [(ngModel)]="nuevoUsuario.tecnologias" type="text" placeholder="Angular, Node, Java...">
+        <input [(ngModel)]="nuevoUsuario.tecnologias" type="text">
 
         <label>Cargo:</label>
         <input [(ngModel)]="nuevoUsuario.cargo" type="text">

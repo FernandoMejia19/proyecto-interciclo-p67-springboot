@@ -33,8 +33,12 @@ export class InicioSesion {
   }
 
   async login() {
-  if (this.loginForm.invalid) return;
+  if (this.loginForm.invalid) {
+        this.errorMessage = 'Por favor completa los campos correctamente'; 
+        return;
+    }
   this.loading = true;
+  this.errorMessage = '';
   const { email, password } = this.loginForm.value;
   try {
     const userCredential = await this.authService.login(email, password);
@@ -60,8 +64,45 @@ export class InicioSesion {
 
   } catch (error: any) {
     console.log(error);
-    this.errorMessage = 'Correo o contraseña incorrectos';
+    if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          this.errorMessage = 'Correo o contraseña incorrectos.';
+      } else if (error.code === 'auth/too-many-requests') {
+          this.errorMessage = 'Demasiados intentos fallidos. Intenta más tarde.';
+      } else {
+          this.errorMessage = 'Ocurrió un error al iniciar sesión.';
+      }
   }
   this.loading = false;
 }
+async loginGoogle() {
+    this.loading = true;
+    this.errorMessage = '';
+    try {
+        const userCredential = await this.authService.loginWithGoogle();
+        if (userCredential.user?.uid) {
+            await this.redirigirSegunRol(userCredential.user.uid);
+        }
+    } catch (error) {
+        console.error(error);
+        this.errorMessage = 'Error al iniciar con Google';
+    }
+    this.loading = false;
+  }
+  async redirigirSegunRol(uid: string) {
+    const role = await this.authService.getUserRole(uid); 
+    console.log('Login exitoso. Rol:', role);
+    switch (role) {
+      case 'admin':
+        this.router.navigate(['/administrador']);
+        break;
+      case 'dev': 
+        this.router.navigate(['/perfilUsuario']);
+        break;
+      case 'user':
+      default:
+        this.router.navigate(['/proyectos']); 
+        break;
+    }
+  }
+
 }

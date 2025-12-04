@@ -47,8 +47,9 @@ export class PerfilUsuario implements OnInit {
     });
   }
   crearNuevoProyecto() {
-    this.router.navigate(['/crear-proyecto']);
-  }
+  this.router.navigate(['/crear-proyecto']);
+}
+
 
   cambiarSeccion(seccion: string) {
     this.seccionActiva = seccion;

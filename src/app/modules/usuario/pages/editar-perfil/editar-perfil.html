@@ -1,17 +1,22 @@
 <div class="editar-perfil-container">
   <h2>Editar Perfil</h2>
-
+ <!--
   <div class="foto-section">
     <img [src]="fotoPreview || 'https://via.placeholder.com/150'" class="foto-preview">
     <input type="file" accept="image/*" (change)="onFileSelected($event)" id="foto">
     <label for="foto" class="btn-subir">Cambiar Foto</label>
   </div>
-
+  
+  -->
   <form [formGroup]="perfilForm" (ngSubmit)="guardarCambios()">
-    <input type="text" formControlName="nombre" placeholder="Nombre completo">
-    <input type="text" formControlName="ciudad" placeholder="Ciudad">
-    <input type="text" formControlName="pais" placeholder="País">
-    <textarea formControlName="descripcion" placeholder="Descripción o bio"></textarea>
+    <label for="nombre">Nombre</label>
+    <input type="text" formControlName="nombre" id="nombre" placeholder="Nombre completo">
+    <label for="ciudad">Ciudad</label>
+    <input type="text" formControlName="ciudad" id="ciudad" placeholder="Ciudad">
+    <label for="pais">Pais</label>
+    <input type="text" formControlName="pais" id="pais" placeholder="País">
+    <label for="descripcion">Descripcion</label>
+    <textarea formControlName="descripcion" id="descripcion" placeholder="Descripción o bio"></textarea>
 
     <h3>Redes Sociales (opcional)</h3>
     <input type="text" formControlName="facebook" placeholder="Usuario de Facebook">
@@ -24,4 +29,4 @@
       <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
     </div>
   </form>
-</div>
+</div>  

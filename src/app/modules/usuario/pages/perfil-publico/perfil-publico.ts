@@ -21,6 +21,8 @@ export class PerfilPublico implements OnInit {
   horariosDisponibles: any[] = [];
   uidUsuarioActual: string = '';
   loading = true;
+  proyectos: any[] = [];
+
 
   constructor(
     private route: ActivatedRoute,
@@ -31,25 +33,30 @@ export class PerfilPublico implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.idProgramador = this.route.snapshot.paramMap.get('id') || '';
-    this.authService.currentUser$.subscribe(user => {
-      if (user) this.uidUsuarioActual = user.uid;
-    });
+  this.idProgramador = this.route.snapshot.paramMap.get('id') || '';
 
-    if (this.idProgramador) {
-      await this.cargarDatosProgramador();
-      await this.cargarHorariosDisponibles();
-    }
+  this.authService.currentUser$.subscribe(user => {
+    if (user) this.uidUsuarioActual = user.uid;
+  });
 
-    this.loading = false;
-    this.cdr.detectChanges();
+  if (this.idProgramador) {
+    await this.cargarDatosProgramador();
+    await this.cargarHorariosDisponibles();
+    await this.cargarProyectos();
   }
+
+  this.loading = false;
+  this.cdr.detectChanges();
+}
+
 
   async cargarDatosProgramador() {
     const docRef = doc(this.firestore, 'users', this.idProgramador);
     const snap = await getDoc(docRef);
     if (snap.exists()) {
       this.programador = snap.data();
+      console.log("👤 Programador cargado:", this.programador);
+
     }
   }
 
@@ -109,7 +116,6 @@ export class PerfilPublico implements OnInit {
     return;
   }
 
-  // Pedir motivo
   const motivo = prompt("Ingresa el motivo de la asesoría:");
 
   if (!motivo || motivo.trim() === "") {
@@ -132,7 +138,7 @@ export class PerfilPublico implements OnInit {
       horaInicio: slot.horaInicio,
       horaFin: slot.horaFin,
       estado: 'pendiente',
-      mensaje: motivo // 👈 se guarda el motivo
+      mensaje: motivo 
     });
 
     const slotRef = doc(this.firestore, 'disponibilidad', slot.id);
@@ -147,6 +153,33 @@ export class PerfilPublico implements OnInit {
   }
   this.cdr.detectChanges();
 }
+verProyecto(id: string) {
+  this.router.navigate(['/proyecto', id]);
+}
+async cargarProyectos() {
+  console.log("=== CARGANDO PROYECTOS ===");
+  console.log("🟢 ID del programador que debo buscar:", this.idProgramador);
+
+  const proyectosRef = collection(this.firestore, 'proyectos');
+  const q = query(proyectosRef, where('creador', '==', this.idProgramador));
+
+  const snap = await getDocs(q);
+
+  console.log("🔵 Cantidad de proyectos encontrados:", snap.size);
+
+  snap.forEach(doc => {
+    console.log("📁 Proyecto encontrado:", doc.id, doc.data());
+  });
+
+  this.proyectos = snap.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+
+  console.log("🟣 Proyectos asignados a la variable:", this.proyectos);
+}
+
+
 volverAtras() {
     window.history.back();
   }

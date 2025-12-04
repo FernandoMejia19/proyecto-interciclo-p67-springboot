@@ -2,7 +2,7 @@
 
 
 <button class="btn-volver" (click)="volver()">
-    ← Volver a proyectos
+    ← Volver 
 </button>
 
   <div class="proyecto-detalle" *ngIf="proyecto">
@@ -21,7 +21,7 @@
         <div *ngIf="!autor?.photoURL" class="avatar-placeholder">
         {{ autor?.nombre?.[0] || 'A' }}
         </div>
-        <div>
+        <div> 
         <strong>Autor:</strong> {{ autor?.nombre || 'Anónimo' }}
         <br>
           <small *ngIf="proyecto.cargo">Rol: {{ proyecto.cargo }}</small>
@@ -42,15 +42,11 @@
         </div>
     </div>
 
-      <div class="link-proyecto" *ngIf="proyecto.link">
-        <h3>Ver proyecto en vivo</h3>
+      <div class="link-proyecto" *ngIf="proyecto.linkCodigo">
+        <h3>Ver codigo de proyecto</h3>
         <button class="btn-link" (click)="irAlLink()">
             Abrir proyecto → 
         </button>
-        </div>
-
-        <div class="fecha">
-        Publicado el {{ proyecto.fechaCreacion?.toDate() | date:'mediumDate' }}
         </div>
 
     </div>
@@ -59,4 +55,4 @@
 
 <ng-template #cargando>
     <div class="loading">Cargando proyecto...</div>
-</ng-template>
+</ng-template> 

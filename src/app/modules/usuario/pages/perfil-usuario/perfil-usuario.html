@@ -1,9 +1,15 @@
 <div class="container_perfil-usuario" *ngIf="perfil; else cargando">
+  
+  <!-- PORTADA -->
   <div class="portada-usuario">
-    <img class="imagen-usuario" 
-        [src]="perfil.photoURL || 'https://lienzocreativo.com/blog/wp-content/uploads/2020/03/primer-plano.jpg'" 
-        alt="Foto de perfil">
-    
+    <div class="overlay"></div>
+
+    <!-- FOTO DE PERFIL -->
+    <img 
+      class="imagen-usuario"
+      [src]="perfil.photoURL || 'https://lienzocreativo.com/blog/wp-content/uploads/2020/03/primer-plano.jpg'" 
+      alt="Foto de perfil">
+
     <div class="encabezado-usuario">
       <h2>{{ perfil.nombre || 'Usuario' }}</h2>
       <p>{{ perfil.descripcion || 'Sin descripción' }}</p>
@@ -13,23 +19,32 @@
   <div class="container-contenido">
 
     <!-- INFORMACIÓN PERSONAL -->
-    <div class="informacion-usuario">
+    <div class="informacion-usuario card-info">
+      <h3 class="titulo-seccion">Información Personal</h3>
+
       <p><strong>Email:</strong> {{ perfil.email }}</p>
       <p><strong>Ciudad:</strong> {{ perfil.ciudad || 'No especificada' }}</p>
       <p><strong>País:</strong> {{ perfil.pais || 'No especificado' }}</p>
 
-      <!-- REDES SOCIALES -->
+      <!-- CONTACTOS -->
       <div class="redes-sociales" *ngIf="tieneContactos()">
         <h4>Mis Contactos</h4>
+
         <div *ngIf="perfil.contactos?.whatsapp">
-          WhatsApp: <a [href]="'https://wa.me/' + perfil.contactos.whatsapp" target="_blank">{{ perfil.contactos.whatsapp }}</a>
+          WhatsApp: 
+          <a [href]="'https://wa.me/' + perfil.contactos.whatsapp" target="_blank">
+            {{ perfil.contactos.whatsapp }}
+          </a>
         </div>
+
         <div *ngIf="perfil.contactos?.facebook">
-          Facebook: <a [href]="'https://facebook.com/' + perfil.contactos.facebook" target="_blank">{{ perfil.contactos.facebook }}</a>
+          Facebook:
+          <a [href]="'https://facebook.com/' + perfil.contactos.facebook" target="_blank">
+            {{ perfil.contactos.facebook }}
+          </a>
         </div>
       </div>
 
-      <!-- BOTÓN EDITAR -->
       <div class="acciones-perfil">
         <button class="btn-editar-perfil" (click)="irAEditarPerfil()">
           Editar Información Personal
@@ -37,16 +52,19 @@
       </div>
     </div>
 
+    <!-- CONTENIDO DINÁMICO -->
     <div class="contenido-dinamico">
 
-      <!-- SI ES USUARIO NORMAL (role: user) -->
-      <div *ngIf="perfil.role === 'user'" class="seccion-user">
-        <h3>Mis Solicitudes de Asesoría</h3>
+      <!-- SI ES USUARIO NORMAL -->
+      <div *ngIf="perfil.role === 'user'" class="seccion-user card-info">
+        <h3 class="titulo-seccion">Mis Solicitudes de Asesoría</h3>
         <app-mis-citas [esSolicitante]="true"></app-mis-citas>
       </div>
 
       <!-- SI ES DEV O ADMIN -->
       <div *ngIf="perfil.role !== 'user'">
+
+        <!-- TABS -->
         <div class="menu-tabs">
           <button [class.activo]="seccionActiva === 'proyectos'" (click)="cambiarSeccion('proyectos')">
             Mis Proyectos
@@ -62,20 +80,25 @@
         <!-- PROYECTOS -->
         <div *ngIf="seccionActiva === 'proyectos'">
           <button class="btn-crear-full" (click)="crearNuevoProyecto()">Crear Proyecto</button>
+
           <div class="grid-proyectos">
             <div class="card-proyecto" *ngFor="let pro of proyectos">
-              <img [src]="pro.imagen || 'assets/default.png'">
-              <h4>{{ pro.titulo }}</h4>
+              <img [src]="pro.imagen || 'assets/default.png'" class="img-proyecto">
+
+              <div class="info-proyecto">
+                <h4>{{ pro.titulo }}</h4>
+              </div>
+
               <div class="acciones-proyecto">
-                <button (click)="editarProyecto(pro.id)">Editar</button>
-                <button (click)="eliminarProyecto(pro.id)">Eliminar</button>
+                <button class="btn-editar" (click)="editarProyecto(pro.id)">Editar</button>
+                <button class="btn-eliminar" (click)="eliminarProyecto(pro.id)">Eliminar</button>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- ASESORÍAS RECIBIDAS (para dev) -->
-        <div *ngIf="seccionActiva === 'citas'">
+        <!-- ASESORÍAS RECIBIDAS -->
+        <div *ngIf="seccionActiva === 'citas'" class="card-info">
           <app-mis-citas [esSolicitante]="false"></app-mis-citas>
         </div>
 
@@ -83,6 +106,7 @@
         <div *ngIf="seccionActiva === 'usuarios' && isAdmin">
           <app-admin-usuarios></app-admin-usuarios>
         </div>
+
       </div>
 
     </div>

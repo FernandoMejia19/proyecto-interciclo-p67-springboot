@@ -1,6 +1,51 @@
 /* You can add global styles to this file, and also import other style files */
-*{
-    font-family: sans-serif;
+
+* {
     margin: 0;
     padding: 0;
-};
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: #F5F6FA;
+    color: #1F2937;
+}
+
+.card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 1.5rem;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+    border: 1px solid #E5E7EB;
+}
+
+.btn-primary {
+    background: #4C6EF5;
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: .2s;
+}
+.btn-primary:hover {
+    background: #3B5BDB;
+}
+
+.badge {
+    background: #EEF2FF;
+    color: #4C6EF5;
+    padding: .4rem .8rem;
+    border-radius: 12px;
+    font-size: .85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+}
+
+.badge img {
+    width: 18px;
+    height: 18px;
+}

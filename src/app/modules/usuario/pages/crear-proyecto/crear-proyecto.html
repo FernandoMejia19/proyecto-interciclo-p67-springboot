@@ -25,6 +25,15 @@
             <img *ngIf="miFormulario.get('imagen')?.value" 
                 [src]="miFormulario.get('imagen')?.value" 
                 class="preview-img">
+                <div class="form-group">
+    <label>Link del Código (GitHub, GitLab, etc.)</label>
+    <input 
+        type="text" 
+        formControlName="linkCodigo" 
+        placeholder="https://github.com/usuario/repositorio">
+
+    <small>Ejemplo: https://github.com/mi-proyecto</small>
+</div>
         </div>
 
         <div class="botones-accion">
@@ -35,4 +44,4 @@
         </div>
 
     </form>
-</div>
+</div> 

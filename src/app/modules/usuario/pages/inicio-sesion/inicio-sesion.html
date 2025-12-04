@@ -1,33 +1,39 @@
-<div class="container__inicio-sesion">
-    <div>
-        <p>Proyecto Interciclo</p>
-        <span>Realizado por: Fernando Mejia</span>
-    </div>
-
-    <form [formGroup]="loginForm" (ngSubmit)="login()">
-        <!-- Botón cerrar con type="button" para que no envíe el form -->
-        <button type="button" class="cerrar" (click)="salir()">x</button>
+<div class="login-wrapper"> 
+    <div class="login-container">
         
-        <h2>Iniciar Sesión</h2>
+        <!-- Lado izquierdo (Info) -->
+        <div class="login-info">
+            <p>Proyecto Interciclo</p>
+            <span>Realizado por: Fernando Mejia</span>
+        </div>
 
-        <input 
-            type="email" 
-            placeholder="Correo" 
-            formControlName="email">
+        <!-- Lado derecho (Formulario) -->
+        <div class="login-form-container">
+            <button type="button" class="cerrar" (click)="salir()">×</button>
+            
+            <form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">
+                <h2>Iniciar Sesión</h2>
 
-        <input 
-            type="password" 
-            placeholder="Contraseña" 
-            formControlName="password"
-            (keydown.enter)="login()"> <!-- Esto evita que Enter recargue la página -->
+                <input type="email" placeholder="Correo" formControlName="email">
+                <input type="password" placeholder="Contraseña" formControlName="password" (keydown.enter)="login()">
 
-        <button 
-            class="iniciar" 
-            type="submit" 
-            [disabled]="loading">
-            {{ loading ? 'Ingresando...' : 'Iniciar' }}
-        </button>
+                <button class="btn-iniciar" type="submit" [disabled]="loading">
+                    {{ loading ? 'Ingresando...' : 'Iniciar' }}
+                </button>
 
-        <p *ngIf="errorMessage" style="color: red">{{ errorMessage }}</p>
-    </form>
+                <div class="separador">
+                    <span>O continúa con</span>
+                </div>
+
+                <!-- Botón de Google -->
+                <button type="button" class="btn-google" (click)="loginGoogle()" [disabled]="loading">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20">
+                    Google
+                </button>
+                <div *ngIf="errorMessage" class="alert-error">
+                    <span>{{ errorMessage }}</span>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

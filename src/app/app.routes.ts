@@ -45,11 +45,6 @@ export const routes: Routes = [
     path: 'proyecto/:id',
     loadComponent: () => import('./modules/usuario/pages/detalle-proyecto/detalle-proyecto').then(m => m.DetalleProyectoComponent)
     },
-    { 
-        path: 'crear-proyecto', 
-        loadComponent: () => import('./modules/usuario/pages/crear-proyecto/crear-proyecto').then(m => m. CrearProyectoComponent),
-        canActivate: [AuthGuard] 
-    },
     {
     path: 'editar-perfil',
     loadComponent: () => import('./modules/usuario/pages/editar-perfil/editar-perfil')
@@ -58,5 +53,6 @@ export const routes: Routes = [
     { 
         path: '', 
         loadChildren: () => import('./modules/usuario/usuario-module').then(m => m.UsuarioModule) 
-    }
-];
+    },
+    
+]; 

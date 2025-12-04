@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { GestionUsuarios } from '../../../../services/gestion-usuarios';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -22,7 +23,8 @@ export class DetalleProyectoComponent implements OnInit {
     private router: Router,
     private firestore: Firestore,
     private usuariosService: GestionUsuarios,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private location:Location
   ) {}
 
   async ngOnInit() {
@@ -62,12 +64,12 @@ export class DetalleProyectoComponent implements OnInit {
 }
 
   irAlLink() {
-    if (this.proyecto.link) {
-      window.open(this.proyecto.link, '_blank');
+    if (this.proyecto.linkCodigo) {
+      window.open(this.proyecto.linkCodigo, '_blank');
     }
   }
 
   volver() {
-    this.router.navigate(['/proyectos']);
+    this.location.back();
   }
 }

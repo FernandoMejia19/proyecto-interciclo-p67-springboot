@@ -29,6 +29,11 @@
                 [src]="miFormulario.get('imagen')?.value" 
                 class="preview-img">
         </div>
+        <div class="form-group">
+            <label>Link del Código / Repositorio</label>
+            <input type="text" formControlName="linkCodigo" placeholder="https://github.com/usuario/proyecto">
+        </div>
+
 
         <div class="botones-accion">
             <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
@@ -36,4 +41,4 @@
         </div>
 
     </form>
-</div>
+</div> 

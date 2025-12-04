@@ -15,6 +15,16 @@ export const routes:Routes=[
   { path: 'desarrolladores', component: Desarrolladores },
   { path: 'inicio-sesion', component: InicioSesion },
   { path: 'perfilUsuario', component: PerfilUsuario},
+  { path: '', redirectTo: 'proyectos', pathMatch: 'full' },
+  { 
+    path: 'crear-proyecto',
+    loadComponent: () => import('./pages/crear-proyecto/crear-proyecto').then(m => m.CrearProyectoComponent)
+  },
+  { 
+    path: 'editar-proyecto/:id',
+    loadComponent: () => import('./pages/editar-proyecto/editar-proyecto').then(m => m.EditarProyecto)
+  },
+
   { path: '', redirectTo: 'proyectos', pathMatch: 'full' }
     ];
   

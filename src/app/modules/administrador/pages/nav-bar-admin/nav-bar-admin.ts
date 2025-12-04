@@ -8,6 +8,7 @@ import { Router, RouterOutlet, RouterLink } from '@angular/router';
   styleUrl: './nav-bar-admin.scss',
 })
 export class NavBarAdmin {
+  menuOpen = false;
   constructor( private router:Router){
 
   }
@@ -15,4 +16,5 @@ export class NavBarAdmin {
   salir(){
     this.router.navigate(['/proyectos']);
   }
+
 }

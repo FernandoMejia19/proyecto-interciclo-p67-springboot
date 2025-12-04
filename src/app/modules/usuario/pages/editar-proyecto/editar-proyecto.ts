@@ -25,11 +25,12 @@ export class EditarProyecto implements OnInit {
     private cdr: ChangeDetectorRef 
   ) {
     this.miFormulario = this.fb.group({
-      titulo: ['', Validators.required],
-      descripcion: ['', Validators.required],
-      tecnologias: [''], 
-      imagen: ['']
-    });
+  titulo: ['', Validators.required],
+  descripcion: ['', Validators.required],
+  tecnologias: [''],
+  imagen: [''],
+  linkCodigo: [''] 
+});
   }
 
   async ngOnInit() {
@@ -60,11 +61,13 @@ export class EditarProyecto implements OnInit {
         }
 
         this.miFormulario.patchValue({
-          titulo: data['titulo'],
-          descripcion: data['descripcion'],
-          imagen: data['imagen'],
-          tecnologias: tecsString 
+        titulo: data['titulo'],
+        descripcion: data['descripcion'],
+        imagen: data['imagen'],
+        tecnologias: tecsString,
+        linkCodigo: data['linkCodigo'] || ''  
         });
+
         
       } else {
         console.log("No existe el documento");
@@ -93,8 +96,9 @@ export class EditarProyecto implements OnInit {
     const datosActualizados = {
       titulo: formVal.titulo,
       descripcion: formVal.descripcion,
-      imagen: formVal.imagen,
-      tecnologias: tecsArray
+      imagen: formVal.imagen||'https://img-c.udemycdn.com/course/750x422/4666926_22f0.jpg',
+      tecnologias: tecsArray,
+      linkCodigo: formVal.linkCodigo || ''
     };
 
     try {
@@ -112,4 +116,4 @@ export class EditarProyecto implements OnInit {
   cancelar() {
       this.router.navigate(['/perfil']);
   }
-}
+} 

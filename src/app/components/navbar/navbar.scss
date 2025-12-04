@@ -1,67 +1,62 @@
-
 nav {
     position: sticky;
     top: 0;
     z-index: 1000;
-    background-color: white;
-    padding: 5px 20px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    padding: 12px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-}
-
-
-.enlaces {
-    flex-grow: 2;
+    border-bottom: 1px solid #e2e2e2;
 }
 
 .enlaces a {
-    margin-left: 20px;
-    text-decoration: none; 
-    color: #333;
+    margin-left: 25px;
+    text-decoration: none;
+    color: #1a1a1a;
     font-weight: 500;
-    transition: color 0.3s;
-}
-
-.enlaces a.active {
-    color: #007bff; 
-    font-weight: bold;
-    border-bottom: 2px solid #007bff; 
-    padding-bottom: 2px;
+    font-size: 16px;
+    transition: 0.3s;
 }
 
 .enlaces a:hover {
-    color: #0056b3; 
+    color: #6C63FF;
 }
 
+.enlaces a.active {
+    color: #6C63FF;
+    font-weight: 600;
+    border-bottom: 2px solid #6C63FF;
+    padding-bottom: 3px;
+}
 
+/* BOTONES */
 .botones {
-    background-color: beige; 
-    padding: 5px 10px;       
-    border-radius: 8px;      
     display: flex;
-    align-items: center;    
+    align-items: center;
+    border-radius: 12px;
+    padding: 5px 12px;
 }
 
 button {
-    margin-left: 10px;
-    border-radius: 5px;
-    padding: 10px 15px;
+    border-radius: 8px;
+    padding: 8px 14px;
     border: none;
     cursor: pointer;
-    background-color: transparent; 
-    font-weight: bold;
+    background-color: #6C63FF;
+    color: white;
+    font-weight: 600;
+    transition: 0.3s;
 }
 
 button:hover {
-    background-color: aqua;
+    background-color: #544dff;
 }
 
-
-
+/* AVATAR */
 .usuario-container {
-    position: relative; 
+    position: relative;
 }
 
 .avatar {
@@ -69,78 +64,74 @@ button:hover {
     align-items: center;
     gap: 10px;
     cursor: pointer;
-    padding: 5px;
-    border-radius: 5px;
-    transition: background 0.2s;
+    padding: 8px 12px;
+    border-radius: 10px;
+    transition: 0.2s;
 }
 
 .avatar:hover {
-    background-color: rgba(255, 255, 255, 0.5); 
+    background: #EDEBFF;
 }
 
 .avatar img {
-    width: 35px;
-    height: 35px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid white;
-}
-
-.avatar span {
-    font-size: 0.9rem;
-    color: #333;
-    margin-right: 5px;
+    border: 2px solid #6C63FF;
 }
 
 .arrow-icon {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
+    color: #333;
 }
 
+/* DROPDOWN */
 .dropdown {
     position: absolute;
-    top: 120%;
+    top: 115%;
     right: 0;
-    width: 180px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+    width: 200px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 6px 16px rgba(0,0,0,0.15);
     overflow: hidden;
-    z-index: 1001;
-    display: flex;
-    flex-direction: column;
+    animation: fadeIn 0.2s ease-in-out;
 }
 
 .dropdown-header {
-    padding: 10px 15px;
-    background-color: #f1f1f1;
+    padding: 15px;
+    background: #F4F3FF;
     font-size: 0.85rem;
-    color: #666;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #e2e2e2;
 }
-
 
 .dropdown a {
     padding: 12px 15px;
     text-decoration: none;
     color: #333;
-    font-size: 0.9rem;
     display: block;
-    border-bottom: 1px solid #f9f9f9;
+    font-size: 0.9rem;
 }
 
 .dropdown a:hover {
-    background-color: #f0f8ff; 
+    background-color: #EDEBFF;
 }
 
-.dropdown .btn-logout {
+.btn-logout {
     width: 100%;
-    text-align: left;
+    border: none;
     background: none;
-    color: #d9534f; 
-    margin: 0;
-    border-radius: 0;
+    padding: 12px 15px;
+    text-align: left;
+    color: #d9534f;
 }
 
-.dropdown .btn-logout:hover {
-    background-color: #fff5f5; 
+.btn-logout:hover {
+    background-color: #fff2f2;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
 }

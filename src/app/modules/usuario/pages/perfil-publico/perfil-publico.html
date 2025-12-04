@@ -1,4 +1,5 @@
 <div class="perfil-publico-container" *ngIf="!loading; else cargando">
+    
     <div class="volver-atras">
         <button class="btn-volver" (click)="volverAtras()">
             <span class="flecha">←</span> Volver
@@ -6,12 +7,27 @@
     </div>
 
     <div class="header-perfil" *ngIf="programador">
-        
+        <img 
+            *ngIf="programador.photoURL; else sinFoto"
+            [src]="programador.photoURL" 
+            alt="Foto del programador"
+            class="avatar"
+        >
+
+        <ng-template #sinFoto>
+            <div class="avatar-placeholder">
+                {{ programador.nombre?.[0] || 'U' }}
+            </div>
+        </ng-template>
+
         <div class="info">
             <h1>{{ programador.nombre || 'Programador' }}</h1>
             <p class="desc">{{ programador.descripcion || 'Sin descripción' }}</p>
+
             <div class="badges">
-                <span class="badge" *ngFor="let tech of programador.tecnologias">{{ tech }}</span>
+                <span class="badge" *ngFor="let tech of programador.tecnologias">
+                    {{ tech }}
+                </span>
             </div>
         </div>
     </div>
@@ -20,33 +36,49 @@
 
     <div class="seccion-reserva">
         <h2>📅 Disponibilidad para Asesorías</h2>
-        <p>Selecciona un horario disponible para enviar tu solicitud.</p>
+
+        <p class="texto-explicacion">
+            Selecciona un horario disponible para enviar tu solicitud.
+        </p>
 
         <div *ngIf="horariosDisponibles.length === 0" class="sin-horarios">
             <p>Este programador no tiene horarios disponibles por el momento.</p>
         </div>
 
+        <!-- HORARIOS -->
         <div class="grid-horarios">
             <div class="card-horario" *ngFor="let slot of horariosDisponibles">
-                <div class="fecha">
-                    <strong>{{ slot.fecha }}</strong>
-                </div>
-                <div class="hora">
-                    ⏰ {{ slot.horaInicio }} - {{ slot.horaFin }}
-                </div>
+                <div class="fecha"><strong>{{ slot.fecha }}</strong></div>
+                <div class="hora">⏰ {{ slot.horaInicio }} - {{ slot.horaFin }}</div>
+
                 <button class="btn-reservar" (click)="reservarCita(slot)">
                     Reservar Cita
-                </button>
+                </button> 
             </div>
         </div>
-        <!--
-            <div class="proyects">
-                <app-proyectos></app-proyectos>
-            </div>
-        
-        -->
     </div>
+    
+    <div class="seccion-proyectos" *ngIf="proyectos && proyectos.length > 0">
+        <h2>📌 Proyectos del Programador</h2>
+        
+        <div class="grid-proyectos">
+            <div class="card-proyecto" *ngFor="let p of proyectos">
+                <h3 class="titulo">{{ p.titulo }}</h3>
+            <p class="descripcion">{{ p.descripcion }}</p>
+            
+            <div class="tecnologias" *ngIf="p.tecnologias?.length">
+                <span class="tech" *ngFor="let t of p.tecnologias">{{ t }}</span>
+            </div>
+            
+            <button class="btn-ver" (click)="verProyecto(p.id)">Ver Proyecto</button>
+        </div>
+    </div>
+</div>
 
+<div class="seccion-proyectos" *ngIf="proyectos && proyectos.length === 0">
+    <h2>📌 Proyectos del Programador</h2>
+    <p class="sin-proyectos">Este programador aún no ha creado proyectos.</p>
+</div>
 </div>
 
 <ng-template #cargando>

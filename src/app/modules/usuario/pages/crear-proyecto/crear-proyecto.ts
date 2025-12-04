@@ -28,7 +28,8 @@ export class CrearProyectoComponent implements OnInit {
       titulo: ['', Validators.required],
       descripcion: ['', Validators.required],
       tecnologias: [''], 
-      imagen: ['']
+      imagen: [''],
+      linkCodigo: ['']
     });
   }
 
@@ -55,8 +56,9 @@ export class CrearProyectoComponent implements OnInit {
       creador: this.uidUsuario, 
       titulo: formVal.titulo,
       descripcion: formVal.descripcion,
-      imagen: formVal.imagen || '',
-      tecnologias: tecsArray
+      imagen: formVal.imagen || 'https://www.educaciontrespuntocero.com/wp-content/uploads/2016/12/ideas-sobre-proyectos-de-programacion-para.jpg',
+      tecnologias: tecsArray,
+      linkCodigo: formVal.linkCodigo || '' 
     };
 
     try {

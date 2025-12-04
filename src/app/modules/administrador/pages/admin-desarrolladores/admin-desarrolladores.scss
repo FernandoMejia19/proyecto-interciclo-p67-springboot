@@ -1,24 +1,95 @@
-.contenido-proyectos{
-    display: flex;
-    width: 80vw;
-    flex-wrap: wrap;
-}
-.container{
+
+.contenido-proyectos {
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 25px;
 }
-.img{
-    width: 100px;
-    height: 100px;
-    background-color: aqua;
-    border-radius: 50px;
-    
+
+.tarjeta {
+    width: 320px;
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.10);
+    transition: 0.25s ease;
+    cursor: pointer;
+    display: flex;
+    gap: 18px;
+    align-items: center;
 }
-.tarjeta{
-    background-color: #333;
-    width: 30%;
-    padding: 20px;
+
+.tarjeta:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.img {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #EDEBFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.placeholder-avatar {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    background: #6C63FF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+}
+
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.nombre {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.ubicacion small {
+    color: #666;
+}
+
+
+.tecnologias {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.tech-badge {
+    background: #EDEBFF;
+    color: #6C63FF;
+    padding: 4px 10px;
     border-radius: 20px;
-    color: #eee;
-    margin: 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.no-desarrolladores {
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    color: #777;
+    margin-top: 40px;
 }

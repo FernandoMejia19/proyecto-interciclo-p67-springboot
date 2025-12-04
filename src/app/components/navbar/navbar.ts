@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router } from "@angular/router";
 import { AuthService } from '../../core/services/auth'; 
+import { map, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -19,7 +20,18 @@ export class Navbar {
     private router: Router,
     public authService: AuthService 
   ) {
-    this.user$ = this.authService.currentUser$;
+    this.user$ = this.authService.currentUser$.pipe(
+  switchMap((user) => {
+    if (!user) return of(null);
+
+    return this.authService.getUserFirestoreData$(user.uid).pipe(
+      map((data: any) => ({
+        ...user,
+        photoURL: data?.photoURL || user.photoURL
+      }))
+    );
+  })
+);
 
   }
 

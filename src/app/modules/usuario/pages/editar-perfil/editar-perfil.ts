@@ -14,7 +14,7 @@ import { AuthService } from '../../../../core/services/auth';
   styleUrl: './editar-perfil.scss'
 })
 export class EditarPerfilComponent implements OnInit {
-  perfilForm: FormGroup;
+  perfilForm: FormGroup; 
   usuario: any = null;
   fotoPreview: string | null = null;
   fotoArchivo: File | null = null;
