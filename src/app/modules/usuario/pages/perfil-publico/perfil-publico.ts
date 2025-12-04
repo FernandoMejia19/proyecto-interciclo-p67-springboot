@@ -55,8 +55,6 @@ export class PerfilPublico implements OnInit {
     const snap = await getDoc(docRef);
     if (snap.exists()) {
       this.programador = snap.data();
-      console.log("👤 Programador cargado:", this.programador);
-
     }
   }
 
@@ -94,7 +92,6 @@ export class PerfilPublico implements OnInit {
           horaFin: this.convertirAFormato(siguiente),
           uidDev: h.uidDev
         });
-
         inicio = siguiente;
       }
     });
@@ -157,26 +154,19 @@ verProyecto(id: string) {
   this.router.navigate(['/proyecto', id]);
 }
 async cargarProyectos() {
-  console.log("=== CARGANDO PROYECTOS ===");
-  console.log("🟢 ID del programador que debo buscar:", this.idProgramador);
-
   const proyectosRef = collection(this.firestore, 'proyectos');
   const q = query(proyectosRef, where('creador', '==', this.idProgramador));
 
   const snap = await getDocs(q);
 
-  console.log("🔵 Cantidad de proyectos encontrados:", snap.size);
-
   snap.forEach(doc => {
-    console.log("📁 Proyecto encontrado:", doc.id, doc.data());
+    console.log("Proyecto ", doc.id, doc.data());
   });
 
   this.proyectos = snap.docs.map(doc => ({
     id: doc.id,
     ...doc.data()
   }));
-
-  console.log("🟣 Proyectos asignados a la variable:", this.proyectos);
 }
 
 

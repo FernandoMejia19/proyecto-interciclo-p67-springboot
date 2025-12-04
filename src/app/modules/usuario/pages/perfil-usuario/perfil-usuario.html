@@ -52,7 +52,6 @@
       </div>
     </div>
 
-    <!-- CONTENIDO DINÁMICO -->
     <div class="contenido-dinamico">
 
       <!-- SI ES USUARIO NORMAL -->
@@ -64,7 +63,6 @@
       <!-- SI ES DEV O ADMIN -->
       <div *ngIf="perfil.role !== 'user'">
 
-        <!-- TABS -->
         <div class="menu-tabs">
           <button [class.activo]="seccionActiva === 'proyectos'" (click)="cambiarSeccion('proyectos')">
             Mis Proyectos

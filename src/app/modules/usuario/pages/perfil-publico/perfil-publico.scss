@@ -135,22 +135,23 @@
 
 /* BOTÓN VOLVER */
 .btn-volver {
-    background: transparent;
-    border: 2px solid #007bff;
-    color: #007bff;
-    padding: 8px 16px;
-    border-radius: 50px;
-    cursor: pointer;
+    color: #222;
     font-weight: 600;
     display: inline-flex;
     align-items: center;
     gap: 8px;
     margin-bottom: 10px;
+    background: #f8f9fa;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer; 
+    margin-bottom: 20px;
 }
 
 .btn-volver:hover {
-    background: #007bff;
-    color: white;
+    background: #e9ecef; 
 }
 
 /* LOADING */
@@ -343,4 +344,4 @@
     .card-proyecto {
         width: 90%;
     }
-}
+} 

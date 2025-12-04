@@ -35,7 +35,7 @@
     <hr>
 
     <div class="seccion-reserva">
-        <h2>📅 Disponibilidad para Asesorías</h2>
+        <h2> Disponibilidad para Asesorías</h2>
 
         <p class="texto-explicacion">
             Selecciona un horario disponible para enviar tu solicitud.
@@ -52,14 +52,14 @@
                 <div class="hora">⏰ {{ slot.horaInicio }} - {{ slot.horaFin }}</div>
 
                 <button class="btn-reservar" (click)="reservarCita(slot)">
-                    Reservar Cita
+                    📅 Reservar Cita
                 </button> 
             </div>
         </div>
     </div>
     
     <div class="seccion-proyectos" *ngIf="proyectos && proyectos.length > 0">
-        <h2>📌 Proyectos del Programador</h2>
+        <h2> Proyectos del Programador</h2>
         
         <div class="grid-proyectos">
             <div class="card-proyecto" *ngFor="let p of proyectos">
@@ -76,7 +76,7 @@
 </div>
 
 <div class="seccion-proyectos" *ngIf="proyectos && proyectos.length === 0">
-    <h2>📌 Proyectos del Programador</h2>
+    <h2> Proyectos del Programador</h2>
     <p class="sin-proyectos">Este programador aún no ha creado proyectos.</p>
 </div>
 </div>

@@ -2,10 +2,12 @@
     width: 100%;
     padding: 50px 20px;
     text-align: center;
-    background: linear-gradient(135deg, #6C63FF, #948dff);
+    background: linear-gradient(135deg, #222, #444);
     color: white;
+    /*
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
+    */
 }
 
 .titulo h1 {
@@ -17,7 +19,7 @@
 
 .titulo h1 span {
     background: white;
-    color: #6C63FF;
+    color: #444;
     padding: 6px 12px;
     font-size: 22px;
     border-radius: 10px;

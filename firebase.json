@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "site": "proyectointeciclopw",
+    "public": "dist/proyecto-interciclo-p67/browser",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

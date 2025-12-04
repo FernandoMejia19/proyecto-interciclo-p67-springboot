@@ -22,6 +22,8 @@
         <p class="nombre"><strong>{{ d.nombre || 'Sin nombre' }}</strong></p>
         <p class="ubicacion">
             <small>{{ d.ciudad || 'Ciudad no especificada' }}, {{ d.pais || 'País no especificado' }}</small>
+            <br>
+            <small>{{ d.cargo || '' }}</small>
         </p>
         <div class="tecnologias" *ngIf="d.tecnologias && d.tecnologias.length > 0">
           <span class="tech-badge" *ngFor="let tech of d.tecnologias">{{ tech }}</span>
