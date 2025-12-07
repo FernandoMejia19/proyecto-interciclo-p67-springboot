@@ -22,8 +22,7 @@
 
         <div class="info">
             <h1>{{ programador.nombre || 'Programador' }}</h1>
-            <p class="desc">{{ programador.descripcion || 'Sin descripción' }}</p>
-
+            <p class="desc"> {{'( '+ programador.cargo +' )' || '' }} </p>
             <div class="badges">
                 <span class="badge" *ngFor="let tech of programador.tecnologias">
                     {{ tech }}
@@ -36,50 +35,141 @@
 
     <div class="seccion-reserva">
         <h2> Disponibilidad para Asesorías</h2>
-
         <p class="texto-explicacion">
             Selecciona un horario disponible para enviar tu solicitud.
         </p>
 
-        <div *ngIf="horariosDisponibles.length === 0" class="sin-horarios">
-            <p>Este programador no tiene horarios disponibles por el momento.</p>
-        </div>
-
         <!-- HORARIOS -->
-        <div class="grid-horarios">
-            <div class="card-horario" *ngFor="let slot of horariosDisponibles">
-                <div class="fecha"><strong>{{ slot.fecha }}</strong></div>
-                <div class="hora">⏰ {{ slot.horaInicio }} - {{ slot.horaFin }}</div>
+        <div class="asesorias-container">
+            <div class="grid-horarios">
 
-                <button class="btn-reservar" (click)="reservarCita(slot)">
-                    📅 Reservar Cita
-                </button> 
+                <ng-container *ngIf="horariosDisponibles.length > 0">
+    <div *ngFor="let grupo of agruparPorFecha(horariosDisponibles); let i = index">
+        <div class="fecha-grupo">
+            <div class="fecha-header">
+                <div class="fecha-info" (click)="alternarFecha(grupo.fecha)">
+                    <div class="fecha-texto">
+                        <strong class="fecha-titulo">{{ formatearFecha(grupo.fecha) }}</strong>
+                        <!--
+                            <span class="fecha-subtitulo">{{ getDiaSemana(grupo.fecha) }}</span>
+                            -->
+                    </div>
+                    <div class="fecha-controls">
+                        <span class="horario-count">{{ grupo.horarios.length }} horario(s)</span>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="estaExpandida(grupo.fecha)" class="horarios-expandidos">
+                <div class="grid-horarios-horizontal">
+                    <div class="card-horario-h" *ngFor="let slot of grupo.horarios" (click)="abrirModalReserva(slot)">
+                        <span class="texto-rango">Inicia</span>
+                        <div class="hora-h">  {{ slot.horaInicio }} </div>
+                        <span class="texto-rango">Termina</span>
+                        <div class="fecha-h">{{ slot.horaFin }}</div>
+                        <button class="button-h">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 24 24" height="20" fill="none" class="svg-icon-h">
+                                <g stroke-width="2" stroke-linecap="round" stroke="currentColor">
+                                    <rect y="5" x="4" width="16" rx="2" height="16"></rect>
+                                    <path d="m8 3v4"></path>
+                                    <path d="m16 3v4"></path>
+                                    <path d="m4 11h16"></path>
+                                </g>
+                            </svg>
+                            <span class="lable-h">Reservar</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    
+</ng-container>
+
+                <!--si no hay horarios -->
+                <div *ngIf="horariosDisponibles.length === 0" class="no-horarios">
+                    <p>No hay horarios disponibles en este momento.</p>
+                </div>
+
+            </div>
+        </div>
+    </div> 
+
+    <!-- MODAL -->
+    <div class="modal-overlay" *ngIf="modalVisible" (click)="cerrarModal()">
+        <div class="modal-container" (click)="$event.stopPropagation()">
+            <button class="modal-close" (click)="cerrarModal()">×</button>
+            
+            <div class="modal-header">
+                <h2>📅 Confirmar Reserva</h2>
+                <p class="modal-subtitle">Solicita una asesoría con {{ programador?.nombre || 'el programador' }}</p>
+            </div>
+
+            <div class="modal-info">
+                <div class="info-item">
+                    <span class="info-label">📅 Fecha:</span>
+                    <span class="info-value">{{ slotSeleccionado?.fecha | date:'longDate' }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">⏰ Horario:</span>
+                    <span class="info-value">{{ slotSeleccionado?.horaInicio }} - {{ slotSeleccionado?.horaFin }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">⏱️ Duración:</span>
+                    <span class="info-value">60 minutos</span>
+                </div>
+            </div>
+
+            <form class="modal-form" (ngSubmit)="confirmarReserva()">
+                <div class="form-group">
+                    <label for="motivo">📝 Motivo de la asesoría *</label>
+                    <textarea 
+                        id="motivo" 
+                        name="motivo" 
+                        [(ngModel)]="motivoAsesoria" 
+                        placeholder="Ej: Dudas sobre React hooks, revisión de código, consejos de arquitectura..."
+                        rows="4"
+                        required
+                        class="form-textarea"
+                    ></textarea>
+                    <small class="form-help">Describe brevemente qué te gustaría tratar en la sesión.</small>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-modal btn-cancel" (click)="cerrarModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-modal btn-confirm" [disabled]="!motivoAsesoria.trim() || enviando">
+                        <span *ngIf="!enviando">Enviar Solicitud</span>
+                        <span *ngIf="enviando">Enviando...</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--Proyectos-->
     <div class="seccion-proyectos" *ngIf="proyectos && proyectos.length > 0">
-        <h2> Proyectos del Programador</h2>
+        <h2> Proyectos</h2>
         
         <div class="grid-proyectos">
             <div class="card-proyecto" *ngFor="let p of proyectos">
                 <h3 class="titulo">{{ p.titulo }}</h3>
-            <p class="descripcion">{{ p.descripcion }}</p>
-            
-            <div class="tecnologias" *ngIf="p.tecnologias?.length">
-                <span class="tech" *ngFor="let t of p.tecnologias">{{ t }}</span>
+                <p class="descripcion">{{ p.descripcion }}</p>
+                
+                <div class="tecnologias" *ngIf="p.tecnologias?.length">
+                    <span class="tech" *ngFor="let t of p.tecnologias">{{ t }}</span>
+                </div>
+                
+                <button class="btn-ver" (click)="verProyecto(p.id)">Ver Proyecto</button>
             </div>
-            
-            <button class="btn-ver" (click)="verProyecto(p.id)">Ver Proyecto</button>
         </div>
     </div>
-</div>
 
-<div class="seccion-proyectos" *ngIf="proyectos && proyectos.length === 0">
-    <h2> Proyectos del Programador</h2>
-    <p class="sin-proyectos">Este programador aún no ha creado proyectos.</p>
-</div>
-</div>
+    <div class="seccion-proyectos" *ngIf="proyectos && proyectos.length === 0">
+        <h2> Proyectos </h2>
+        <p class="sin-proyectos">Este programador aún no ha creado proyectos.</p>
+    </div>
+
+</div> 
 
 <ng-template #cargando>
     <div class="loading">Cargando perfil...</div>

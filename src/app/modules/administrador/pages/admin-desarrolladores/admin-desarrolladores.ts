@@ -22,7 +22,6 @@ export class AdminDesarrolladores implements OnInit {
   ngOnInit(): void {
     this.usuariosService.getUsuarios().subscribe(usuarios => {
     const lista = Array.isArray(usuarios) ? usuarios : [];
-
     this.desarrolladores = lista.filter(user => 
       user.role === 'dev' || 
       user.rol === 'dev' || 
@@ -35,10 +34,11 @@ export class AdminDesarrolladores implements OnInit {
   }
 
   abrirPerfil(id: string) {
+    console.log('click xd',id) 
     if (id) {
-        this.router.navigate(['/ver-programador', id]);
+      this.router.navigate(['/ver-programador', id]);
     } else {
-        console.error("Error: El usuario no tiene ID");
-    }
+      console.error("Error: El usuario no tiene ID");
+  }
   }
 }

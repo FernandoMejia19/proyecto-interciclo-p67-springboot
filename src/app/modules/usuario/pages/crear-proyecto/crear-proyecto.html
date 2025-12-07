@@ -21,19 +21,19 @@
         <div class="form-group">
             <label>URL de la Imagen (opcional)</label>
             <input type="text" formControlName="imagen" placeholder="https://...">
-            
-            <img *ngIf="miFormulario.get('imagen')?.value" 
-                [src]="miFormulario.get('imagen')?.value" 
-                class="preview-img">
-                <div class="form-group">
-    <label>Link del Código (GitHub, GitLab, etc.)</label>
-    <input 
-        type="text" 
-        formControlName="linkCodigo" 
-        placeholder="https://github.com/usuario/repositorio">
+        </div>
 
-    <small>Ejemplo: https://github.com/mi-proyecto</small>
-</div>
+        <img *ngIf="miFormulario.get('imagen')?.value" 
+            [src]="miFormulario.get('imagen')?.value" 
+            class="preview-img">
+
+        <div class="form-group">
+            <label>Link del Código (GitHub, GitLab, etc.)</label>
+            <input 
+                type="text" 
+                formControlName="linkCodigo" 
+                placeholder="https://github.com/usuario/proyecto">
+            <small>Ejemplo: https://github.com/mi-proyecto</small>
         </div>
 
         <div class="botones-accion">
@@ -44,4 +44,4 @@
         </div>
 
     </form>
-</div> 
+</div>

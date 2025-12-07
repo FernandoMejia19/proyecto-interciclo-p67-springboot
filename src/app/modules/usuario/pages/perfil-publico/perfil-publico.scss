@@ -8,6 +8,26 @@
     border-radius: 12px;
 }
 
+/* BOTÓN VOLVER */
+.btn-volver {
+    color: #222;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    background: #f8f9fa;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.btn-volver:hover {
+    background: #e9ecef;
+}
+
 /* HEADER CON FOTO */
 .header-perfil {
     display: flex;
@@ -67,7 +87,14 @@
     font-size: 0.9rem;
 }
 
-/* TÍTULO DISPONIBILIDAD */
+hr {
+    border: none;
+    height: 1px;
+    background: #e0e0e0;
+    margin: 30px 0;
+}
+
+/* SECCIÓN RESERVA */
 .seccion-reserva h2 {
     margin-top: 40px;
     margin-bottom: 18px;
@@ -80,181 +107,181 @@
     color: #555;
 }
 
-/* GRID DE HORARIOS */
-.grid-horarios {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    gap: 20px;
-}
-
-/* TARJETA HORARIO - CIAN PASTEL */
-.card-horario {
-    background: #d7f8ff; /* cyan pastel */
-    border: 1px solid #bfeefa;
+/* GRUPO POR FECHA */
+.fecha-grupo {
+    margin-bottom: 40px;
+    border: 1px solid #e0e0e0;
     border-radius: 10px;
-    padding: 15px;
-    text-align: center;
-    transition: .25s ease-in-out;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
 }
 
-/* HOVER MÁS CLARITO */
-.card-horario:hover {
-    background: #e8fbff; /* un poco más claro */
-    transform: translateY(-4px);
-    border-color: #90e6ff;
-}
-
-/* FECHA Y HORA */
-.card-horario .fecha {
-    font-size: 1.1rem;
-    margin-bottom: 6px;
-    color: #0d4c5c;
-}
-
-.card-horario .hora {
-    color: #333;
-    margin-bottom: 15px;
-}
-
-/* BOTÓN */
-.btn-reservar {
-    width: 100%;
-    background: #00a8cc;
+/* ENCABEZADO DE FECHA */
+.fecha-header {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    padding: 18px 25px;
     color: white;
-    border: none;
-    padding: 10px 0;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: .2s;
 }
 
-.btn-reservar:hover {
-    background: #008eac;
-}
-
-/* BOTÓN VOLVER */
-.btn-volver {
-    color: #222;
-    font-weight: 600;
-    display: inline-flex;
+.fecha-info {
+    display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    background: #f8f9fa;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 50px;
-    font-weight: 600;
-    cursor: pointer; 
-    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
-.btn-volver:hover {
-    background: #e9ecef; 
+.fecha-titulo {
+    font-size: 1.3rem;
+    margin: 0;
+    font-weight: 700;
 }
 
-/* LOADING */
-.loading {
-    text-align: center;
-    padding: 50px;
-    font-size: 1.2rem;
-    color: #777;
+.fecha-subtitulo {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
-
-.seccion-proyectos {
-    margin-top: 45px;
+.horario-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
-.seccion-proyectos h2 {
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 1.6rem;
-}
-
-.grid-proyectos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
-}
-
-.card-proyecto {
-    background: #f4f8ff;
-    border: 1px solid #d8e3ff;
-    padding: 18px;
-    border-radius: 12px;
-    transition: 0.25s ease;
-}
-
-.card-proyecto:hover {
-    transform: translateY(-4px);
-    background: #eef4ff;
-}
-
-.card-proyecto .titulo {
-    margin: 0 0 10px;
-    font-size: 1.25rem;
-    color: #003c8f;
-}
-
-.card-proyecto .descripcion {
-    color: #555;
-    font-size: 0.95rem;
-    margin-bottom: 14px;
-}
-
-.tecnologias {
+/* GRID HORIZONTAL DE HORARIOS */
+.grid-horarios-horizontal {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 15px;
+    gap: 15px;
+    padding: 25px;
+    background-color: #fafafa;
 }
 
-.tech {
-    background: #e3f2fd;
-    color: #0d47a1;
-    padding: 5px 10px;
-    border-radius: 14px;
-    font-size: 0.8rem;
-}
-
-.btn-ver {
-    width: 100%;
-    padding: 8px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px;
+/* TARJETA HORARIO HORIZONTAL */
+.card-horario-h {
+    flex: 0 0 calc(33.333% - 15px);
+    min-width: 200px;
+    background: #d7f8ff;
+    border: 1px solid #bfeefa;
+    border-radius: 10px;
+    padding: 20px;
     cursor: pointer;
-    font-weight: bold;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.05);
 }
 
-.btn-ver:hover {
-    background: #005ecb;
+.card-horario-h:hover {
+    background: #e8fbff;
+    transform: translateY(-5px);
+    border-color: #90e6ff;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
 }
 
-.sin-proyectos {
+.hora-h {
+    font-size: 1.2rem;
+    font-size: 1.2rem;
+    color: #0d4c5c;
+    background-color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 1px 1px 1px #2226;
+}
+
+.fecha-h {
+    font-size: 1.2rem;
+    color: #0d4c5c;
+    background-color: #fff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 1px 1px 1px #2226;
+}
+.texto-rango{
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* BOTÓN RESERVAR HORIZONTAL */
+.button-h {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 15px;
+    gap: 8px;
+    height: 45px;
+    border: none;
+    background: #ff4d44;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: auto;
+}
+
+.button-h .lable-h {
+    line-height: 22px;
+    font-size: 14px;
+    color: #fff;
+    font-family: sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.button-h:hover {
+    background: #e52e26;
+    transform: scale(1.05);
+}
+
+.button-h:hover .svg-icon-h {
+    animation: slope 1s linear infinite;
+}
+
+@keyframes slope {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(10deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.svg-icon-h {
+    stroke: white;
+    stroke-width: 2;
+    stroke-linecap: round;
+    color: #eee;
+}
+
+/* MENSAJE SIN HORARIOS */
+.no-horarios, .sin-horarios {
+    text-align: center;
+    padding: 40px;
     color: #666;
     font-style: italic;
+    background: #f9f9f9;
+    border-radius: 10px;
+    margin: 20px 0;
 }
 
-/* CONTENEDOR GENERAL */
+/* SECCIÓN PROYECTOS */
 .seccion-proyectos {
-    width: 95%;
-    margin: 40px auto;
+    margin-top: 50px;
 }
 
-/* TÍTULO */
 .seccion-proyectos h2 {
-    font-size: 26px;
-    font-weight: 700;
-    color: #1a1a1a;
-    text-align: center;
+    color: #333;
     margin-bottom: 25px;
+    font-size: 1.6rem;
+    text-align: center;
 }
 
-/* GRID DE PROYECTOS */
 .grid-proyectos {
     display: flex;
     flex-wrap: wrap;
@@ -262,7 +289,6 @@
     justify-content: center;
 }
 
-/* CARD */
 .card-proyecto {
     width: 300px;
     background: white;
@@ -277,30 +303,27 @@
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
-/* TÍTULO DEL PROYECTO */
 .card-proyecto .titulo {
-    margin: 0;
+    margin: 0 0 10px;
     font-size: 20px;
     font-weight: 700;
     color: #1a1a1a;
 }
 
-/* DESCRIPCIÓN */
 .card-proyecto .descripcion {
-    margin-top: 10px;
-    font-size: 14px;
     color: #555;
+    font-size: 14px;
     line-height: 1.4;
+    margin-bottom: 15px;
     max-height: 90px;
     overflow: hidden;
 }
 
-/* TECNOLOGÍAS */
 .tecnologias {
-    margin-top: 12px;
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
+    margin-bottom: 15px;
 }
 
 .tech {
@@ -312,18 +335,16 @@
     font-weight: 600;
 }
 
-/* BOTÓN */
 .btn-ver {
-    margin-top: 15px;
     width: 100%;
+    padding: 12px;
     background: #6C63FF;
     color: white;
     border: none;
-    padding: 10px;
-    font-size: 14px;
-    font-weight: 600;
     border-radius: 12px;
     cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
     transition: background 0.25s ease;
 }
 
@@ -331,7 +352,6 @@
     background: #584ae0;
 }
 
-/* MENSAJE SIN PROYECTOS */
 .sin-proyectos {
     text-align: center;
     font-size: 16px;
@@ -339,9 +359,284 @@
     margin-top: 10px;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-    .card-proyecto {
-        width: 90%;
+/* LOADING */
+.loading {
+    text-align: center;
+    padding: 50px;
+    font-size: 1.2rem;
+    color: #777;
+}
+
+/* MODAL DE RESERVA */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-container {
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 16px;
+    padding: 30px;
+    position: relative;
+    animation: slideUp 0.4s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(60px);
     }
-} 
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s;
+    line-height: 1;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.modal-close:hover {
+    color: #e53e3e;
+    background: #f5f5f5;
+}
+
+.modal-header {
+    margin-bottom: 25px;
+    text-align: center;
+    padding-right: 30px;
+}
+
+.modal-header h2 {
+    color: #2d3748;
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+}
+
+.modal-subtitle {
+    color: #718096;
+    font-size: 1rem;
+}
+
+.modal-info {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 25px;
+    border-left: 5px solid #6a11cb;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.info-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #4a5568;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+}
+
+.info-value {
+    color: #2d3748;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* FORMULARIO MODAL */
+.modal-form {
+    margin-top: 25px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 1rem;
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 120px;
+    transition: all 0.3s;
+    background: #f8fafc;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: #6a11cb;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+}
+
+.form-help {
+    display: block;
+    margin-top: 8px;
+    color: #718096;
+    font-size: 0.9rem;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-modal {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.btn-cancel {
+    background: #e2e8f0;
+    color: #4a5568;
+}
+
+.btn-cancel:hover {
+    background: #cbd5e0;
+}
+
+.btn-confirm {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+}
+
+.btn-confirm:hover:not(:disabled) {
+    background: linear-gradient(135deg, #5a0db9 0%, #1c65e8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(106, 17, 203, 0.3);
+}
+
+.btn-confirm:disabled {
+    background: #a0aec0;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+    .card-horario-h {
+        flex: 0 0 calc(50% - 15px);
+    }
+}
+
+@media (max-width: 768px) {
+    .perfil-publico-container {
+        padding: 20px;
+        margin: 15px;
+    }
+    
+    .header-perfil {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .fecha-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .card-horario-h {
+        flex: 0 0 100%;
+    }
+    
+    .grid-horarios-horizontal {
+        padding: 20px 15px;
+        gap: 12px;
+    }
+    
+    .modal-container {
+        width: 95%;
+        padding: 25px 20px;
+    }
+    
+    .modal-actions {
+        flex-direction: column;
+    }
+    
+    .card-proyecto {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .info h1 {
+        font-size: 1.6rem;
+    }
+    
+    .seccion-reserva h2,
+    .seccion-proyectos h2 {
+        font-size: 1.4rem;
+    }
+    
+    .modal-header h2 {
+        font-size: 1.5rem;
+    }
+}

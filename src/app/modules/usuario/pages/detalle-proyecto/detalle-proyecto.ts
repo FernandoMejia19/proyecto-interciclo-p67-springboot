@@ -53,7 +53,6 @@ export class DetalleProyectoComponent implements OnInit {
 
     this.proyecto = { id: snap.id, ...snap.data() };
 
-    // Cargar autor con async/await
     if (this.proyecto.creador) {
       this.autor = await this.usuariosService.getUsuarioPorId(this.proyecto.creador);
     }

@@ -8,7 +8,7 @@
         <div class="form-group">
             <label>Título del Proyecto</label>
             <input type="text" formControlName="titulo" placeholder="Ej: Mi Portafolio">
-        </div>
+        </div> 
 
         <div class="form-group">
             <label>Descripción</label>
@@ -29,11 +29,11 @@
                 [src]="miFormulario.get('imagen')?.value" 
                 class="preview-img">
         </div>
+
         <div class="form-group">
             <label>Link del Código / Repositorio</label>
             <input type="text" formControlName="linkCodigo" placeholder="https://github.com/usuario/proyecto">
         </div>
-
 
         <div class="botones-accion">
             <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
@@ -41,4 +41,13 @@
         </div>
 
     </form>
-</div> 
+</div>
+
+<!-- 🟩 MODAL QUE SÍ FUNCIONA
+
+<div class="modal-fondo" *ngIf="mostrarModal">
+    <div class="modal-caja">
+        {{ mensajeModal }}
+    </div>
+</div>
+-->

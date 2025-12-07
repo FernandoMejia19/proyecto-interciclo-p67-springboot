@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core'; // <--- 1. IMPORTAR ESTO
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,36 +14,34 @@ import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 export class EditarProyecto implements OnInit {
 
   miFormulario: FormGroup;
-  idProyecto: string | null = '';
-  loading: boolean = true; 
+  idProyecto: string | null = null;
+  loading: boolean = true;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private firestore: Firestore,
-    private cdr: ChangeDetectorRef 
+    private cdr: ChangeDetectorRef
   ) {
     this.miFormulario = this.fb.group({
-  titulo: ['', Validators.required],
-  descripcion: ['', Validators.required],
-  tecnologias: [''],
-  imagen: [''],
-  linkCodigo: [''] 
-});
+      titulo: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      tecnologias: [''],
+      imagen: [''],
+      linkCodigo: ['']
+    });
   }
 
   async ngOnInit() {
     this.idProyecto = this.route.snapshot.paramMap.get('id');
-    console.log("ID para editar:", this.idProyecto);
 
     if (this.idProyecto) {
       await this.cargarDatosProyecto(this.idProyecto);
-    } else {
-      console.log("No hay ID, quitando loading de todas formas.");
-      this.loading = false;
-      this.cdr.detectChanges(); 
     }
+
+    this.loading = false;
+    this.cdr.detectChanges();
   }
 
   async cargarDatosProyecto(id: string) {
@@ -53,67 +51,66 @@ export class EditarProyecto implements OnInit {
 
       if (docSnap.exists()) {
         const data = docSnap.data();
-        console.log("Datos recuperados:", data); 
-
-        let tecsString = '';
-        if (data['tecnologias'] && Array.isArray(data['tecnologias'])) {
-          tecsString = data['tecnologias'].join(', ');
-        }
 
         this.miFormulario.patchValue({
-        titulo: data['titulo'],
-        descripcion: data['descripcion'],
-        imagen: data['imagen'],
-        tecnologias: tecsString,
-        linkCodigo: data['linkCodigo'] || ''  
+          titulo: data['titulo'],
+          descripcion: data['descripcion'],
+          imagen: data['imagen'],
+          tecnologias: data['tecnologias']?.join(', ') || '',
+          linkCodigo: data['linkCodigo'] || ''
         });
-
-        
       } else {
-        console.log("No existe el documento");
         alert("Proyecto no encontrado");
       }
 
     } catch (error) {
-      console.error("Error:", error);
-    } finally {
-
-      this.loading = false; 
-      console.log("Loading es ahora false. Forzando actualización...");
-      
-      this.cdr.detectChanges();
+      console.error(error);
     }
   }
 
   async guardar() {
-    if (this.miFormulario.invalid) return;
+    if (this.miFormulario.invalid || !this.idProyecto) return;
 
     const formVal = this.miFormulario.value;
-    const tecsArray = formVal.tecnologias 
-                      ? formVal.tecnologias.split(',').map((t: string) => t.trim()) 
-                      : [];
+    const tecsArray = formVal.tecnologias
+      ? formVal.tecnologias.split(',').map((x: string) => x.trim())
+      : [];
 
     const datosActualizados = {
       titulo: formVal.titulo,
       descripcion: formVal.descripcion,
-      imagen: formVal.imagen||'https://img-c.udemycdn.com/course/750x422/4666926_22f0.jpg',
+      imagen: formVal.imagen || '',
       tecnologias: tecsArray,
       linkCodigo: formVal.linkCodigo || ''
     };
 
     try {
-      if (this.idProyecto) {
-        const docRef = doc(this.firestore, 'proyectos', this.idProyecto);
-        await updateDoc(docRef, datosActualizados);
-        alert('Proyecto actualizado correctamente');
-        this.router.navigate(['/perfil']);
-      }
+      const docRef = doc(this.firestore, 'proyectos', this.idProyecto);
+      await updateDoc(docRef, datosActualizados);
+
+      // 🔥 ENVIAR MENSAJE A PERFIL-USUARIO
+      this.router.navigate(['/perfil'], {
+        state: {
+          toast: {
+            mensaje: 'Proyecto editado correctamente',
+            tipo: 'success'
+          }
+        }
+      });
+
     } catch (error) {
-      alert("Ocurrió un error al guardar.");
+      this.router.navigate(['/perfil'], {
+        state: {
+          toast: {
+            mensaje: 'Error al guardar los cambios',
+            tipo: 'error'
+          }
+        }
+      });
     }
   }
-  
+
   cancelar() {
-      this.router.navigate(['/perfil']);
+    this.router.navigate(['/perfil']);
   }
-} 
+}

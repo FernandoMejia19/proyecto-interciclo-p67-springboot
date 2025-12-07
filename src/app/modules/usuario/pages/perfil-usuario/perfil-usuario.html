@@ -29,14 +29,18 @@
       <!-- CONTACTOS -->
       <div class="redes-sociales" *ngIf="tieneContactos()">
         <h4>Mis Contactos</h4>
-
         <div *ngIf="perfil.contactos?.whatsapp">
           WhatsApp: 
           <a [href]="'https://wa.me/' + perfil.contactos.whatsapp" target="_blank">
             {{ perfil.contactos.whatsapp }}
           </a>
         </div>
-
+        <div *ngIf="perfil.contactos?.instagram">
+          Instagram: 
+          <a [href]="'https://www.instagram.com/' + perfil.contactos.instagram" target="_blank">
+            {{ perfil.contactos.instagram }}
+          </a>
+        </div>
         <div *ngIf="perfil.contactos?.facebook">
           Facebook:
           <a [href]="'https://facebook.com/' + perfil.contactos.facebook" target="_blank">
@@ -109,6 +113,22 @@
 
     </div>
   </div>
+</div>
+
+<!-- CONFIRMACIÓN -->
+<div class="modal-confirm" *ngIf="confirmData.mostrar">
+  <div class="modal-box">
+    <p>{{ confirmData.mensaje }}</p>
+    <div class="acciones">
+      <button class="btn-si" (click)="confirmarAccion()">Sí</button>
+      <button class="btn-no" (click)="cancelarAccion()">No</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICACIONES -->
+<div class="toast" *ngIf="toast.mostrar" [class.error]="toast.tipo === 'error'">
+  {{ toast.mensaje }}
 </div>
 
 <ng-template #cargando>
