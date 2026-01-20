@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AsesoriasService } from '../../../../core/services/asesorias';
 import { AuthService } from '../../../../core/services/auth';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-mis-citas',
@@ -69,11 +70,11 @@ export class MisCitasComponent implements OnInit {
 
     try {
       await this.asesoriasService.crearDisponibilidad(slot);
-      alert('Horario agregado');
+      Swal.fire('Horario agregado');
       this.horaInicio = '';
       this.horaFin = '';
     } catch (err) {
-      alert('Error al agregar horario');
+      Swal.fire('Error al agregar horario');
     }
     this.guardandoHorario = false;
   }
@@ -81,6 +82,6 @@ export class MisCitasComponent implements OnInit {
   async responder(idCita: string, decision: 'aceptada' | 'rechazada') {
     await this.asesoriasService.responderSolicitud(idCita, decision);
     this.cargarDatosSegunRol();
-    alert(decision === 'aceptada' ? 'Cita aceptada' : 'Solicitud rechazada');
+    Swal.fire(decision === 'aceptada' ? 'Cita aceptada' : 'Solicitud rechazada');
   }
 }

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { GestionUsuarios } from '../../../../services/gestion-usuarios';
 import { Location } from '@angular/common';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class DetalleProyectoComponent implements OnInit {
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
-      alert('Proyecto no encontrado');
+      Swal.fire('Proyecto no encontrado');
       this.router.navigate(['/proyectos']);
       return;
     }
@@ -46,7 +47,7 @@ export class DetalleProyectoComponent implements OnInit {
     const snap = await getDoc(docRef);
 
     if (!snap.exists()) {
-      alert('Este proyecto no existe o fue eliminado.');
+      Swal.fire('Este proyecto no existe o fue eliminado.');
       this.router.navigate(['/proyectos']);
       return;
     }

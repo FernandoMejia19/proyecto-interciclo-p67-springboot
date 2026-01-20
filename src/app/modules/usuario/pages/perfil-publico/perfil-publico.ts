@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Firestore, doc, getDoc, collection, query, where, getDocs, addDoc, updateDoc } from '@angular/fire/firestore';
 import { AuthService } from '../../../../core/services/auth';
 import { FormsModule } from '@angular/forms'; 
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-ver-perfil-publico',
@@ -160,7 +161,7 @@ estaExpandida(fecha: string): boolean {
 
   abrirModalReserva(slot: any) {
     if (!this.uidUsuarioActual) {
-      alert("Debes iniciar sesión para reservar.");
+      Swal.fire("Debes iniciar sesión para reservar.");
       return;
     }
     
@@ -178,7 +179,7 @@ estaExpandida(fecha: string): boolean {
 
   async confirmarReserva() {
     if (!this.motivoAsesoria.trim()) {
-      alert("Por favor, ingresa el motivo de la asesoría.");
+      Swal.fire("Por favor, ingresa el motivo de la asesoría.");
       return;
     }
 
@@ -200,14 +201,14 @@ estaExpandida(fecha: string): boolean {
       const slotRef = doc(this.firestore, 'disponibilidad', this.slotSeleccionado.id);
       await updateDoc(slotRef, { estado: 'reservado' });
 
-      alert('✅ ¡Solicitud enviada! El programador será notificado.');
+      Swal.fire('✅ ¡Solicitud enviada! El programador será notificado.');
       
       this.cerrarModal();
       await this.cargarHorariosDisponibles();
       
     } catch (error) {
       console.error(error);
-      alert('❌ Error al enviar la solicitud');
+      Swal.fire('❌ Error al enviar la solicitud');
     } finally {
       this.enviando = false;
       this.cdr.detectChanges();

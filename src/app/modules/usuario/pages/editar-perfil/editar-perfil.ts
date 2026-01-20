@@ -5,6 +5,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-editar-perfil',
@@ -75,7 +76,7 @@ export class EditarPerfilComponent implements OnInit {
   }
   async guardarCambios() {
   if (this.perfilForm.invalid) {
-    alert('Por favor completa los campos correctamente');
+    Swal.fire('Por favor completa los campos correctamente');
     return;
   }
 
@@ -83,7 +84,7 @@ export class EditarPerfilComponent implements OnInit {
     // OBTENEMOS EL USUARIO ACTUAL (siempre tiene el UID correcto)
     const user = await this.authService.getCurrentUser();
     if (!user) {
-      alert('Error: no estás autenticado');
+      Swal.fire('Error: no estás autenticado');
       this.router.navigate(['/login']);
       return;
     }
@@ -113,12 +114,12 @@ export class EditarPerfilComponent implements OnInit {
     const userDocRef = doc(this.firestore, 'users', uid);
     await updateDoc(userDocRef, datosActualizados);
 
-    alert('¡Perfil actualizado correctamente!');
+    Swal.fire('¡Perfil actualizado correctamente!');
     this.router.navigate(['/perfil']);
 
   } catch (error) {
     console.error('Error al guardar perfil:', error);
-    alert('Error al guardar los cambios');
+    Swal.fire('Error al guardar los cambios');
   }
 }
 }

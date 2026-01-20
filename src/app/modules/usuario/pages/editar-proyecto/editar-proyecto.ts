@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-editar-proyecto',
@@ -60,7 +61,7 @@ export class EditarProyecto implements OnInit {
           linkCodigo: data['linkCodigo'] || ''
         });
       } else {
-        alert("Proyecto no encontrado");
+        Swal.fire("Proyecto no encontrado");
       }
 
     } catch (error) {
