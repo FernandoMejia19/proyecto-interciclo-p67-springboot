@@ -4,6 +4,7 @@ import { GestionProyectos } from '../../../../services/gestion-proyectos';
 import { GestionUsuarios } from '../../../../services/gestion-usuarios';
 import { CommonModule } from '@angular/common';
 import { combineLatest } from 'rxjs';
+import { Proyecto } from '../../../../../models/entitys';
 
 @Component({
   selector: 'app-proyectos',
@@ -12,39 +13,15 @@ import { combineLatest } from 'rxjs';
   styleUrl: './proyectos.scss',
 })
 export class Proyectos {
-  proyectos: any[] = [];
-
-  constructor(
-    private proyectosService: GestionProyectos,
-    private usuariosService: GestionUsuarios,
-    private cdr: ChangeDetectorRef,
-    private router: Router  // ← Inyecta Router
-  ) {}
-
+  proyectos:Proyecto[]=[]
+  constructor (private gp:GestionProyectos,
+    private cdr:ChangeDetectorRef
+  ){}
   ngOnInit(): void {
-    combineLatest([
-      this.proyectosService.getProyectos(),
-      this.usuariosService.getUsuarios()
-    ]).subscribe(([proyectos, usuarios]) => {
-      this.proyectos = proyectos.map(p => {
-        const usuarioEncontrado = usuarios.find(u => u.id === p.creador);
-        return {
-          ...p,
-          usuarioNombre: usuarioEncontrado ? usuarioEncontrado.nombre : 'Desconocido',
-          usuarioPhoto: usuarioEncontrado?.photoURL || null
-        };
-      });
+    this.gp.getProyectos().subscribe({next:(resp)=>{
+      console.log("DATOS ",resp);
+      this.proyectos=resp;
       this.cdr.detectChanges();
-    });
-  }
-
-  // ← MÉTODO NUEVO: abre el detalle del proyecto
-  verDetalleProyecto(proyectoId: string) {
-    this.router.navigate(['/proyecto', proyectoId]);
-  }
-
-  // ← Para imágenes rotas
-  onImgError(event: any) {
-    event.target.src = 'assets/default-project.jpg';
+    }})
   }
 }

@@ -4,6 +4,7 @@ import { Navbar } from './components/navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { Footer } from "./components/footer/footer";
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -11,6 +12,7 @@ import { Footer } from "./components/footer/footer";
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
+
 export class App {
   titulo="Proyecto Interciclo";
   mostrarNavBar: boolean =true;

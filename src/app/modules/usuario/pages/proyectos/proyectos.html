@@ -4,35 +4,38 @@
   <div *ngIf="proyectos.length === 0" class="sin-proyectos">
     <p>No hay proyectos publicados aún.</p>
   </div>
-
   <div *ngFor="let p of proyectos" 
-        class="card" 
-        (click)="verDetalleProyecto(p.id)"
-        style="cursor: pointer;">
-
-    <img [src]="p.imagen || 'assets/default-project.jpg'" 
-        alt="Proyecto {{ p.titulo }}" 
-        class="imagen-proyecto" 
-        (error)="onImgError($event)" />
-
+  class="card" 
+  style="cursor: pointer;">
+  <!--
+  <div *ngFor="let p of proyectos" 
+  class="card" 
+  (click)="verDetalleProyecto(p.id)"
+  style="cursor: pointer;">
+  <img [src]="p.imagen || 'assets/default-project.jpg'" 
+  alt="Proyecto {{ p.titulo }}" 
+  class="imagen-proyecto" 
+  (error)="onImgError($event)" />
+  
+  -->
     <div class="card-content">
       <h3>{{ p.titulo }}</h3>
       
       <p class="autor">
-        <strong>Por:</strong> {{ p.usuarioNombre || 'Anónimo' }}
+        <strong>Por:</strong> {{ p.programador.nombre }}
       </p>
 
-      <p class="descripcion">{{ p.descripcion | slice:0:120 }}{{ p.descripcion?.length > 120 ? '...' : '' }}</p>
+      <p class="descripcion">{{ p.descripcion | slice:0:120 }}{{ p.descripcion }}</p>
 
       <div class="tecnologias">
-        <span class="tech" *ngFor="let t of p.tecnologias; let isLast = last">
+        <span class="tech" *ngFor="let t of p.fecha; let isLast = last">
           {{ t }}{{ isLast ? '' : ' · ' }}
         </span>
       </div>
 
       <!-- Badge opcional de cargo -->
-      <div class="cargo" *ngIf="p.cargo">
-        <small><strong>Cargo:</strong> {{ p.cargo }}</small>
+      <div class="cargo" *ngIf="p.programador">
+        <small><strong>Cargo:</strong> {{ p.fecha }}</small>
       </div>
     </div>
   </div>

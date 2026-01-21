@@ -55,7 +55,7 @@ export class DetalleProyectoComponent implements OnInit {
     this.proyecto = { id: snap.id, ...snap.data() };
 
     if (this.proyecto.creador) {
-      this.autor = await this.usuariosService.getUsuarioPorId(this.proyecto.creador);
+      //this.autor = await this.usuariosService.getUsuarioPorId(this.proyecto.creador);
     }
   } catch (error) {
     console.error('Error cargando proyecto:', error);

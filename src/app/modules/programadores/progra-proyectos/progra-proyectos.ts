@@ -17,11 +17,13 @@ export class PrograProyectos {
     private proyectosService:GestionProyectos,
     private cdr: ChangeDetectorRef
   ){}
+  /*
   ngOnInit(): void {
     this.proyectosService.getProyectosByUser('9XpJg5IvlmSCpu6XoO3E6H0kI5s1').subscribe(usuarios=>{
       this.desarrolladores=usuarios
       this.cdr.detectChanges();
     });
   }
+  */
 
 }

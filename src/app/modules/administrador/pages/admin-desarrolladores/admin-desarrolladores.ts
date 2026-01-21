@@ -23,9 +23,9 @@ export class AdminDesarrolladores implements OnInit {
     this.usuariosService.getUsuarios().subscribe(usuarios => {
     const lista = Array.isArray(usuarios) ? usuarios : [];
     this.desarrolladores = lista.filter(user => 
-      user.role === 'dev' || 
       user.rol === 'dev' || 
-      user.role === 'admin'
+      user.rol === 'dev' || 
+      user.rol === 'admin'
     );
 
     console.log('Desarrolladores finales:', this.desarrolladores); 

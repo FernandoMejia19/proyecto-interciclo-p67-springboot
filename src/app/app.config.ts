@@ -6,7 +6,7 @@ import { environment } from '../environments/environment';
 import { routes } from './app.routes';
 import { provideRouter } from '@angular/router';
 import { getStorage, provideStorage } from '@angular/fire/storage';
-
+import { provideHttpClient } from '@angular/common/http';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -15,6 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideRouter(routes),
-    provideStorage(() => getStorage())
+    provideStorage(() => getStorage()),
+    provideHttpClient()
   ]
 };

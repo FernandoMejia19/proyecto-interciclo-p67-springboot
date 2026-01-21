@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
 import { GestionUsuarios } from '../../services/gestion-usuarios';
 import { combineLatest } from 'rxjs';
+import { Usuario } from '../../../models/entitys';
 
 @Component({
   selector: 'app-listar-contenido',
@@ -15,7 +16,7 @@ import { combineLatest } from 'rxjs';
 export class ListarContenido implements OnInit {
 
   proyectos: any[] = []; 
-  usuarios: any[]=[]
+  usuarios: Usuario[]=[]
   constructor(private proyectosService: GestionProyectos,
     private usuariosService:GestionUsuarios,
     private cdr: ChangeDetectorRef
