@@ -29,30 +29,30 @@ export class GestionUsuarios {
 
   // Actualizar usuario
   actualizarUsuario(id: number, usuario: Partial<Usuario>): Observable<Usuario> {
-    return this.http.put<Usuario>(`${this.baseURL}/usuarios/${id}`, usuario);
+    return this.http.put<Usuario>(this.baseURL+'/usuarios/'+id, usuario);
   }
 
   // Actualización parcial (solo campos específicos)
   actualizarParcial(id: number, datos: Partial<Usuario>): Observable<Usuario> {
-    return this.http.patch<Usuario>(`${this.baseURL}/usuarios/${id}`, datos);
+    return this.http.patch<Usuario>(this.baseURL+'/usuarios/'+id, datos);
   }
 
   // Eliminar usuario
   eliminarUsuario(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseURL}/usuarios/${id}`);
+    return this.http.delete<void>(this.baseURL+'/usuarios/'+id);
   }
 
   // Subir foto de perfil (cuando implementes el endpoint)
   subirFotoPerfil(id: number, formData: FormData): Observable<{ url: string }> {
     return this.http.post<{ url: string }>(
-      `${this.baseURL}/usuarios/${id}/foto`,
+      this.baseURL+'/usuarios/'+id+'/foto',
       formData
     );
   }
 
   // Buscar usuarios por rol
   obtenerPorRol(rol: string): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(`${this.baseURL}/usuarios/rol/${rol}`);
+    return this.http.get<Usuario[]>(this.baseURL+'/usuarios/rol/'+rol);
   }
 
   // Buscar usuarios por ciudad/país
@@ -61,6 +61,10 @@ export class GestionUsuarios {
     if (ciudad) params += `ciudad=${ciudad}&`;
     if (pais) params += `pais=${pais}`;
     
-    return this.http.get<Usuario[]>(`${this.baseURL}/usuarios/buscar?${params}`);
+    return this.http.get<Usuario[]>(this.baseURL+'/usuarios/buscar?'+params);
   }
+  getReporteGeneral() {
+  return this.http.get(this.baseURL+'/admin/reportes/resumen');
+}
+
 }

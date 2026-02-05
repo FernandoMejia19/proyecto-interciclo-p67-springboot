@@ -107,5 +107,11 @@ export class GestionAsesorias {
   obtenerHorasDisponibles(asesoriaId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.urlHoras}/${asesoriaId}`);
   }
+  // En gestion-asesorias.service.ts
 
+/** Obtener estadísticas globales de asesorías para el reporte del Admin */
+obtenerEstadisticasReporte(): Observable<any> {
+  // Usamos el endpoint que definimos en FastAPI anteriormente
+  return this.http.get<any>(this.apiUrl+'/estadisticas/reporte');
+}
 }

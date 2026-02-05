@@ -11,6 +11,10 @@ export interface ProyectoRequest {
   idProgramador: number;
   fecha: string; // ISO format: "2024-01-31"
 }
+export interface DashboardStats {
+  totalProyectos: number;
+  totalUsuarios: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -21,14 +25,14 @@ export class GestionProyectos {
 
   constructor(private http: HttpClient) {}
 
-  // ========== MÉTODOS ORIGINALES ==========
-  
+  // ========== CRUD PRINCIPAL ==========
+
   obtenerTodos(): Observable<Proyecto[]> {
     return this.http.get<Proyecto[]>(this.baseURL);
   }
 
   obtenerPorId(id: number): Observable<Proyecto> {
-    return this.http.get<Proyecto>(`${this.baseURL}/${id}`);
+    return this.http.get<Proyecto>(this.baseURL + '/' + id);
   }
 
   crear(proyecto: ProyectoRequest): Observable<Proyecto> {
@@ -36,15 +40,15 @@ export class GestionProyectos {
   }
 
   actualizar(id: number, proyecto: Partial<ProyectoRequest>): Observable<Proyecto> {
-    return this.http.put<Proyecto>(`${this.baseURL}/${id}`, proyecto);
+    return this.http.put<Proyecto>(this.baseURL + '/' + id, proyecto);
   }
 
   eliminar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseURL}/${id}`);
+    return this.http.delete<void>(this.baseURL + '/' + id);
   }
 
   // ========== ALIAS PARA COMPATIBILIDAD ==========
-  
+
   getProyectos(): Observable<Proyecto[]> {
     return this.obtenerTodos();
   }
@@ -67,14 +71,32 @@ export class GestionProyectos {
 
   // ========== MÉTODOS ADICIONALES ==========
 
-  // Obtener proyectos por programador
+  // Obtener proyectos por programador (requiere endpoint en backend)
   obtenerPorProgramador(idProgramador: number): Observable<Proyecto[]> {
-    return this.http.get<Proyecto[]>(`${this.baseURL}/programador/${idProgramador}`);
+    return this.http.get<Proyecto[]>(
+      this.baseURL + '/programador/' + idProgramador
+    );
   }
 
-  // Buscar proyectos por título
+  // Buscar proyectos por título (requiere endpoint en backend)
   buscarPorTitulo(titulo: string): Observable<Proyecto[]> {
-    return this.http.get<Proyecto[]>(`${this.baseURL}/buscar?titulo=${titulo}`);
+    return this.http.get<Proyecto[]>(
+      this.baseURL + '/buscar?titulo=' + titulo
+    );
+  }
+
+  // Conteo total de proyectos (endpoint correcto)
+  obtenerConteoTotal(): Observable<number> {
+    return this.http.get<number>(
+      this.baseURL + '/stats/total-count'
+    );
   }
   
+
+obtenerDashboardStats() {
+  return this.http.get<DashboardStats>(
+    this.baseURL + '/stats/dashboard'
+  );
+}
+
 }

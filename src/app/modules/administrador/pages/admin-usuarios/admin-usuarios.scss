@@ -140,3 +140,59 @@ table th {
     display: flex;
     justify-content: space-between;
 }
+.reporte-general {
+    background: #f8f9fc;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.reporte-general h3 {
+    margin-bottom: 15px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 5px solid #007bff;
+    box-shadow: 0 2px 6px rgba(0,0,0,.08);
+}
+
+.card h4 {
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.big-number {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.card.aceptadas { border-left-color: #28a745; }
+.card.pendientes { border-left-color: #ffc107; }
+.card.rechazadas { border-left-color: #dc3545; }
+.btn-exportar {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-exportar:hover {
+    opacity: 0.85;
+}
+

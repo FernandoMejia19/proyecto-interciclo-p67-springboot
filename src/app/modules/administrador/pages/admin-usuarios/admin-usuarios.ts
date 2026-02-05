@@ -3,7 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Usuario } from '../../../../../models/entitys';
 import { GestionUsuarios } from '../../../../services/gestion-usuarios';
-
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { forkJoin } from 'rxjs';
+import { GestionAsesorias } from '../../../../services/gestion-asesorias';
+import { GestionProyectos } from '../../../../services/gestion-proyectos';
 
 @Component({
   selector: 'app-admin-usuarios',
@@ -17,6 +21,18 @@ export class AdminUsuarios implements OnInit {
   usuarios: any[] = [];
   loading = false;
   errorMsg = '';
+  reporte = {
+  proyectosTotales: 0,
+  asesorias: {
+    totales: 0,
+    aceptadas: 0,
+    pendientes: 0,
+    rechazadas: 0
+  }
+};
+
+loadingReporte = false;
+
 
   // Modal crear usuario
   modalCrearAbierto = false;
@@ -34,10 +50,13 @@ export class AdminUsuarios implements OnInit {
   };
 
   constructor(private gestionUsuarios: GestionUsuarios,
+    private gestionProyectos: GestionProyectos, 
+    private gestionAsesorias: GestionAsesorias,
     private cdr:ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
+    this.cargarReporteGeneral();
     this.cargarUsuarios();
   }
 
@@ -62,6 +81,37 @@ export class AdminUsuarios implements OnInit {
       
     });
   }
+cargarReporteGeneral() {
+  this.loadingReporte = true;
+  this.gestionAsesorias.obtenerEstadisticasReporte().subscribe({
+    next: (stats) => {
+      console.log('ASESORIAS STATS:', stats);
+
+      this.reporte.asesorias.totales = stats.totales;
+      this.reporte.asesorias.aceptadas = stats.aceptadas;
+      this.reporte.asesorias.pendientes = stats.pendientes;
+      this.reporte.asesorias.rechazadas = stats.rechazadas;
+
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+      console.error('Error asesorías stats:', err);
+    }
+  });
+  this.gestionProyectos.obtenerConteoTotal().subscribe({
+    next: (total) => {
+      console.log('TOTAL PROYECTOS:', total); // 👈 clave
+      this.reporte.proyectosTotales = total;
+      this.loadingReporte = false;
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+      console.error('Error al obtener conteo de proyectos:', err);
+      this.loadingReporte = false;
+    }
+  });
+}
+
 
   activarEdicion(u: any) {
     u.editando = true;
@@ -74,6 +124,30 @@ export class AdminUsuarios implements OnInit {
     u.nuevoNombre = u.nombre;
     u.nuevoRol = u.rol;
   }
+exportarPDF() {
+  const element = document.getElementById('reportePDF');
+
+  if (!element) return;
+
+  html2canvas(element, {
+    scale: 2, // mejor calidad
+    useCORS: true
+  }).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
+
+    const pdf = new jsPDF('p', 'mm', 'a4');
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+    pdf.setFontSize(14);
+    pdf.text('Reporte General del Sistema', 14, 15);
+
+    pdf.addImage(imgData, 'PNG', 10, 25, pdfWidth - 20, pdfHeight);
+
+    pdf.save('reporte-general.pdf');
+  });
+}
 
   guardarCambios(u: any) {
     this.gestionUsuarios.actualizarParcial(u.id, {
@@ -128,4 +202,5 @@ export class AdminUsuarios implements OnInit {
       }
     });
   }
+  
 }

@@ -12,11 +12,13 @@
             <span class="dev">Para: <strong>{{ sol.nombreDev || 'Desarrollador' }}</strong></span>
             <span class="tema">Tema: {{ sol.mensaje }}</span>
             <span class="fecha">Fecha: {{ sol.fecha }} | Hora: {{ sol.horaInicio }} - {{ sol.horaFin }}</span>
-            <span class="estado" [class.pendiente]="sol.estado === 'pendiente'"
-                [class.aceptada]="sol.estado === 'aceptada'"
-                [class.rechazada]="sol.estado === 'rechazada'">
-                Estado: {{ sol.estado | titlecase }}
-            </span>
+            <span class="estado"
+                [class.pendiente]="sol.estado === 'PENDIENTE'"
+                [class.aceptada]="sol.estado === 'CONFIRMADA'"
+                [class.rechazada]="sol.estado === 'CANCELADA'">
+                Estado: {{ sol.estado }}
+</span>
+
         </div>
         </div>
     </div>
@@ -37,18 +39,28 @@
             <div class="info">
             <span class="cliente">De: {{ sol.nombreSolicitante }}</span>
             <span class="tema">Tema: {{ sol.mensaje }}</span>
-            <span class="fecha">Fecha: {{ sol.fecha }} | Hora: {{ sol.horaInicio }} - {{ sol.horaFin }}</span>
+            <span class="fecha" *ngIf="sol.estado === 'PENDIENTE'">
+                Fecha y hora pendientes de confirmación
+            </span>
+
+            <span class="fecha" *ngIf="sol.estado !== 'PENDIENTE'">
+                Fecha: {{ sol.fecha }} | Hora: {{ sol.horaInicio }} - {{ sol.horaFin }}
+            </span>
+
         </div>
         <div class="acciones">
-            <button class="btn-aceptar" (click)="responder(sol.id, 'aceptada')">Aceptar</button>
-            <button class="btn-rechazar" (click)="responder(sol.id, 'rechazada')">Rechazar</button>
+            <button class="btn-aceptar" (click)="responder(sol.id, 'aceptar')">
+            Aceptar
+            </button>
+
+            <button class="btn-rechazar" (click)="responder(sol.id, 'rechazar')">
+            Rechazar
+            </button>
         </div>
         </div>
     </div>
     </section>
-
-    <hr *ngIf="solicitudes.length > 0">
-
+    <hr>
     <!-- Configurar horarios libres -->
     <section class="seccion-calendario">
     <h3>Configurar mis Horarios Libres</h3>
@@ -104,6 +116,60 @@
         </div>
     </div>
     </section>
+    <hr>
+
+    <!--Reporte de asesorias-->
+    <section class="dashboard-dev">
+    <h3>Resumen de Asesorías</h3>
+
+    <div class="dashboard-grid">
+        
+        <div class="card aceptadas">
+            <h4>Aceptadas</h4>
+            <strong>{{ aceptadasCount }}</strong>
+        </div>
+        
+        <div class="card pendientes">
+            <h4>Pendientes</h4>
+            <strong>{{ pendientesCount }}</strong>
+        </div>
+        
+        <div class="card rechazadas">
+            <h4>Rechazadas</h4>
+            <strong>{{ rechazadasCount }}</strong>
+        </div>
+        
+        <div class="card">
+            <h4>Total</h4>
+            <strong>{{ totalCount }}</strong>
+        </div>
+
+    </div>
+    <hr>
+    
+    <!-- DASHBOARD DEV -->
+<section class="seccion-dashboard">
+    <h3>Resumen de Asesorías</h3>
+
+    <div style="max-width: 400px; margin: auto">
+    <canvas
+        baseChart
+        [data]="chartData"
+        [type]="chartTipo">
+    </canvas>
+    </div>
+</section>
+</section>
+
+    <hr *ngIf="solicitudes.length > 0">
+
+<hr>
+    <div class="export-container right">
+        <button class="btn-export" (click)="exportarPDF()">Exportar PDF</button>
+    </div>
+
+
+
 
     </div>
 </div>

@@ -13,5 +13,10 @@
         "^/api": "/api"
     },
     "logLevel": "debug"
+    },"/api-portafolios": {
+    "target": "http://localhost:8090",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
     }
 }

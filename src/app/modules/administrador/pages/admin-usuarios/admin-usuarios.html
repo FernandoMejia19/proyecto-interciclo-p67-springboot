@@ -75,7 +75,7 @@
                 Eliminar
                     </button>
             </div>
-
+            
             <div class="botones-accion" *ngIf="u.editando">
                 <button class="btn-guardar" (click)="guardarCambios(u)">
                 Guardar
@@ -90,6 +90,53 @@
     </table>
     </div>
 </div>
+
+
+
+<div id="reportePDF" class="reporte-general">
+
+    <div class="reporte-general">
+        <h3>📊 Reporte General del Sistema</h3>
+
+        <div class="cards">
+            
+            <!-- PROYECTOS -->
+            <div class="card">
+                <h4>📁 Proyectos</h4>
+                <p class="big-number">{{ reporte.proyectosTotales }}</p>
+                <!--
+                    <span>Total de proyectos registrados</span>
+                    -->
+                </div>
+
+                <!-- ASESORÍAS -->
+                <div class="card">
+        <h4>🧑‍🏫 Asesorías Totales</h4>
+        <p class="big-number">{{ reporte.asesorias.totales }}</p>
+    </div>
+
+    <div class="card aceptadas">
+        <h4>✅ Aceptadas <p class="big-number">{{ reporte.asesorias.aceptadas }}</p></h4>
+        
+    </div>
+
+    <div class="card pendientes">
+        <h4>⏳ Pendientes</h4>
+        <p class="big-number">{{ reporte.asesorias.pendientes }}</p>
+    </div>
+
+    <div class="card rechazadas">
+        <h4>❌ Rechazadas</h4>
+        <p class="big-number">{{ reporte.asesorias.rechazadas }}</p>
+    </div>
+    
+</div>
+</div>
+</div>
+<div style="display:flex; justify-content:flex-end; margin-bottom:10px">
+    <button class="btn-exportar" (click)="exportarPDF()">📄 Exportar PDF</button>
+</div>
+
 
 <!-- MODAL CREAR USUARIO -->
 <div class="modal" *ngIf="modalCrearAbierto">
@@ -134,5 +181,7 @@
         <button class="btn-guardar" (click)="crearUsuario()">Crear</button>
         <button class="btn-cancelar" (click)="cerrarCrearUsuario()">Cerrar</button>
     </div>
+    
     </div>
+    
 </div>

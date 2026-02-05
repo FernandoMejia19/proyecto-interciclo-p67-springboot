@@ -8,6 +8,7 @@ import { Proyecto, Usuario } from '../../../../../models/entitys';
 import { GestionProyectos } from '../../../../services/gestion-proyectos';
 import { GestionAsesorias } from '../../../../services/gestion-asesorias';
 import { GestionUsuarios } from '../../../../services/gestion-usuarios';
+import { GestionNotificacion } from '../../../../services/gestion-notificacion';
 
 @Component({
   selector: 'app-ver-perfil-publico',
@@ -38,6 +39,7 @@ export class PerfilPublico implements OnInit {
     private proyectoService: GestionProyectos,
     private gestionAsesorias: GestionAsesorias,
     private gestionUsuarios: GestionUsuarios,
+    private notificacionService:GestionNotificacion,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -213,7 +215,7 @@ export class PerfilPublico implements OnInit {
     this.motivoAsesoria = '';
     this.enviando = false;
   }
-
+/*
   confirmarReserva() {
   if (!this.motivoAsesoria.trim()) {
     Swal.fire("Por favor, ingresa el motivo de la asesoría.");
@@ -221,8 +223,8 @@ export class PerfilPublico implements OnInit {
   }
 
   this.enviando = true;
+  const usuarioActual = this.authService.getUsuarioLogeado(); // Obtenemos datos del solicitante
 
-  // ⚠️ PAYLOAD CORREGIDO PARA FASTAPI
   const reserva = {
     motivo: this.motivoAsesoria.trim(),
     estado: 'PENDIENTE',
@@ -234,6 +236,22 @@ export class PerfilPublico implements OnInit {
 
   this.gestionAsesorias.crearReserva(reserva).subscribe({
     next: () => {
+      // --- LÓGICA DE NOTIFICACIONES ---
+      
+      // 1. Notificar al Programador
+      if (this.programador?.email) {
+        const descProg = 'Hola '+this.programador.nombre+', tienes una nueva solicitud de asesoría de '+usuarioActual?.nombre+'. Motivo: '+this.motivoAsesoria;
+        this.notificacionService.enviarNotificacion(this.programador.email, descProg).subscribe();
+      }
+
+      // 2. Notificar al Usuario (Solicitante)
+      if (usuarioActual?.email) {
+        const descUser = `Tu solicitud de asesoría para el día ${this.formatearFecha(this.slotSeleccionado.fecha)} a las ${this.slotSeleccionado.horaInicio} ha sido enviada correctamente.`;
+        this.notificacionService.enviarNotificacion(usuarioActual.email, descUser).subscribe();
+      }
+
+      // --- FIN LÓGICA NOTIFICACIONES ---
+
       Swal.fire('✅ ¡Solicitud enviada! El programador será notificado.');
       this.cerrarModal();
       this.cargarHorariosDisponibles();
@@ -246,7 +264,7 @@ export class PerfilPublico implements OnInit {
     }
   });
 }
-
+*/
 
   verProyecto(id: number) {
     this.router.navigate(['/proyecto', id]);
@@ -269,4 +287,61 @@ export class PerfilPublico implements OnInit {
   volverAtras() {
     window.history.back();
   }
+
+
+  confirmarReserva() {
+  if (!this.motivoAsesoria.trim()) {
+    Swal.fire("Por favor, ingresa el motivo de la asesoría.");
+    return;
+  }
+
+  this.enviando = true;
+  const usuarioActual = this.authService.getUsuarioLogeado();
+
+  const reserva = {
+    motivo: this.motivoAsesoria.trim(),
+    estado: 'PENDIENTE',
+    asesoria_id: this.slotSeleccionado.idAsesoria,
+    hora_asesoria_id: this.slotSeleccionado.idHora,
+    solicitante_id: this.idUsuarioActual,
+    programador_id: this.idProgramador
+  };
+
+  this.gestionAsesorias.crearReserva(reserva).subscribe({
+    next: () => {
+      // --- PRUEBA DE NOTIFICACIONES ---
+      
+      // 1. REEMPLAZO: Cambiamos "this.programador.email" por tu correo real
+      const miCorreoPrueba = 'fecholkm19@gmail.com'; 
+
+      const descProg = 'Hola '+this.programador?.nombre+', tienes una nueva solicitud de asesoría. Motivo: '+this.motivoAsesoria;
+      
+      // Enviamos al correo de prueba
+      this.notificacionService.enviarNotificacion(miCorreoPrueba, descProg).subscribe({
+        next: () => console.log('Correo al programador enviado correctamente'),
+        error: (e) => console.error('Error enviando al programador', e)
+      });
+
+      // 2. REEMPLAZO: También puedes enviarte la copia del usuario al mismo correo
+      const descUser = `Tu solicitud para el día ${this.formatearFecha(this.slotSeleccionado.fecha)} ha sido enviada.`;
+      
+      this.notificacionService.enviarNotificacion(miCorreoPrueba, descUser).subscribe({
+        next: () => console.log('Correo al usuario enviado correctamente'),
+        error: (e) => console.error('Error enviando al usuario', e)
+      });
+
+      // --- FIN PRUEBA ---
+
+      Swal.fire('✅ ¡Solicitud enviada! Revisa el correo de prueba.');
+      this.cerrarModal();
+      this.cargarHorariosDisponibles();
+    },
+    error: (err) => {
+      console.error('Error al crear reserva:', err);
+      Swal.fire('❌ Error al enviar la solicitud');
+      this.enviando = false;
+      this.cdr.detectChanges();
+    }
+  });
+}
 }
