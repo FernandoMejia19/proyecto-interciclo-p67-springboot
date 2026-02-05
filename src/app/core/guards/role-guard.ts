@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { AuthService } from '../services/auth';
-import { UserService } from '../services/user';
-import { switchMap, map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 
 @Injectable({
@@ -11,43 +9,37 @@ import { Observable, of } from 'rxjs';
 export class RoleGuard implements CanActivate {
 
   constructor(
-    private auth: AuthService,
-    private userService: UserService,
+    private authService: AuthService,
     private router: Router
   ) {}
 
-  canActivate(): Observable<boolean> {
-    return this.auth.getUser().pipe(
-      switchMap(user => {
+  canActivate(route: ActivatedRouteSnapshot): boolean {
 
-        if (!user) {
-          this.router.navigate(['/login']);
-          return of(false);
-        }
+    const usuario = this.authService.getUsuarioLogeado();
 
-        return this.userService.getUserRole(user.uid).pipe(
-          map(role => {
-            switch(role){
-              case 'admin':
-                return true
-              case 'dev':
-                return true
-              default:
-                this.router.navigate(['/forbidden']);
-            return false;
-            }
+    // No logueado
+    if (!usuario) {
+      this.router.navigate(['/login']);
+      return false;
+    }
 
-            /*
-            if (role === 'admin') {
-              return true;
-            } else {
-              this.router.navigate(['/forbidden']);
-            return false;
-          }
-          */
-          })
-        );
-      })
+    const rolesPermitidos = route.data['roles'] as string[];
+
+    // Si no se definen roles, dejar pasar
+    if (!rolesPermitidos || rolesPermitidos.length === 0) {
+      return true;
+    }
+
+    // Validar rol
+    if (rolesPermitidos.includes(usuario.rol)) {
+      return true;
+    }
+
+    console.warn(
+      `Acceso denegado → Rol requerido: ${rolesPermitidos.join(', ')} | Rol actual: ${usuario.rol}`
     );
+
+    this.router.navigate(['/forbidden']);
+    return false;
   }
 }

@@ -14,13 +14,13 @@ export interface Usuario{
 }
 export interface Asesoria{
     id:number;
-    fecha:string;
+    fecha:any;
     programador:number
 }
 
 export interface HoraAsesoria{
     id:number;
-    hora:string;
+    hora:any;
     reservador:string;
     asesoria:number;
 }
@@ -32,7 +32,7 @@ export interface Proyecto{
     imagen:string;
     linkRepo:string;
     programador:Usuario;
-    fecha:string;
+    fecha:any;
 }
 
 export interface ReservaAsesoria{

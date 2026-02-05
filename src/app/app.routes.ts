@@ -1,7 +1,8 @@
-import { AuthGuard } from '@angular/fire/auth-guard';
+
 import { Routes } from '@angular/router';
 import { RoleGuard } from './core/guards/role-guard';
 import { EditarProyecto } from './modules/usuario/pages/editar-proyecto/editar-proyecto';
+import { AuthGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
 

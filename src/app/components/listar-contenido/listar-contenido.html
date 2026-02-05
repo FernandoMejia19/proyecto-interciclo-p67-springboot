@@ -1,21 +1,102 @@
-<!--
-    <div class="container">
-        <div *ngFor="let p of proyectos" class="card">
-            
-            <img [src]="p.imagen" alt="imagen proyecto" />
-            
-            <h3>{{ p.titulo }}</h3>
-            <p>{{p.usuarioNombre}}</p>
-            <p>{{ p.descripcion }}</p>
-            
-            
-            <b>Tecnologías:</b>
-            <ul>
-                <li *ngFor="let t of p.tecnologias">{{ t }}</li>
-            </ul>
-            
-        </div>
-        
+<div class="proyectos-page">
+
+    <!-- HEADER -->
+    <div class="page-header">
+    <h1>🚀 Proyectos Destacados</h1>
+    <p class="subtitle">Explora los proyectos de nuestra comunidad de desarrolladores</p>
     </div>
+
+    <!-- LOADING -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando proyectos...</p>
+    </div>
+
+    <!-- ERROR -->
+  <div *ngIf="error && !loading" class="error-container">
+    <span class="error-icon">⚠️</span>
+    <p>{{ error }}</p>
+    <button class="btn-retry" (click)="cargarProyectos()">
+        Reintentar
+    </button>
+    </div>
+
+    <!-- SIN PROYECTOS -->
+  <div *ngIf="!loading && !error && proyectos.length === 0" class="sin-proyectos">
+    <span class="empty-icon">📂</span>
+    <p>Aún no hay proyectos publicados</p>
+    </div>
+
+    <!-- GRID DE PROYECTOS -->
+  <div *ngIf="!loading && !error && proyectos.length > 0" class="container">
     
-    -->
+    <div *ngFor="let p of proyectos" class="card" (click)="verProyecto(p.id)">
+        
+        <!-- IMAGEN DEL PROYECTO -->
+        <div class="card-image">
+        <img 
+            [src]="p.imagen || 'assets/default-project.jpg'" 
+            [alt]="p.titulo"
+            (error)="$event.target.src='https://www.educaciontrespuntocero.com/wp-content/uploads/2016/12/ideas-sobre-proyectos-de-programacion-para.jpg'"
+        />
+        
+        <!-- Badge de fecha (opcional) -->
+        <div class="fecha-badge" *ngIf="p.fecha">
+            <span>{{ p.fecha | date:'dd/MM/yyyy' }}</span>
+        </div>
+        </div>
+
+        <!-- CONTENIDO DE LA TARJETA -->
+        <div class="card-content">
+        
+        <!-- TÍTULO -->
+        <h3 class="card-title">{{ p.titulo }}</h3>
+
+        <!-- AUTOR -->
+        <div 
+            class="autor-info" 
+            (click)="$event.stopPropagation(); verPerfilProgramador(obtenerIdProgramador(p.programador))"
+        >
+            <img 
+            [src]="p.usuarioFoto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'" 
+            [alt]="p.usuarioNombre"
+            class="avatar-pequeno"
+            />
+            <span class="nombre-autor">{{ p.usuarioNombre }}</span>
+        </div>
+
+        <!-- DESCRIPCIÓN -->
+        <p class="card-descripcion">{{ p.descripcion }}</p>
+
+        <!-- TECNOLOGÍAS (cuando las implementes) 
+        <div class="tecnologias" *ngIf="p.tecnologias && p.tecnologias.length > 0">
+            <b class="tech-label">Tecnologías:</b>
+            <ul class="tech-list">
+                <li *ngFor="let t of p.tecnologias" class="tech-item">{{ t }}</li>
+            </ul>
+        </div>
+        -->
+
+        <!-- LINK AL REPOSITORIO -->
+        <div class="card-footer" *ngIf="p.linkRepo">
+            <a 
+            [href]="p.linkRepo" 
+            target="_blank" 
+            class="btn-repo"
+            (click)="$event.stopPropagation()"
+            >
+            <span>🔗</span> Repositorio
+            </a>
+        </div>
+
+        </div>
+    </div>
+
+    </div>
+
+        <!-- CONTADOR -->
+  <div *ngIf="proyectos.length > 0" class="contador">
+    <p>Mostrando {{ proyectos.length }} proyecto(s)</p>
+    </div>
+
+</div>

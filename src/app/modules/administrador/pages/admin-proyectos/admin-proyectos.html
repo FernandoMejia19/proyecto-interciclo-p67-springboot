@@ -1,19 +1,80 @@
 <div class="contenido_desarrolladores">
-    <div *ngFor="let p of proyectos" class="card">
-        <div class="item-desarrolladores" >
-            <div>
-                <h3>{{p.titulo}}</h3>
-                <p> {{p.descripcion}}</p>
-                <div class="complemento">
-                    <span>Tecnologias usadas: </span>
-                    <ul>
-                        <li *ngFor="let t of p.tecnologias" class="tec">{{ t }}</li>
-                    </ul>
+    
+    <!-- LOADING -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando proyectos...</p>
+    </div>
 
-                </div>
-                <button (click)="saludar()"> Editar</button>
-                <button (click)="saludar()"> Eliminar</button>
-            </div>
+    <!-- SIN PROYECTOS -->
+  <div *ngIf="!loading && proyectos.length === 0" class="sin-proyectos">
+    <p>📂 No hay proyectos registrados</p>
+    </div>
+
+<!-- LISTA DE PROYECTOS -->
+  <div *ngFor="let p of proyectos" class="card">
+    <div class="item-desarrolladores">
+        <div>
+        <!-- Imagen del proyecto (opcional) -->
+        <div class="proyecto-imagen" *ngIf="p.imagen">
+            <img [src]="p.imagen" [alt]="p.titulo">
+        </div>
+
+        <h3>{{ p.titulo }}</h3>
+        
+        <!-- Información del autor -->
+        <div class="info-autor">
+            <small>👨‍💻 Creado por: <strong>{{ p.usuarioNombre }}</strong></small>
+        </div>
+
+        <p>{{ p.descripcion }}</p>
+
+        <!-- Fecha de creación -->
+        <div class="fecha-creacion" *ngIf="p.fecha">
+            <small>📅 {{ p.fecha | date:'dd/MM/yyyy' }}</small>
+        </div>
+
+        <!-- Link al repositorio -->
+        <div class="link-repo" *ngIf="p.linkRepo">
+            <a [href]="p.linkRepo" target="_blank" class="btn-repo">
+            🔗 Ver repositorio
+            </a>
+        </div>
+
+        <!-- Tecnologías (cuando las implementes) -->
+        <div class="complemento" *ngIf="p.tecnologias && p.tecnologias.length > 0">
+            <span>Tecnologías usadas: </span>
+            <ul>
+            <li *ngFor="let t of p.tecnologias" class="tec">{{ t }}</li>
+            </ul>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="acciones-proyecto">
+            <button class="btn-ver" (click)="verProyecto(p.id)">
+            👁️ Ver
+            </button>
+            <button class="btn-editar" (click)="editarProyecto(p.id)">
+            ✏️ Editar
+            </button>
+            <button class="btn-eliminar" (click)="eliminarProyecto(p.id)">
+            🗑️ Eliminar
+            </button>
+        </div>
         </div>
     </div>
+    </div>
+
+    <!-- Estadísticas al final -->
+  <div class="estadisticas" *ngIf="!loading && proyectos.length > 0">
+    <div class="stat-item">
+        <span class="stat-numero">{{ proyectos.length }}</span>
+        <span class="stat-label">Proyectos totales</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-numero">{{ usuarios.length }}</span>
+        <span class="stat-label">Desarrolladores</span>
+    </div>
+    </div>
+
 </div>

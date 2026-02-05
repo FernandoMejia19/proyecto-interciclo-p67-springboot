@@ -1,10 +1,13 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Firestore, doc, getDoc, collection, query, where, getDocs, addDoc, updateDoc } from '@angular/fire/firestore';
 import { AuthService } from '../../../../core/services/auth';
 import { FormsModule } from '@angular/forms'; 
 import Swal from 'sweetalert2';
+import { Proyecto, Usuario } from '../../../../../models/entitys';
+import { GestionProyectos } from '../../../../services/gestion-proyectos';
+import { GestionAsesorias } from '../../../../services/gestion-asesorias';
+import { GestionUsuarios } from '../../../../services/gestion-usuarios';
 
 @Component({
   selector: 'app-ver-perfil-publico',
@@ -15,14 +18,13 @@ import Swal from 'sweetalert2';
 })
 export class PerfilPublico implements OnInit {
 
-  idProgramador: string = '';
-  programador: any = null;
+  idProgramador: number = 0;
+  programador: Usuario | null = null;
   horariosDisponibles: any[] = [];
-  uidUsuarioActual: string = '';
+  idUsuarioActual: number = 0;
   loading = true;
-  proyectos: any[] = [];
+  proyectos: Proyecto[] = [];
   fechasExpandidas: { [key: string]: boolean } = {};
-  
   
   modalVisible: boolean = false;
   slotSeleccionado: any = null;
@@ -32,50 +34,84 @@ export class PerfilPublico implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private firestore: Firestore,
     private authService: AuthService,
+    private proyectoService: GestionProyectos,
+    private gestionAsesorias: GestionAsesorias,
+    private gestionUsuarios: GestionUsuarios,
     private cdr: ChangeDetectorRef
   ) {}
 
-  async ngOnInit() {
-    this.idProgramador = this.route.snapshot.paramMap.get('id') || '';
+  ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+    this.idProgramador = id ? parseInt(id, 10) : 0;
     
-    this.authService.currentUser$.subscribe(user => {
-      if (user) this.uidUsuarioActual = user.uid;
-    });
-    if (this.idProgramador) {
-      await this.cargarDatosProgramador();
-      await this.cargarHorariosDisponibles();
-      await this.cargarProyectos();
-      }
-    this.loading = false;
-    this.cdr.detectChanges();
-  }
+    const usuarioActual = this.authService.getUsuarioLogeado();
+    if (usuarioActual) {
+      this.idUsuarioActual = usuarioActual.id;
+    }
 
-  async cargarDatosProgramador() {
-    const docRef = doc(this.firestore, 'users', this.idProgramador);
-    const snap = await getDoc(docRef);
-    if (snap.exists()) {
-      this.programador = snap.data();
+    if (this.idProgramador) {
+      this.cargarDatosProgramador();
+      this.cargarHorariosDisponibles();
+      this.cargarProyectos();
     }
   }
 
-  async cargarHorariosDisponibles() {
-    const colRef = collection(this.firestore, 'disponibilidad');
-    const q = query(
-      colRef, 
-      where('uidDev', '==', this.idProgramador),
-      where('estado', '==', 'libre')
-    );
-    
-    const snap = await getDocs(q);
-    const horariosOriginales = snap.docs.map(d => ({
-      id: d.id,
-      ...d.data()
-    }));
-
-    this.horariosDisponibles = this.desglosarHorarios(horariosOriginales);
+  cargarDatosProgramador() {
+    this.gestionUsuarios.getUsuario(this.idProgramador).subscribe({
+      next: (usuario) => {
+        this.programador = usuario;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error al cargar programador:', err);
+        Swal.fire('Error', 'No se pudo cargar el perfil del programador', 'error');
+        this.loading = false;
+      }
+    });
   }
+
+  cargarHorariosDisponibles() {
+  this.loading = true;
+  this.gestionAsesorias.obtenerAsesoriasPorProgramador(this.idProgramador).subscribe({
+    next: (asesorias) => {
+      this.horariosDisponibles = []; // Limpiamos
+      
+      if (asesorias.length === 0) {
+        this.loading = false;
+        this.cdr.detectChanges();
+        return;
+      }
+
+      // Por cada "Asesoria" (fecha), buscamos sus horas
+      asesorias.forEach(asesoria => {
+        this.gestionAsesorias.obtenerHorasDisponibles(asesoria.id).subscribe({
+          next: (horas) => {
+            const horasMapeadas = horas.map(h => ({
+              id: h.id, // id de la hora
+              fecha: asesoria.fecha,
+              horaInicio: h.hora,
+              // Calculamos fin asumiendo 1 hora de duración (puedes ajustarlo)
+              horaFin: this.convertirAFormato(this.convertirAHoras(h.hora) + 1),
+              idProgramador: this.idProgramador,
+              idAsesoria: asesoria.id,
+              idHora: h.id
+            }));
+
+            this.horariosDisponibles = [...this.horariosDisponibles, ...horasMapeadas];
+            this.loading = false;
+            this.cdr.detectChanges();
+          }
+        });
+      });
+    },
+    error: (err) => {
+      console.error('Error al cargar asesorias:', err);
+      this.loading = false;
+    }
+  });
+}
 
   desglosarHorarios(horarios: any[]) {
     const resultado: any[] = [];
@@ -90,7 +126,9 @@ export class PerfilPublico implements OnInit {
           fecha: h.fecha,
           horaInicio: this.convertirAFormato(inicio),
           horaFin: this.convertirAFormato(siguiente),
-          uidDev: h.uidDev
+          idProgramador: h.idProgramador,
+          idAsesoria: h.idAsesoria,
+          idHora: h.idHora
         });
         inicio = siguiente;
       }
@@ -104,10 +142,9 @@ export class PerfilPublico implements OnInit {
   }
 
   convertirAFormato(hora: number): string {
-    return `${hora.toString().padStart(2, '0')}:00`;
+    return hora.toString().padStart(2, '0')+":00";
   }
 
-  //agrupar por fecha
   agruparPorFecha(horarios: any[]): any[] {
     const grupos: any = {};
     
@@ -121,13 +158,11 @@ export class PerfilPublico implements OnInit {
       grupos[slot.fecha].horarios.push(slot);
     });
     
-    //ordenar por fecha
     return Object.values(grupos).sort((a: any, b: any) => {
       return new Date(a.fecha).getTime() - new Date(b.fecha).getTime();
     });
   }
 
-  //formatear fecha larga
   formatearFecha(fechaStr: string): string {
     const fecha = new Date(fechaStr);
     const opciones: Intl.DateTimeFormatOptions = { 
@@ -138,7 +173,6 @@ export class PerfilPublico implements OnInit {
     return fecha.toLocaleDateString('es-ES', opciones);
   }
 
-  //fecha corta (para las tarjetas)
   formatearFechaCorta(fechaStr: string): string {
     const fecha = new Date(fechaStr);
     return fecha.toLocaleDateString('es-ES', { 
@@ -152,16 +186,19 @@ export class PerfilPublico implements OnInit {
     const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     return dias[fecha.getDay()];
   }
+
   alternarFecha(fecha: string) {
     this.fechasExpandidas[fecha] = !this.fechasExpandidas[fecha];
-}
-estaExpandida(fecha: string): boolean {
+  }
+
+  estaExpandida(fecha: string): boolean {
     return this.fechasExpandidas[fecha] || false;
-}
+  }
 
   abrirModalReserva(slot: any) {
-    if (!this.uidUsuarioActual) {
+    if (!this.idUsuarioActual) {
       Swal.fire("Debes iniciar sesión para reservar.");
+      this.router.navigate(['/login']);
       return;
     }
     
@@ -177,57 +214,56 @@ estaExpandida(fecha: string): boolean {
     this.enviando = false;
   }
 
-  async confirmarReserva() {
-    if (!this.motivoAsesoria.trim()) {
-      Swal.fire("Por favor, ingresa el motivo de la asesoría.");
-      return;
-    }
+  confirmarReserva() {
+  if (!this.motivoAsesoria.trim()) {
+    Swal.fire("Por favor, ingresa el motivo de la asesoría.");
+    return;
+  }
 
-    this.enviando = true;
-    
-    try {
-      await addDoc(collection(this.firestore, 'asesorias'), {
-        uidDev: this.idProgramador,
-        uidSolicitante: this.uidUsuarioActual,
-        nombreSolicitante: 'Cliente',
-        tema: 'Asesoría General',
-        fecha: this.slotSeleccionado.fecha,
-        horaInicio: this.slotSeleccionado.horaInicio,
-        horaFin: this.slotSeleccionado.horaFin,
-        estado: 'pendiente',
-        mensaje: this.motivoAsesoria.trim()
-      });
+  this.enviando = true;
 
-      const slotRef = doc(this.firestore, 'disponibilidad', this.slotSeleccionado.id);
-      await updateDoc(slotRef, { estado: 'reservado' });
+  // ⚠️ PAYLOAD CORREGIDO PARA FASTAPI
+  const reserva = {
+    motivo: this.motivoAsesoria.trim(),
+    estado: 'PENDIENTE',
+    asesoria_id: this.slotSeleccionado.idAsesoria,
+    hora_asesoria_id: this.slotSeleccionado.idHora,
+    solicitante_id: this.idUsuarioActual,
+    programador_id: this.idProgramador
+  };
 
+  this.gestionAsesorias.crearReserva(reserva).subscribe({
+    next: () => {
       Swal.fire('✅ ¡Solicitud enviada! El programador será notificado.');
-      
       this.cerrarModal();
-      await this.cargarHorariosDisponibles();
-      
-    } catch (error) {
-      console.error(error);
+      this.cargarHorariosDisponibles();
+    },
+    error: (err) => {
+      console.error('Error al crear reserva:', err);
       Swal.fire('❌ Error al enviar la solicitud');
-    } finally {
       this.enviando = false;
       this.cdr.detectChanges();
     }
-  }
+  });
+}
 
-  verProyecto(id: string) {
+
+  verProyecto(id: number) {
     this.router.navigate(['/proyecto', id]);
   }
 
-  async cargarProyectos() {
-    const proyectosRef = collection(this.firestore, 'proyectos');
-    const q = query(proyectosRef, where('creador', '==', this.idProgramador));
-
-    const snap = await getDocs(q);
-    this.proyectos = snap.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+  cargarProyectos() {
+    this.proyectoService.obtenerTodos().subscribe({
+      next: (proyectos) => {
+        this.proyectos = proyectos.filter(p => 
+          p.programador?.id === this.idProgramador
+        );
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error al cargar proyectos:', err);
+      }
+    });
   }
 
   volverAtras() {

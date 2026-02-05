@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../../core/services/auth';
+import { AuthService, LoginResponse } from '../../../../core/services/auth';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -32,77 +32,67 @@ export class InicioSesion {
     this.router.navigate(['/proyectos']);
   }
 
-  async login() {
-  if (this.loginForm.invalid) {
-        this.errorMessage = 'Por favor completa los campos correctamente'; 
-        return;
-    }
-  this.loading = true;
-  this.errorMessage = '';
-  const { email, password } = this.loginForm.value;
-  try {
-    const userCredential = await this.authService.login(email, password);
-    const uid = userCredential.user?.uid;
-
-    if (uid) {
-      const role = await this.authService.getUserRole(uid); 
-      
-      console.log('Login exitoso. Rol:', role);
-      switch (role) {
-        case 'admin':
-          this.router.navigate(['/administrador']);
-          break;
-        case 'dev': 
-          this.router.navigate(['/perfilUsuario']);
-          break;
-        case 'user':
-        default:
-          this.router.navigate(['/proyectos']); 
-          break;
-      }
+  login() {
+    if (this.loginForm.invalid) {
+      this.errorMessage = 'Por favor completa los campos correctamente';
+      return;
     }
 
-  } catch (error: any) {
-    console.log(error);
-    if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-          this.errorMessage = 'Correo o contraseña incorrectos.';
-      } else if (error.code === 'auth/too-many-requests') {
-          this.errorMessage = 'Demasiados intentos fallidos. Intenta más tarde.';
-      } else {
-          this.errorMessage = 'Ocurrió un error al iniciar sesión.';
-      }
-  }
-  this.loading = false;
-}
-async loginGoogle() {
     this.loading = true;
     this.errorMessage = '';
-    try {
-        const userCredential = await this.authService.loginWithGoogle();
-        if (userCredential.user?.uid) {
-            await this.redirigirSegunRol(userCredential.user.uid);
+
+    const { email, password } = this.loginForm.value;
+
+    this.authService.loginBackend(email, password).subscribe({
+      next: (resp: LoginResponse) => {
+        console.log('Login exitoso:', resp);
+
+        // Redirigir según rol
+        switch (resp.rol) {
+          case 'admin':
+            this.router.navigate(['/administrador']);
+            break;
+          case 'dev':
+            this.router.navigate(['/perfil']);
+            break;
+          default:
+            this.router.navigate(['/proyectos']);
         }
-    } catch (error) {
-        console.error(error);
-        this.errorMessage = 'Error al iniciar con Google';
-    }
-    this.loading = false;
-  }
-  async redirigirSegunRol(uid: string) {
-    const role = await this.authService.getUserRole(uid); 
-    console.log('Login exitoso. Rol:', role);
-    switch (role) {
-      case 'admin':
-        this.router.navigate(['/administrador']);
-        break;
-      case 'dev': 
-        this.router.navigate(['/perfilUsuario']);
-        break;
-      case 'user':
-      default:
-        this.router.navigate(['/proyectos']); 
-        break;
-    }
+
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error en login:', err);
+        
+        // Mensajes de error más específicos según el código de estado
+        if (err.status === 401) {
+          this.errorMessage = 'Correo o contraseña incorrectos';
+        } else if (err.status === 404) {
+          this.errorMessage = 'Usuario no encontrado';
+        } else if (err.status === 0) {
+          this.errorMessage = 'No se puede conectar al servidor';
+        } else {
+          this.errorMessage = 'Error al iniciar sesión. Intenta nuevamente';
+        }
+        
+        this.loading = false;
+      }
+    });
   }
 
+  // TODO: Implementar login con Google cuando tengas el backend configurado
+  loginGoogle() {
+    console.log('Login con Google - Pendiente de implementar');
+    this.errorMessage = 'Función no disponible aún';
+    
+    // Cuando lo implementes, deberías hacer algo como:
+    // this.authService.loginWithGoogle().subscribe({
+    //   next: (resp) => {
+    //     // Manejar respuesta
+    //   },
+    //   error: (err) => {
+    //     this.errorMessage = 'Error al iniciar sesión con Google';
+    //   }
+    // });
+  }
 }

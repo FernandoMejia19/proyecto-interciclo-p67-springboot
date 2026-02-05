@@ -6,28 +6,27 @@
   <div class="container" *ngFor="let d of desarrolladores">
 
     <div class="tarjeta" (click)="abrirPerfil(d.id)">
-
         <div class="img"> 
-            <img *ngIf="d.photoURL" 
-                [src]="d.photoURL" 
+            <img *ngIf="d.foto" 
+                [src]="d.foto" 
                 alt="Foto de {{ d.nombre }}"
                 style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
-        
-        <div *ngIf="!d.photoURL" class="placeholder-avatar">
-            <span>{{ d.nombre?.[0] || 'D' }}</span>
+        <div *ngIf="!d.foto" class="placeholder-avatar">
+            <span>{{ d.nombre[0] || 'D' }}</span>
         </div>
     </div>
-
     <div class="info">
         <p class="nombre"><strong>{{ d.nombre || 'Sin nombre' }}</strong></p>
         <p class="ubicacion">
             <small>{{ d.ciudad || 'Ciudad no especificada' }}, {{ d.pais || 'País no especificado' }}</small>
             <br>
-            <small>{{ d.cargo || '' }}</small>
+            <small>{{ d.rol }}</small>
         </p>
-        <div class="tecnologias" *ngIf="d.tecnologias && d.tecnologias.length > 0">
-          <span class="tech-badge" *ngFor="let tech of d.tecnologias">{{ tech }}</span>
-        </div>
+        <!--
+            <div class="tecnologias" *ngIf="d.tecnologia && d.tecnologias.length > 0">
+                <span class="tech-badge" *ngFor="let tech of d.tecnologias">{{ tech }}</span>
+            </div>
+            -->
     </div>
 
     </div>

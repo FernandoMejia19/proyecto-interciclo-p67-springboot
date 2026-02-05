@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GestionUsuarios } from '../../../../services/gestion-usuarios';
 import { CommonModule } from '@angular/common';
+import { Usuario } from '../../../../../models/entitys';
 
 @Component({
   selector: 'app-admin-desarrolladores',
@@ -11,16 +12,16 @@ import { CommonModule } from '@angular/common';
 })
 export class AdminDesarrolladores implements OnInit {
   
-  desarrolladores: any[] = [];
+  desarrolladores: Usuario[] = [];
 
   constructor(
     private router: Router,
-    private usuariosService: GestionUsuarios,
+    private gu: GestionUsuarios,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.usuariosService.getUsuarios().subscribe(usuarios => {
+    this.gu.getUsuarios().subscribe(usuarios => {
     const lista = Array.isArray(usuarios) ? usuarios : [];
     this.desarrolladores = lista.filter(user => 
       user.rol === 'dev' || 
@@ -33,12 +34,14 @@ export class AdminDesarrolladores implements OnInit {
   });
   }
 
-  abrirPerfil(id: string) {
+  abrirPerfil(id: number) {
     console.log('click xd',id) 
-    if (id) {
+    this.router.navigate(['/ver-programador', id]);
+    
+    /*if (id) {
       this.router.navigate(['/ver-programador', id]);
     } else {
       console.error("Error: El usuario no tiene ID");
-  }
+  }*/
   }
 }

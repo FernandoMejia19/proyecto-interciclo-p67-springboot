@@ -1,112 +1,74 @@
-import { inject, Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User, authState, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth'; // 👈 TODO DESDE AQUÍ
-import { Observable, take } from 'rxjs';
-import { Firestore, doc, getDoc, setDoc,docData } from '@angular/fire/firestore';
-import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { Usuario } from '../../../models/entitys';
+
+export interface LoginResponse {
+  id: number;
+  email: string;
+  nombre: string;
+  rol: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  currentUser$: Observable<User | null>;
+  private baseURL = 'http://localhost:8080/api/auth';
+  
+  private currentUserSubject = new BehaviorSubject<LoginResponse | null>(
+    this.getUsuarioLogeado()
+  );
+  currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(
-    private auth: Auth,
-    private firestore: Firestore,
-    private storage: Storage
-  ) {
-    this.currentUser$ = authState(this.auth);
+  constructor(private http: HttpClient) {}
+
+  loginBackend(email: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(
+      this.baseURL + '/login',
+      { email, contrasena: password }
+    ).pipe(
+      tap(resp => {
+        localStorage.setItem('usuario', JSON.stringify(resp));
+        this.currentUserSubject.next(resp);
+      })
+    );
   }
 
-  login(email: string, pass: string) {
-    return signInWithEmailAndPassword(this.auth, email, pass);
+  getUserProfile(userId: number): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.baseURL}/usuarios/${userId}`);
   }
 
-  async loginWithGoogle() {
-    try {
-      const provider = new GoogleAuthProvider();
-      
-      const credential = await signInWithPopup(this.auth, provider);
-      
-      const userRef = doc(this.firestore, 'users', credential.user.uid);
-      const userSnap = await getDoc(userRef);
-      
-      if (!userSnap.exists()) {
-        await setDoc(userRef, {
-          email: credential.user.email,
-          nombre: credential.user.displayName,
-          photoURL: credential.user.photoURL,
-          role: 'user', 
-          uid: credential.user.uid
-        });
-      }
-      
-      return credential;
-    } catch (error) {
-      console.error("Error en loginWithGoogle:", error);
-      throw error;
-    }
+  getUsuarioLogeado(): LoginResponse | null {
+    const data = localStorage.getItem('usuario');
+    return data ? JSON.parse(data) : null;
   }
 
-  register(email: string, pass: string) {
-    return createUserWithEmailAndPassword(this.auth, email, pass);
+  // Método para verificar rol
+  tieneRol(rol: string): boolean {
+    const usuario = this.getUsuarioLogeado();
+    return usuario?.rol === rol;
+  }
+
+  // Método para verificar si tiene alguno de los roles
+  tieneAlgunRol(roles: string[]): boolean {
+    const usuario = this.getUsuarioLogeado();
+    return usuario ? roles.includes(usuario.rol) : false;
   }
 
   logout() {
-    return signOut(this.auth);
+    localStorage.removeItem('usuario');
+    this.currentUserSubject.next(null);
   }
 
-  getUser() {
-    return this.currentUser$;
+  estaLogeado(): boolean {
+    return !!localStorage.getItem('usuario');
   }
 
-  async getUserRole(uid: string): Promise<string> {
-    const docRef = doc(this.firestore, 'users', uid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      return docSnap.data()['role']; 
-    } else {
-      return 'user';
-    }
-  }
-
-  async getUserProfile(uid: string) {
-    const docRef = doc(this.firestore, 'users', uid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      return docSnap.data();
-    }
-    return null;
-  }
-
-  async subirFotoPerfil(file: File, uid: string): Promise<string> {
-    const filePath = `users/${uid}/avatar.jpg`;
-    const storageRef = ref(this.storage, filePath);
-
-    try {
-      const snapshot = await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(snapshot.ref);
-      return url;
-    } catch (error) {
-      console.error('Error al subir foto:', error);
-      throw error;
-    }
-  }
-  async getUserFirestoreData(uid: string) {
-  const refUser = doc(this.firestore, 'users', uid);
-  const snap = await getDoc(refUser);
-
-  if (snap.exists()) {
-    return snap.data();
-  }
-  return null;
-}
-getUserFirestoreData$(uid: string) {
-  const refUser = doc(this.firestore, 'users', uid);
-  return docData(refUser, { idField: 'uid' });
-}
-  async getCurrentUser() {
-    return await this.currentUser$.pipe(take(1)).toPromise();
+  // Método para obtener el rol actual
+  getRolActual(): string | null {
+    const usuario = this.getUsuarioLogeado();
+    return usuario?.rol || null;
   }
 }

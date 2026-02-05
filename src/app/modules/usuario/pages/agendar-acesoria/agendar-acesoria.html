@@ -18,11 +18,6 @@
                 Estado: {{ sol.estado | titlecase }}
             </span>
         </div>
-          <div class="acciones" *ngIf="sol.estado === 'aceptada' && sol.linkReunion">
-            <a [href]="sol.linkReunion" target="_blank" class="btn-unirse">
-            Unirse a la reunión
-            </a>
-        </div>
         </div>
     </div>
     </div>

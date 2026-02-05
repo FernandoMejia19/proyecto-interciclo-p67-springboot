@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
-import { Auth } from '@angular/fire/auth';
+import { CanActivate, Router, UrlTree } from '@angular/router';
+import { AuthService } from '../services/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private auth: Auth, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  async canActivate(): Promise<boolean> {
-    const user = this.auth.currentUser;
+  canActivate(): boolean | UrlTree {
 
-    if (user) {
-      // Está logueado → permitir acceso
+    // Si está logueado → deja pasar
+    if (this.authService.estaLogeado()) {
       return true;
     }
 
-    // No logueado → redirigir a login
-    this.router.navigate(['/login']);
-    return false;
+    // Si NO está logueado → redirige al login
+    return this.router.createUrlTree(['/login']);
   }
 }
-

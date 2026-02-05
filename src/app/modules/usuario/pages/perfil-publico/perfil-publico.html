@@ -6,94 +6,120 @@
         </button>
     </div>
 
+    <!-- HEADER DEL PERFIL -->
     <div class="header-perfil" *ngIf="programador">
         <img 
-            *ngIf="programador.photoURL; else sinFoto"
-            [src]="programador.photoURL" 
+            *ngIf="programador.foto; else sinFoto"
+            [src]="programador.foto" 
             alt="Foto del programador"
             class="avatar"
         >
 
         <ng-template #sinFoto>
             <div class="avatar-placeholder">
-                {{ programador.nombre?.[0] || 'U' }}
+                {{ programador.nombre[0] || 'U' }}
             </div>
         </ng-template>
 
         <div class="info">
             <h1>{{ programador.nombre || 'Programador' }}</h1>
-            <p class="desc"> {{'( '+ programador.cargo +' )' || '' }} </p>
-            <div class="badges">
-                <span class="badge" *ngFor="let tech of programador.tecnologias">
-                    {{ tech }}
-                </span>
+            <p class="desc">{{ programador.descripcion || 'Desarrollador' }}</p>
+            
+            <!-- UBICACIÓN -->
+            <div class="ubicacion" *ngIf="programador.ciudad || programador.pais">
+                <span class="icono-ubicacion">📍</span>
+                <span>{{ programador.ciudad }}{{ programador.ciudad && programador.pais ? ', ' : '' }}{{ programador.pais }}</span>
+            </div>
+
+            <!-- CONTACTOS -->
+            <div class="contactos" *ngIf="programador.linkedin || programador.github">
+                <a *ngIf="programador.linkedin" 
+                    [href]="'https://linkedin.com/in/' + programador.linkedin" 
+                    target="_blank" 
+                    class="contacto-link">
+                    LinkedIn
+                </a>
+                <a *ngIf="programador.github" 
+                    [href]="'https://github.com/' + programador.github" 
+                    target="_blank" 
+                    class="contacto-link">
+                    GitHub
+                </a>
             </div>
         </div>
     </div>
 
     <hr>
 
+    <!-- SECCIÓN DE RESERVAS -->
     <div class="seccion-reserva">
-        <h2> Disponibilidad para Asesorías</h2>
+        <h2>💼 Disponibilidad para Asesorías</h2>
         <p class="texto-explicacion">
-            Selecciona un horario disponible para enviar tu solicitud.
+            Selecciona un horario disponible para enviar tu solicitud de asesoría.
         </p>
 
-        <!-- HORARIOS -->
+        <!-- HORARIOS DISPONIBLES -->
         <div class="asesorias-container">
             <div class="grid-horarios">
 
                 <ng-container *ngIf="horariosDisponibles.length > 0">
-    <div *ngFor="let grupo of agruparPorFecha(horariosDisponibles); let i = index">
-        <div class="fecha-grupo">
-            <div class="fecha-header">
-                <div class="fecha-info" (click)="alternarFecha(grupo.fecha)">
-                    <div class="fecha-texto">
-                        <strong class="fecha-titulo">{{ formatearFecha(grupo.fecha) }}</strong>
-                        <!--
-                            <span class="fecha-subtitulo">{{ getDiaSemana(grupo.fecha) }}</span>
-                            -->
-                    </div>
-                    <div class="fecha-controls">
-                        <span class="horario-count">{{ grupo.horarios.length }} horario(s)</span>
-                    </div>
-                </div>
-            </div>
-            <div *ngIf="estaExpandida(grupo.fecha)" class="horarios-expandidos">
-                <div class="grid-horarios-horizontal">
-                    <div class="card-horario-h" *ngFor="let slot of grupo.horarios" (click)="abrirModalReserva(slot)">
-                        <span class="texto-rango">Inicia</span>
-                        <div class="hora-h">  {{ slot.horaInicio }} </div>
-                        <span class="texto-rango">Termina</span>
-                        <div class="fecha-h">{{ slot.horaFin }}</div>
-                        <button class="button-h">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 24 24" height="20" fill="none" class="svg-icon-h">
-                                <g stroke-width="2" stroke-linecap="round" stroke="currentColor">
-                                    <rect y="5" x="4" width="16" rx="2" height="16"></rect>
-                                    <path d="m8 3v4"></path>
-                                    <path d="m16 3v4"></path>
-                                    <path d="m4 11h16"></path>
-                                </g>
-                            </svg>
-                            <span class="lable-h">Reservar</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</ng-container>
+                    <div *ngFor="let grupo of agruparPorFecha(horariosDisponibles)" class="fecha-grupo-wrapper">
+                        <div class="fecha-grupo">
+                            <div class="fecha-header">
+                                <div class="fecha-info" (click)="alternarFecha(grupo.fecha)">
+                                    <div class="fecha-texto">
+                                        <strong class="fecha-titulo">{{ formatearFecha(grupo.fecha) }}</strong>
+                                        <span class="fecha-subtitulo">{{ getDiaSemana(grupo.fecha) }}</span>
+                                    </div>
+                                    <div class="fecha-controls">
+                                        <span class="horario-count">{{ grupo.horarios.length }} horario(s)</span>
+                                        <span class="icono-expandir">{{ estaExpandida(grupo.fecha) ? '▼' : '▶' }}</span>
+                                    </div>
+                                </div>
+                            </div>
 
-                <!--si no hay horarios -->
+                            <!-- HORARIOS EXPANDIDOS -->
+                            <div *ngIf="estaExpandida(grupo.fecha)" class="horarios-expandidos">
+                                <div class="grid-horarios-horizontal">
+                                    <div class="card-horario-h" 
+                                         *ngFor="let slot of grupo.horarios" 
+                                        (click)="abrirModalReserva(slot)">
+                                        <span class="texto-rango">Inicia</span>
+                                        <div class="hora-h">{{ slot.horaInicio }}</div>
+                                        <span class="texto-rango">Termina</span>
+                                        <div class="fecha-h">{{ slot.horaFin }}</div>
+                                        <button class="button-h" type="button">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 24 24" height="20" fill="none" class="svg-icon-h">
+                                                <g stroke-width="2" stroke-linecap="round" stroke="currentColor">
+                                                    <rect y="5" x="4" width="16" rx="2" height="16"></rect>
+                                                    <path d="m8 3v4"></path>
+                                                    <path d="m16 3v4"></path>
+                                                    <path d="m4 11h16"></path>
+                                                </g>
+                                            </svg>
+                                            <span class="lable-h">Reservar</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <!-- SIN HORARIOS -->
                 <div *ngIf="horariosDisponibles.length === 0" class="no-horarios">
-                    <p>No hay horarios disponibles en este momento.</p>
+                    <div class="no-horarios-content">
+                        <span class="icono-vacio">📅</span>
+                        <p>No hay horarios disponibles en este momento.</p>
+                        <small>El programador no ha configurado disponibilidad aún.</small>
+                    </div>
                 </div>
 
             </div>
         </div>
     </div> 
 
-    <!-- MODAL -->
+    <!-- MODAL DE RESERVA -->
     <div class="modal-overlay" *ngIf="modalVisible" (click)="cerrarModal()">
         <div class="modal-container" (click)="$event.stopPropagation()">
             <button class="modal-close" (click)="cerrarModal()">×</button>
@@ -106,7 +132,7 @@
             <div class="modal-info">
                 <div class="info-item">
                     <span class="info-label">📅 Fecha:</span>
-                    <span class="info-value">{{ slotSeleccionado?.fecha | date:'longDate' }}</span>
+                    <span class="info-value">{{ formatearFecha(slotSeleccionado?.fecha) }}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">⏰ Horario:</span>
@@ -138,39 +164,59 @@
                         Cancelar
                     </button>
                     <button type="submit" class="btn-modal btn-confirm" [disabled]="!motivoAsesoria.trim() || enviando">
-                        <span *ngIf="!enviando">Enviar Solicitud</span>
-                        <span *ngIf="enviando">Enviando...</span>
+                        <span *ngIf="!enviando">✉️ Enviar Solicitud</span>
+                        <span *ngIf="enviando">⏳ Enviando...</span>
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!--Proyectos-->
+    <!-- SECCIÓN DE PROYECTOS -->
     <div class="seccion-proyectos" *ngIf="proyectos && proyectos.length > 0">
-        <h2> Proyectos</h2>
+        <h2>🚀 Proyectos</h2>
         
         <div class="grid-proyectos">
             <div class="card-proyecto" *ngFor="let p of proyectos">
-                <h3 class="titulo">{{ p.titulo }}</h3>
-                <p class="descripcion">{{ p.descripcion }}</p>
-                
-                <div class="tecnologias" *ngIf="p.tecnologias?.length">
-                    <span class="tech" *ngFor="let t of p.tecnologias">{{ t }}</span>
+                <div class="proyecto-imagen" *ngIf="p.imagen">
+                    <img [src]="p.imagen" [alt]="p.titulo">
                 </div>
                 
-                <button class="btn-ver" (click)="verProyecto(p.id)">Ver Proyecto</button>
+                <div class="proyecto-contenido">
+                    <h3 class="titulo">{{ p.titulo }}</h3>
+                    <p class="descripcion">{{ p.descripcion }}</p>
+                    
+                    <div class="proyecto-footer">
+                        <a *ngIf="p.linkRepo" 
+                            [href]="p.linkRepo" 
+                            target="_blank" 
+                            class="btn-repo">
+                            <span>🔗</span> Repositorio
+                        </a>
+                        <button class="btn-ver" (click)="verProyecto(p.id)">
+                            Ver Detalles →
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- SIN PROYECTOS -->
     <div class="seccion-proyectos" *ngIf="proyectos && proyectos.length === 0">
-        <h2> Proyectos </h2>
-        <p class="sin-proyectos">Este programador aún no ha creado proyectos.</p>
+        <h2>🚀 Proyectos</h2>
+        <div class="sin-proyectos">
+            <span class="icono-vacio">📂</span>
+            <p>Este programador aún no ha publicado proyectos.</p>
+        </div>
     </div>
 
 </div> 
 
+<!-- LOADING -->
 <ng-template #cargando>
-    <div class="loading">Cargando perfil...</div>
+    <div class="loading">
+        <div class="spinner"></div>
+        <p>Cargando perfil...</p>
+    </div>
 </ng-template>

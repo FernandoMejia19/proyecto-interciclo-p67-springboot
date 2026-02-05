@@ -4,7 +4,7 @@ import { GestionProyectos } from '../../../../services/gestion-proyectos';
 import { GestionUsuarios } from '../../../../services/gestion-usuarios';
 import { CommonModule } from '@angular/common';
 import { combineLatest } from 'rxjs';
-import { Proyecto } from '../../../../../models/entitys';
+import { Proyecto, Tecnologia } from '../../../../../models/entitys';
 
 @Component({
   selector: 'app-proyectos',
@@ -14,14 +14,24 @@ import { Proyecto } from '../../../../../models/entitys';
 })
 export class Proyectos {
   proyectos:Proyecto[]=[]
+  tecnologias:Tecnologia[]=[]
   constructor (private gp:GestionProyectos,
-    private cdr:ChangeDetectorRef
+    private cdr:ChangeDetectorRef,
+    private router:Router
   ){}
   ngOnInit(): void {
-    this.gp.getProyectos().subscribe({next:(resp)=>{
+    this.gp.obtenerTodos().subscribe({next:(resp)=>{
       console.log("DATOS ",resp);
       this.proyectos=resp;
       this.cdr.detectChanges();
-    }})
+    }});
+  }
+  verDetalleProyecto(id:number){
+    console.log('Id de proyecto ',id)
+    this.router.navigate(['/proyecto', id]);
+
+  }
+  onImgError(event: any) {
+    event.target.src = 'assets/default-project.jpg';
   }
 }

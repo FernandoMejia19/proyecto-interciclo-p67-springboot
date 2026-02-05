@@ -1,37 +1,81 @@
 <nav>
     <div class="enlaces">
-        <!--
-            <a routerLink="/portafolios" routerLinkActive="active">Portafolios</a>
-        
-        -->
         <a routerLink="/proyectos" routerLinkActive="active">Proyectos</a>
         <a routerLink="/desarrolladores" routerLinkActive="active">Desarrolladores</a>
     </div>
 
     <div class="botones">
 
-        <div *ngIf="user$ | async as user; else loginTemplate" class="usuario-container">
+        <!-- SI ESTÁ LOGUEADO -->
+        <div *ngIf="estaLogueado; else loginTemplate" class="usuario-container">
 
             <div class="avatar" (click)="toggleMenu()">
-                <img [src]="user.photoURL || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'" alt="Perfil">
-                
-                <i class="arrow-icon">▼</i>
+                <img 
+                    [src]="'https://cdn-icons-png.flaticon.com/512/149/149071.png'" 
+                    alt="Perfil"
+                >
+                <i class="arrow-icon" [class.rotated]="menuAbierto">▼</i>
             </div>
-             <div class="dropdown" *ngIf="menuAbierto">
+
+            <!-- DROPDOWN MENU -->
+            <div class="dropdown" *ngIf="menuAbierto">
                 <div class="dropdown-header">
-                    <p>Hola, <strong>{{ user.email }}</strong></p>
+                    <img 
+                        [src]=" 'https://cdn-icons-png.flaticon.com/512/149/149071.png'" 
+                        alt="Avatar" 
+                        class="dropdown-avatar"
+                    >
+                    <div class="user-details">
+                        <p class="user-name">{{ nombreUsuario }}</p>
+                        <span class="user-role" [class]="rolUsuario">{{ rolUsuario }}</span>
+                        <small class="user-email">{{ usuario?.email }}</small>
+                    </div>
                 </div>
+
                 <hr>
-                <a routerLink="/perfilUsuario" (click)="menuAbierto=false">Mi Perfil</a>
-                <a routerLink="/perfilUsuario" (click)="menuAbierto=false">Mis Proyectos</a>
+
+                <!-- OPCIONES DEL MENÚ -->
+                <a routerLink="/perfil" (click)="menuAbierto=false" class="dropdown-item">
+                    <span class="icon">👤</span> Mi Perfil
+                </a>
+
+                <a routerLink="/editar-perfil" (click)="menuAbierto=false" class="dropdown-item">
+                    <span class="icon">✏️</span> Editar Perfil
+                </a>
+
+                <!-- Solo para DEV y ADMIN -->
+                <ng-container *ngIf="esDev || esAdmin">
+                    <a routerLink="/perfil" (click)="menuAbierto=false" class="dropdown-item">
+                        <span class="icon">📂</span> Mis Proyectos
+                    </a>
+
+                    <a routerLink="/crear-proyecto" (click)="menuAbierto=false" class="dropdown-item">
+                        <span class="icon">➕</span> Crear Proyecto
+                    </a>
+                </ng-container>
+
+                <!-- Solo para ADMIN -->
+                <ng-container *ngIf="esAdmin">
+                    <hr>
+                    <a routerLink="/administrador" (click)="menuAbierto=false" class="dropdown-item admin-item">
+                        <span class="icon">⚙️</span> Panel Admin
+                    </a>
+                </ng-container>
+
                 <hr>
-                <button (click)="logout()" class="btn-logout">Cerrar Sesión</button>
+
+                <!-- CERRAR SESIÓN -->
+                <button (click)="logout()" class="btn-logout">
+                    <span class="icon">🚪</span> Cerrar Sesión
+                </button>
             </div>
 
         </div>
+
+        <!-- SI NO ESTÁ LOGUEADO -->
         <ng-template #loginTemplate>
-            <button (click)="ingresar()">Ingresar</button>
+            <button (click)="ingresar()" class="btn-ingresar">Ingresar</button>
         </ng-template>
 
     </div>
-</nav> 
+</nav>
