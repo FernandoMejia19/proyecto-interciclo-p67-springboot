@@ -63,6 +63,8 @@ export class PerfilPublico implements OnInit {
     this.gestionUsuarios.getUsuario(this.idProgramador).subscribe({
       next: (usuario) => {
         this.programador = usuario;
+        console.log('Usuario completo:', usuario);
+        console.log("url foto"+usuario.foto)
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -215,8 +217,11 @@ export class PerfilPublico implements OnInit {
     this.motivoAsesoria = '';
     this.enviando = false;
   }
-/*
+
   confirmarReserva() {
+    console.log(this.programador?.email)
+    console.log(this.idProgramador)
+    console.log(this.idUsuarioActual)
   if (!this.motivoAsesoria.trim()) {
     Swal.fire("Por favor, ingresa el motivo de la asesoría.");
     return;
@@ -264,7 +269,7 @@ export class PerfilPublico implements OnInit {
     }
   });
 }
-*/
+
 
   verProyecto(id: number) {
     this.router.navigate(['/proyecto', id]);
@@ -288,7 +293,7 @@ export class PerfilPublico implements OnInit {
     window.history.back();
   }
 
-
+/*
   confirmarReserva() {
   if (!this.motivoAsesoria.trim()) {
     Swal.fire("Por favor, ingresa el motivo de la asesoría.");
@@ -343,5 +348,5 @@ export class PerfilPublico implements OnInit {
       this.cdr.detectChanges();
     }
   });
-}
+}*/
 }

@@ -8,6 +8,7 @@ export interface LoginResponse {
   email: string;
   nombre: string;
   rol: string;
+  foto:string
 }
 
 @Injectable({

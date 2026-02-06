@@ -6,34 +6,50 @@
         <div class="form-group">
             <label>Título del Proyecto</label>
             <input type="text" formControlName="titulo" placeholder="Ej: E-commerce de Zapatos">
+            <small class="error" *ngIf="campoEsInvalido('titulo')">
+                {{ obtenerMensajeError('titulo') }}
+            </small>
+            
         </div>
-
+        
         <div class="form-group">
             <label>Descripción</label>
             <textarea formControlName="descripcion" rows="4" placeholder="Describe brevemente tu proyecto..."></textarea>
+            <small class="error" *ngIf="campoEsInvalido('titulo')">
+                {{ obtenerMensajeError('titulo') }}
+            </small>
         </div>
-
+        
         <div class="form-group">
             <label>Tecnologías (separadas por coma)</label>
             <input type="text" formControlName="tecnologias" placeholder="Ej: Angular, Firebase, Sass">
+            <small class="error" *ngIf="campoEsInvalido('titulo')">
+                {{ obtenerMensajeError('titulo') }}
+            </small>
         </div>
-
+        
         <div class="form-group">
             <label>URL de la Imagen (opcional)</label>
             <input type="text" formControlName="imagen" placeholder="https://...">
+            <small class="error" *ngIf="campoEsInvalido('titulo')">
+                {{ obtenerMensajeError('titulo') }}
+            </small>
         </div>
-
+        
         <img *ngIf="miFormulario.get('imagen')?.value" 
-            [src]="miFormulario.get('imagen')?.value" 
-            class="preview-img">
-
+        [src]="miFormulario.get('imagen')?.value" 
+        class="preview-img">
+        
         <div class="form-group">
             <label>Link del Código (GitHub, GitLab, etc.)</label>
             <input 
-                type="text" 
-                formControlName="linkRepo" 
-                placeholder="https://github.com/usuario/proyecto">
+            type="text" 
+            formControlName="linkRepo" 
+            placeholder="https://github.com/usuario/proyecto">
             <small>Ejemplo: https://github.com/mi-proyecto</small>
+            <small class="error" *ngIf="campoEsInvalido('titulo')">
+                {{ obtenerMensajeError('titulo') }}
+            </small>
         </div>
 
         <div class="botones-accion">

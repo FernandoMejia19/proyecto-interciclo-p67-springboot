@@ -256,7 +256,7 @@ cargarAgendaConfirmada() {
     }
   });
 }
-/*
+
 responder(idCita: number, decision: 'aceptar' | 'rechazar') {
   this.gestionAsesorias.cambiarEstado(idCita, decision).subscribe({
     next: () => {
@@ -293,7 +293,7 @@ responder(idCita: number, decision: 'aceptar' | 'rechazar') {
   });
 }
 
-*/
+
 
   agregarDisponibilidad() {
     if (!this.fechaSeleccionada || !this.horaInicio || !this.horaFin) {
@@ -346,7 +346,7 @@ responder(idCita: number, decision: 'aceptar' | 'rechazar') {
   const h = parseInt(hora.split(':')[0]);
   return `${(h + 1).toString().padStart(2, '0')}:00`;
 }
-
+/*
 responder(idCita: number, decision: 'aceptar' | 'rechazar') {
   this.gestionAsesorias.cambiarEstado(idCita, decision).subscribe({
     next: () => {
@@ -382,5 +382,5 @@ responder(idCita: number, decision: 'aceptar' | 'rechazar') {
       Swal.fire('Error al procesar la solicitud');
     }
   });
-}
+}*/
 }

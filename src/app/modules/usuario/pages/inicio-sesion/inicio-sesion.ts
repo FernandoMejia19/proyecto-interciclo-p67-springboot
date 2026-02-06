@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { AuthService, LoginResponse } from '../../../../core/services/auth';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './inicio-sesion.html',
   styleUrl: './inicio-sesion.scss',
 })
-export class InicioSesion {
+export class InicioSesion implements OnInit{
 
   loginForm: FormGroup;
   loading = false;
@@ -20,6 +20,7 @@ export class InicioSesion {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private route: ActivatedRoute,
     private fb: FormBuilder
   ) {
     this.loginForm = this.fb.group({
@@ -27,6 +28,14 @@ export class InicioSesion {
       password: ['', Validators.required]
     });
   }
+  ngOnInit() {
+  const token = this.route.snapshot.queryParamMap.get('token');
+  if(token) {
+    localStorage.setItem('token', token);
+    this.router.navigate(['/proyectos']);
+  }
+}
+
 
   salir() {
     this.router.navigate(['/proyectos']);
@@ -82,9 +91,9 @@ export class InicioSesion {
 
   // TODO: Implementar login con Google cuando tengas el backend configurado
   loginGoogle() {
-    console.log('Login con Google - Pendiente de implementar');
-    this.errorMessage = 'Función no disponible aún';
-    
+    //console.log('Login con Google - Pendiente de implementar');
+    //this.errorMessage = 'Función no disponible aún';
+    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
     // Cuando lo implementes, deberías hacer algo como:
     // this.authService.loginWithGoogle().subscribe({
     //   next: (resp) => {

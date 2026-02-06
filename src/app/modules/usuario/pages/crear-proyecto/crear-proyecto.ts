@@ -26,12 +26,47 @@ export class CrearProyectoComponent implements OnInit {
     private gestionProyectos: GestionProyectos
   ) {
     this.miFormulario = this.fb.group({
-      titulo: ['', [Validators.required, Validators.minLength(3)]],
-      descripcion: ['', [Validators.required, Validators.minLength(10)]],
-      tecnologias: [''],
-      imagen: ['', Validators.pattern(/^https?:\/\/.+/)],
-      linkRepo: ['', Validators.pattern(/^https?:\/\/.+/)]
-    });
+  titulo: [
+    '',
+    [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)
+    ]
+  ],
+
+  descripcion: [
+    '',
+    [
+      Validators.required,
+      Validators.minLength(10)
+    ]
+  ],
+
+  tecnologias: [
+    '',
+    [
+      Validators.required,
+      Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s,]+$/)
+    ]
+  ],
+
+  imagen: [
+    '',
+    [
+      Validators.pattern(/^https?:\/\/.+/)
+    ]
+  ],
+
+  linkRepo: [
+    '',
+    [
+      Validators.required,
+      Validators.pattern(/^(?!.*\/\d+$)https?:\/\/.+/)
+    ]
+  ]
+});
+
   }
 
   ngOnInit() {
@@ -171,21 +206,30 @@ export class CrearProyectoComponent implements OnInit {
   }
 
   obtenerMensajeError(campo: string): string {
-    const control = this.miFormulario.get(campo);
-    
-    if (control?.hasError('required')) {
-      return 'Este campo es requerido';
-    }
-    
-    if (control?.hasError('minlength')) {
-      const minLength = control.errors?.['minlength'].requiredLength;
-      return `Debe tener al menos ${minLength} caracteres`;
-    }
-    
-    if (control?.hasError('pattern')) {
-      return 'Debe ser una URL válida (ejemplo: https://...)';
-    }
-    
-    return '';
+  const control = this.miFormulario.get(campo);
+
+  if (control?.hasError('required')) {
+    return 'Este campo es obligatorio';
   }
+
+  if (control?.hasError('minlength')) {
+    return `Debe tener al menos ${control.errors?.['minlength'].requiredLength} caracteres`;
+  }
+
+  if (control?.hasError('pattern')) {
+    switch (campo) {
+      case 'titulo':
+        return 'El título solo puede contener letras y espacios';
+      case 'tecnologias':
+        return 'Solo letras y comas (ej: Angular, Spring)';
+      case 'imagen':
+        return 'Debe ser una URL válida (https://...)';
+      case 'linkRepo':
+        return 'Debe ser una URL válida y no solo números';
+    }
+  }
+
+  return '';
+}
+
 }

@@ -7,6 +7,7 @@ import { MisCitasComponent } from '../agendar-acesoria/agendar-acesoria';
 import { AdminUsuarios } from '../../../administrador/pages/admin-usuarios/admin-usuarios';
 import { Proyecto, Usuario } from '../../../../../models/entitys';
 import { GestionProyectos } from '../../../../services/gestion-proyectos';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-perfil-usuario',

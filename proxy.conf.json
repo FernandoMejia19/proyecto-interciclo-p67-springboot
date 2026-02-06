@@ -10,7 +10,7 @@
     "secure": false,
     "changeOrigin": true,
     "pathRewrite": {
-        "^/api": "/api"
+        "^/api": ""
     },
     "logLevel": "debug"
     },"/api-portafolios": {

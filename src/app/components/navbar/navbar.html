@@ -11,7 +11,7 @@
 
             <div class="avatar" (click)="toggleMenu()">
                 <img 
-                    [src]="'https://cdn-icons-png.flaticon.com/512/149/149071.png'" 
+                    [src]="usuario?.foto||'https://img.freepik.com/fotos-premium/lindo-chibi-programador-estilo-3d-gato-acurrucado-su-regazo-codificando-pacificamente-gato_1118790-251.jpg?semt=ais_hybrid&w=740&q=80'" 
                     alt="Perfil"
                 >
                 <i class="arrow-icon" [class.rotated]="menuAbierto">▼</i>
@@ -21,7 +21,7 @@
             <div class="dropdown" *ngIf="menuAbierto">
                 <div class="dropdown-header">
                     <img 
-                        [src]=" 'https://cdn-icons-png.flaticon.com/512/149/149071.png'" 
+                        [src]=" usuario?.foto||'https://img.freepik.com/fotos-premium/lindo-chibi-programador-estilo-3d-gato-acurrucado-su-regazo-codificando-pacificamente-gato_1118790-251.jpg?semt=ais_hybrid&w=740&q=80'" 
                         alt="Avatar" 
                         class="dropdown-avatar"
                     >

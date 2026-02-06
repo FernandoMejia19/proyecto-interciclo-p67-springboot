@@ -32,10 +32,11 @@ export class EditarPerfilComponent implements OnInit {
       ciudad: [''],
       pais: [''],
       descripcion: [''],
-      facebook: [''],
-      celular: [''],
-      linkedin: [''],
-      github: ['']
+      facebook: ['', Validators.pattern(/^(?!\d+$).+/)], // no solo números
+      celular: ['', Validators.pattern(/^\d{7,15}$/)],     // solo números 7-15 dígitos
+      linkedin: ['', Validators.pattern(/^(?!\d+$).+/)],
+      github: ['', Validators.pattern(/^(?!\d+$).+/)],
+      instagram: ['', Validators.pattern(/^(?!\d+$).+/)]
     });
   }
 
@@ -50,7 +51,6 @@ export class EditarPerfilComponent implements OnInit {
 
     this.usuarioId = usuarioActual.id;
 
-    // Cargar datos del usuario
     this.gestionUsuarios.getUsuario(this.usuarioId).subscribe({
       next: (usuario) => {
         this.usuario = usuario;
@@ -75,69 +75,65 @@ export class EditarPerfilComponent implements OnInit {
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
-    if (file) {
-      if (!file.type.startsWith('image/')) {
-        Swal.fire('Error', 'Solo se permiten archivos de imagen', 'error');
-        return;
-      }
+    if (!file) return;
 
-      if (file.size > 5 * 1024 * 1024) {
-        Swal.fire('Error', 'La imagen no debe superar los 5MB', 'error');
-        return;
-      }
-
-      this.fotoArchivo = file;
-      const reader = new FileReader();
-      reader.onload = (e: any) => this.fotoPreview = e.target.result;
-      reader.readAsDataURL(file);
+    if (!file.type.startsWith('image/')) {
+      Swal.fire('Error', 'Solo se permiten archivos de imagen', 'error');
+      return;
     }
+
+    if (file.size > 5 * 1024 * 1024) {
+      Swal.fire('Error', 'La imagen no debe superar los 5MB', 'error');
+      return;
+    }
+
+    this.fotoArchivo = file;
+    const reader = new FileReader();
+    reader.onload = (e: any) => this.fotoPreview = e.target.result;
+    reader.readAsDataURL(file);
   }
 
   cancelar() {
     this.router.navigate(['/perfilUsuario']);
   }
 
-  async guardarCambios() {
+  guardarCambios() {
+    // Validar campos manualmente para mostrar mensajes específicos
     if (this.perfilForm.invalid) {
-      Swal.fire('Por favor completa los campos correctamente');
+      const errores = [];
+      if (this.perfilForm.get('facebook')?.errors?.['pattern']) errores.push('Facebook no puede ser solo números');
+      if (this.perfilForm.get('linkedin')?.errors?.['pattern']) errores.push('LinkedIn no puede ser solo números');
+      if (this.perfilForm.get('github')?.errors?.['pattern']) errores.push('GitHub no puede ser solo números');
+      if (this.perfilForm.get('instagram')?.errors?.['pattern']) errores.push('Instagram no puede ser solo números');
+      if (this.perfilForm.get('celular')?.errors?.['pattern']) errores.push('WhatsApp debe contener solo números (7-15 dígitos)');
+
+      Swal.fire('Campos inválidos', errores.join('<br>'), 'error');
       return;
     }
 
-    try {
-      const datosActualizados: Partial<Usuario> = {
-        nombre: this.perfilForm.get('nombre')?.value?.trim() || '',
-        ciudad: this.perfilForm.get('ciudad')?.value?.trim() || '',
-        pais: this.perfilForm.get('pais')?.value?.trim() || '',
-        descripcion: this.perfilForm.get('descripcion')?.value?.trim() || '',
-        facebook: this.perfilForm.get('facebook')?.value?.trim() || '',
-        celular: this.perfilForm.get('celular')?.value?.trim() || '',
-        linkedin: this.perfilForm.get('linkedin')?.value?.trim() || '',
-        github: this.perfilForm.get('github')?.value?.trim() || ''
-      };
+    const datosActualizados: Partial<Usuario> = {
+      nombre: this.perfilForm.get('nombre')?.value.trim() || '',
+      ciudad: this.perfilForm.get('ciudad')?.value.trim() || '',
+      pais: this.perfilForm.get('pais')?.value.trim() || '',
+      descripcion: this.perfilForm.get('descripcion')?.value.trim() || '',
+      facebook: this.perfilForm.get('facebook')?.value.trim() || '',
+      celular: this.perfilForm.get('celular')?.value.trim() || '',
+      linkedin: this.perfilForm.get('linkedin')?.value.trim() || '',
+      github: this.perfilForm.get('github')?.value.trim() || ''
+    };
 
-      // Si hay una nueva foto, primero subirla
-      if (this.fotoArchivo) {
-        const formData = new FormData();
-        formData.append('foto', this.fotoArchivo);
-        
-        this.gestionUsuarios.subirFotoPerfil(this.usuarioId, formData).subscribe({
-          next: (response) => {
-            datosActualizados.foto = response.url;
-            this.actualizarDatos(datosActualizados);
-          },
-          error: (err) => {
-            console.error('Error al subir foto:', err);
-            Swal.fire('Info', 'Error al subir la foto, guardando otros cambios...', 'info');
-            this.actualizarDatos(datosActualizados);
-          }
-        });
-      } else {
-        this.actualizarDatos(datosActualizados);
-      }
-
-    } catch (error) {
-      console.error('Error al guardar perfil:', error);
-      Swal.fire('Error al guardar los cambios');
+    if (this.fotoArchivo) {
+      const formData = new FormData();
+      formData.append('foto', this.fotoArchivo);
+      this.gestionUsuarios.subirFotoPerfil(this.usuarioId, formData).subscribe({
+        next: (res) => {
+          datosActualizados.foto = res.url;
+          this.actualizarDatos(datosActualizados);
+        },
+        error: () => this.actualizarDatos(datosActualizados)
+      });
+    } else {
+      this.actualizarDatos(datosActualizados);
     }
   }
 

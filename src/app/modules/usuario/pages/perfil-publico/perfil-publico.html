@@ -187,12 +187,14 @@
                     <p class="descripcion">{{ p.descripcion }}</p>
                     
                     <div class="proyecto-footer">
+                        
                         <a *ngIf="p.linkRepo" 
                             [href]="p.linkRepo" 
                             target="_blank" 
                             class="btn-repo">
-                            <span>🔗</span> Repositorio
+                            <span>🔗</span> Repositorio <br>
                         </a>
+                        <br>
                         <button class="btn-ver" (click)="verProyecto(p.id)">
                             Ver Detalles →
                         </button>

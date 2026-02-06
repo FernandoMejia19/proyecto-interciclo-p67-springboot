@@ -9,20 +9,19 @@
     class="card" 
     (click)="verDetalleProyecto(p.id)"
     style="cursor: pointer;">
-    <!-- revisar este error
+    
       <img [src]="p.imagen || 'assets/default-project.jpg'" 
       alt="Proyecto {{ p.titulo }}" 
       class="imagen-proyecto" 
       (error)="onImgError($event)" />
-      -->
+      
   
     <div class="card-content">
         <h3>{{ p.titulo }}</h3>
         <p class="autor">
           <strong>Por:</strong> {{ p.programador.nombre }}
         </p>
-
-        <p class="descripcion">{{ p.descripcion | slice:0:120 }}{{ p.descripcion }}</p>
+        <p class="descripcion">{{ p.descripcion | slice:0:80 }}</p>
       <div class="tecnologias">
         <span class="tech" *ngFor="let t of tecnologias; let isLast = last">
           {{ t }}{{ isLast ? '' : ' · ' }}

@@ -13,7 +13,7 @@ import { Usuario } from '../../../../../models/entitys';
 export class AdminDesarrolladores implements OnInit {
   
   desarrolladores: Usuario[] = [];
-
+  
   constructor(
     private router: Router,
     private gu: GestionUsuarios,

@@ -8,6 +8,7 @@ import html2canvas from 'html2canvas';
 import { forkJoin } from 'rxjs';
 import { GestionAsesorias } from '../../../../services/gestion-asesorias';
 import { GestionProyectos } from '../../../../services/gestion-proyectos';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin-usuarios',
@@ -150,7 +151,7 @@ exportarPDF() {
 }
 
   guardarCambios(u: any) {
-    this.gestionUsuarios.actualizarParcial(u.id, {
+    this.gestionUsuarios.actualizarUsuario(u.id, {
       nombre: u.nuevoNombre,
       rol: u.nuevoRol
     }).subscribe({
@@ -158,18 +159,42 @@ exportarPDF() {
         u.editando = false;
         this.cargarUsuarios();
       },
-      error: () => alert('Error al actualizar usuario')
+      error: () => Swal.fire('Error al actualizar usuario')
     });
   }
+/*
+eliminarUsuario(id: number) {
+  if (!confirm('¿Seguro que deseas eliminar este usuario?')) return;
+  
+  this.gestionUsuarios.eliminarUsuario(id).subscribe({
+    next: () => this.cargarUsuarios(),
+    error: () => Swal.fire('Error al eliminar usuario')
+  });
+}
+*/
+eliminarUsuario(id: number) {
+  Swal.fire({
+    title: '¿Seguro que deseas eliminar este usuario?',
+    text: "Esta acción no se puede deshacer",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.gestionUsuarios.eliminarUsuario(id).subscribe({
+        next: () => {
+          Swal.fire('Eliminado', 'El usuario fue eliminado correctamente', 'success');
+          this.cargarUsuarios();
+        },
+        error: () => Swal.fire('Error', 'No se pudo eliminar el usuario', 'error')
+      });
+    }
+  });
+}
 
-  eliminarUsuario(id: number) {
-    if (!confirm('¿Seguro que deseas eliminar este usuario?')) return;
-
-    this.gestionUsuarios.eliminarUsuario(id).subscribe({
-      next: () => this.cargarUsuarios(),
-      error: () => alert('Error al eliminar usuario')
-    });
-  }
 
   abrirCrearUsuario() {
     this.modalCrearAbierto = true;
@@ -186,13 +211,13 @@ exportarPDF() {
 
   crearUsuario() {
     if (!this.nuevoUsuario.nombre || !this.nuevoUsuario.email || !this.nuevoUsuario.password) {
-      alert('Completa todos los campos obligatorios');
+      Swal.fire('Completa todos los campos obligatorios');
       return;
     }
 
     this.gestionUsuarios.crearUsuario(this.nuevoUsuario).subscribe({
       next: () => {
-        alert('Usuario creado correctamente');
+        Swal.fire('Usuario creado correctamente');
         this.modalCrearAbierto = false;
         this.cargarUsuarios();
       },
