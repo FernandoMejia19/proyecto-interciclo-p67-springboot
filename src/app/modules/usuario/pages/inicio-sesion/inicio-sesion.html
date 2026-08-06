@@ -20,16 +20,18 @@
                 <button class="btn-iniciar" type="submit" [disabled]="loading">
                     {{ loading ? 'Ingresando...' : 'Iniciar' }}
                 </button>
-
+                
+                <!--
                 <div class="separador">
                     <span>O continúa con</span>
                 </div>
-
-                <!-- Botón de Google -->
-                <button type="button" class="btn-google" (click)="loginGoogle()" [disabled]="loading">
+                
+                    Botón de Google 
+                    <button type="button" class="btn-google" (click)="loginGoogle()" [disabled]="loading">
                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20">
                     Google
                 </button>
+                -->
                 <div *ngIf="errorMessage" class="alert-error">
                     <span>{{ errorMessage }}</span>
                 </div>
